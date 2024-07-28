@@ -1,0 +1,502 @@
+<template>
+
+    <Breadcrumb />
+    <RefreshButton :refresh="refresh" v-model:status="status" />    
+
+    <div v-if="status == 'error'">
+        <h1 class="text-red-600">
+            there's an error in page here, call a developer
+        </h1>
+    </div>
+    <main class="my-4" v-else>
+        <UCard v-if="role == 0" class="bg-blue-400 text-white my-2">
+            jika anda telah melakukan pembayaran namun data masih belum berubah klik tombol refresh
+            <UIcon name="i-solar-danger-bold" />
+
+        </UCard>
+
+        <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns">
+            <template #tgl-data="i">
+                {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
+            </template>
+            <template #duration-data="i">
+                {{moment(getNextDate(i.row.duration)).format('DD-MM-YYYY')}}
+            </template>
+            <template #name-data="i">
+
+                <div class="items-center flex gap-x-3">
+                    <UAvatar :src="i.row.avatar" />
+                    {{ i.row.name }}
+                </div>
+            </template>
+
+            <template #price-data="i">
+                <div v-if="i.row.price">
+                    {{ formatRupiahIntl(i.row.price) }}
+                </div>
+            </template>
+
+            <template #link_payment-data="i">
+                <UButton v-if="i.row.paid_status == 2"  color="blue" size="2xs" @click="invoiceOpen = true; dataInvoice = i.row">
+                    Bukti pembayaran
+                </UButton>
+                <UBadge v-if="i.row.paid_status == 0" color="red">
+                    Gagal
+                </UBadge>
+                <UButton v-if="i.row.paid_status == 1" color="blue" @click="openPayment(i.row)">
+                    Bayar
+                </UButton>
+            </template>
+
+            <template #paid_status-data="i">
+                <UBadge :color="i.row.paid_status == 0 ? 'red' : i.row.paid_status == 1 ? 'yellow' : 'green'">
+                    {{ i.row.paid_status == 0 ? 'pembayaran dibatalkan' : i.row.paid_status == 1 ? 'menunggu pembayaran'
+                        : 'pembayaran berhasil' }}
+                </UBadge>
+            </template>
+
+            <template #action-data="i">
+                <template v-if="role != 0">
+                    <UDropdown :items="[[
+                        {
+                            label: 'Batalkan transaksi',
+                            icon: 'i-material-symbols-light-delete',
+                            click: () => submitDeleteBooking(i.row)
+                        }, {
+                            label: 'Verifikasi transaksi',
+                            icon: 'i-material-symbols-light-edit',
+                            click: () => openEdit(i.row)
+                        }]
+                    ]" :popper="{ placement: 'bottom-start' }">
+                        <UButton disabled color="gray" variant="link" icon="i-mi-options-vertical" />
+                    </UDropdown>
+                </template>
+                <template v-else>
+                    <UDropdown :items="[
+                        [
+                            {
+                                label: 'Batalkan transaksi',
+                                icon: 'i-material-symbols-light-delete',
+                                click: () => submitDeleteBooking(i.row)
+                            }
+                        ]
+                    ]" :popper="{ placement: 'bottom-start' }">
+                        <UButton :disabled="i.row.paid_status != 1" :color="i.row.paid_status == 1 ? 'green' : 'gray'"
+                            variant="link" icon="i-mi-options-vertical" />
+                    </UDropdown>
+                </template>
+            </template>
+        </UTable>
+
+        <!-- modal bukti pembayaran -->
+        <UModal v-model="invoiceOpen" :ui="{overlay:{background:'print:bg-white'}}">
+            <UCard class="print:hidden">
+                <template #header>
+                    <div class="items-center justify-between flex">
+                        <h1 class="font-bold text-slate-600">Invoice</h1>
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                            @click="invoiceOpen = false" />
+                    </div>
+                </template>
+            </UCard>
+            <Invoice :data="dataInvoice" />
+        </UModal>
+
+        <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
+                query: { page }
+            })" :ui="{
+                wrapper: 'flex items-center gap-2',
+                rounded: '!rounded-full min-w-[32px] justify-center',
+                default: {
+                    activeButton: {
+                        variant: 'outline'
+                    }
+                }
+            }" />
+        </div>
+
+        <!-- edit -->
+        <UModal v-model="isOpen">
+            <UCard>
+                <template #header>
+                    <div class="items-center justify-between flex">
+                        <h1 class="font-bold text-slate-600">Verifikasi transaksi</h1>
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                            @click="isOpen = false" />
+                    </div>
+                </template>
+                <UForm :state="state" class="space-y-4" @submit="onUpdateTransaksi">
+                    <img v-show="attachment" :src="attachment" alt="image attachment" class="w-[200px] h-[200px] ">
+                    <UFormGroup label="Nama" class="w-full">
+                        <UInput v-model="state.name" placeholder="nama" autocomplete="off" disabled />
+                    </UFormGroup>
+                    <UFormGroup label="Kamar Kos" class="w-full">
+                        <UInput v-model="state.kamarKos" placeholder="nama" autocomplete="off" disabled />
+                    </UFormGroup>
+                    <UFormGroup label="admin" class="w-full">
+                        <UInput v-model="state.admin" placeholder="admin" autocomplete="off" disabled />
+                    </UFormGroup>
+                    <UFormGroup :label="'Harga Kamar Kos: ' + formatRupiahIntl(state.price)" class="w-full">
+                        <UInput type="number" v-model="state.price" placeholder="harga kamar kos" required
+                            autocomplete="off" :disabled="state.paid_status == 2" />
+                    </UFormGroup>
+                    <UFormGroup label="metode pembayaran" class="w-full">
+                        <UInput v-model="state.metodePembayaran" placeholder="harga kamar kos" required
+                            autocomplete="off" disabled />
+                    </UFormGroup>
+
+
+
+                    <UFormGroup v-if="state.paid_status != 2" label="Foto Bukti" class="w-full">
+                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="_uploadFile" />
+                    </UFormGroup>
+                    <UInput v-model="state._id" class="hidden" />
+                    <UFormGroup>
+                        <UButton v-if="state.paid_status == 2" color="red" :loading="loading" type="submit"
+                            class="w-full text-center items-center justify-center">
+                            Batalkan pembayaran
+                        </UButton>
+                        <UButton v-else :loading="loading" type="submit"
+                            class="w-full text-center items-center justify-center">
+                            Verifikasi pembayaran
+                        </UButton>
+                    </UFormGroup>
+                </UForm>
+            </UCard>
+
+
+        </UModal>
+    </main>
+</template>
+
+<script setup lang="ts">
+import moment from 'moment'
+const router = useRoute()
+const page = ref(1)
+const pageCount = 10
+const skip = ref(0)
+const rows = ref([])
+const totalPage = ref(0)
+const isOpen = ref(false)
+const invoiceOpen = ref(false)
+const dataInvoice = ref<any>()
+
+const _data = await myProfile()
+let role = 0
+let verified = false
+if (_data.data) {
+    role = _data.data.role
+    verified = _data.data.verified
+}
+
+const state = reactive({
+    name: '',
+    kamarKos: '',
+    admin: '',
+    price: 0,
+    metodePembayaran: 'manual',
+    attachment: undefined,
+    paid_status: 0,
+    _id: '',
+    verified: true //true verifkasi, false batalkan verifikasi
+})
+const attachment = ref('')
+const loading = ref(false)
+const _uploadFile = (e: any) => uploadFile(e, loading, attachment)
+
+const query = computed(() => ({ skip: skip.value, limit: pageCount }))
+
+const { data: raw, status, refresh } = await useFetch('/api/v2/protect/booking/all-booking', {
+    headers: {
+        Authorization: `Bearer ${token}`
+    },
+    query, method: 'post'
+})
+
+
+
+// update transaksi payment
+
+const openEdit = async (e: any) => {
+    isOpen.value = true
+    const { paid_status, admin_name, _id, name_kamar_kos, user_name, attachment, price } = e
+    state.name = user_name
+    state.kamarKos = name_kamar_kos
+    state.admin = admin_name
+    state.price = price
+    state.attachment = attachment
+    state._id = _id
+    state.paid_status = paid_status
+    state.verified = paid_status ? false : true
+}
+
+const onUpdateTransaksi = async (event: any) => {
+    loading.value = true
+    const { _id, attachment, verified, price } = event.data
+    const link = verified ? '/api/v2/protect/booking/verify-booking' : '/api/v2/protect/booking/fail-booking'
+
+    try {
+        const res = await $fetch(link, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            method: 'POST',
+            body: { _id, attachment, price }
+        })
+
+        if (res.status == 'success') {
+            // @ts-ignore
+            useToast().add({ id: 'update booking', title: res.message })
+            refresh()
+        }
+    } catch (error: any) {
+        if (error.data) {
+            error = error.data
+        }
+        useToast().add({ id: 'settings', title: 'error', description: error.message, color: 'red' })
+
+    }
+
+    isOpen.value = false
+    loading.value = false
+}
+
+// end update transaksi payment
+const openPayment = async (e: any) => {
+    const { link_payment, midtrans, createdAt } = e
+    const f = link_payment.split('/').pop()
+
+    if (checkTime(createdAt)) {
+        const res2 = await $fetch('/api/v2/protect/booking/fail-booking', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            method: 'POST',
+            body: { link_payment }
+        })
+        // will update data payment to fail booking
+        // and we cant to open link payment again
+        if (res2.status == 'success') {
+            refresh()
+        }
+        return
+    }
+
+
+
+    // @ts-ignore this is already reload from header
+    snap.pay(f, {
+        // Optional
+        onSuccess: async function (result: any) {
+
+            const res = await $fetch('/api/v2/protect/booking/verify-booking', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                method: 'POST',
+                body: { link_payment: e }
+            })
+            if (res.status == 'success') {
+                refresh()
+            }
+        },
+        onPending: async function (result: any) {
+            const res = await $fetch('/api/v2/protect/check-midtrans', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                method: 'POST',
+                body: { data: result }
+            })
+
+            if (res.status == 'success') {
+                refresh()
+            }
+        },
+        onError: async function (result: any) {
+
+
+            const res = await $fetch('/api/v2/protect/booking/fail-booking', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                method: 'POST',
+                body: { link_payment: e }
+            })
+
+            if (res.status == 'success') {
+                refresh()
+            }
+        },
+
+        onClose: async function (result: any) {
+
+            try {
+                if (result) {
+                    const res = await $fetch('/api/v2/protect/check-midtrans', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        method: 'POST',
+                        body: { data: result }
+                    })
+
+                    if (res.status == 'success') {
+                        refresh()
+                    }
+                }
+            } catch (error: any) {
+                console.error(error.message)
+            }
+            return
+        }
+    });
+}
+
+
+watch(() => router.query,
+    (e) => {
+        // @ts-ignore
+        skip.value = (e['page'] - 1) * pageCount
+        refresh()
+    }, { deep: true })
+
+watch(() => status,
+    (e) => {
+        if (e.value == 'success') {
+            // @ts-ignore
+            const { data, total } = raw.value
+            totalPage.value = total
+            rows.value = data
+        }
+    }, { deep: true, immediate: true })
+
+let columns = [{
+    key: 'num',
+    label: 'id',
+},
+{
+    key: 'tgl',
+    label: 'tanggal'
+},
+{
+    key: 'user_name',
+    label: 'user',
+},
+{
+    key: 'user_phone',
+    label: 'nomor whatsapp',
+},
+{
+    key: 'name_kos',
+    label: 'kos',
+},
+{
+    key: 'name_kamar',
+    label: 'kamar',
+},
+{
+    key: 'admin_name',
+    label: 'admin',
+},
+{
+    key: 'admin_phone',
+    label: 'nomor whatsapp',
+},
+{
+    key: 'price',
+    label: 'harga',
+},
+{
+    key: 'method_payment',
+    label: 'metode pembayaran',
+},
+{
+    key: 'paid_status',
+    label: 'status pembayaran',
+},
+{
+    key: 'action',
+    label: 'aksi',
+},
+]
+
+const columns_penghuni = [{
+    key: 'num',
+    label: 'id',
+},
+{
+    key: 'tgl',
+    label: 'masuk'
+},
+{
+    key: 'duration',
+    label: 'keluar'
+},
+{
+    key: 'name_kos',
+    label: 'kos',
+},
+{
+    key: 'name_kamar',
+    label: 'kamar',
+},
+{
+    key: 'price',
+    label: 'harga',
+},
+{
+    key: 'method_payment',
+    label: 'metode pembayaran',
+},
+{
+    key: 'link_payment',
+    label: 'link pembayaran',
+},
+{
+    key: 'paid_status',
+    label: 'status pembayaran',
+},
+{
+    key: 'action',
+    label: 'aksi',
+},
+]
+
+
+if (role == 0) {
+    columns = columns_penghuni
+    
+}
+
+const submitDeleteBooking = async (event: any) => {
+    loading.value = true
+    const { _id } = event
+
+    try {
+        const res = await $fetch('/api/v2/protect/booking/delete-booking', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            method: 'POST',
+            body: { _id }
+        })
+
+        if (res.status == 'success') {
+            // @ts-ignore
+            useToast().add({ id: 'hapus booking', title: res.message })
+            refresh()
+        }
+    } catch (error: any) {
+        useToast().add({ id: 'settings', title: 'error', description: error.message, color: 'red' })
+        console.error('error: ' + error.message)
+    }
+
+    loading.value = false
+}
+
+definePageMeta({
+    layout: 'dashboard'
+})
+</script>

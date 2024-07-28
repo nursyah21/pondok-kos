@@ -1,0 +1,138 @@
+import { checkBooking } from "~/server/utils/checkBooking";
+import writeError from "~/server/utils/writeError";
+import {formatRupiahIntl} from "~/utils/formatRupiah";
+
+export default defineEventHandler(async (event) => {
+    const { token } = await readBody(event)
+
+
+    try {
+        checkBooking()
+        const refreshTokens = await RefreshTokens.findOne({ token })
+
+        if (!refreshTokens || !refreshTokens.id_user) throw new Error('token not valid')
+
+        const user = await Users.findById(refreshTokens.id_user)
+        if (!user) throw new Error('user not valid')
+
+        const { role } = user
+
+        let data: DataDashboard;
+        data = {
+            totalPenghuni: "32",
+            totalPenjaga: "4", 
+            totalKamarKos: "12",
+            pendapatan: 123000,
+            chartPiePenghuni: {
+                description: "Total Penghuni 15 orang",
+                options: {
+                    chart: {
+                        type: 'donut',
+                    },
+                    responsive: [{
+                        // breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                                height: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }],
+                    labels: ['Kos Arsapati', 'Kos Beringin'],
+                    dataLabels: {
+                        enabled: false
+                    }
+                },
+                series: [10, 5]
+            },
+            chartBarPendapatan: {
+                description: `Total Pendapatan bulan ini ${formatRupiahIntl(1000000+1200000)}`,
+                options: {
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                    },
+                    plotOptions: {
+                        bar: {
+                            borderRadius: 4,
+                            borderRadiusApplication: 'end',
+                            horizontal: true,
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: ['Kos arsapati','Kos gunung belah'
+                        ],
+                    },
+                    tooltip:{
+                        y: {
+                            title:{
+                                formatter: function(x:any){
+                                    return ''
+                                }
+                            },
+                            formatter: function(x:number){
+                                return formatRupiahIntl(x)
+                            }
+                        }
+                    },
+                    colors: ['#16a34a']
+                },
+                series: [{
+                    data: [1000000, 1200000]
+                }]
+            },
+            chartLineTransaksi: {
+                description: `Total Transaksi ${[10, 41, 35, 51, 49, 62, 69, 91, 148].reduce((a,b)=>a+b)}`,
+                options: {
+                    chart: {
+                      height: 350,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'straight'
+                    },
+                    title: {
+                      text: 'Transaksi per bulan',
+                      align: 'left'
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    },
+                    xaxis: {
+                      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    },
+                    colors: [
+                        '#ca8a04'
+                    ]
+                },
+                series: [{
+                    name: "Transaksi",
+                    data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                }]
+            }
+        }
+
+        return { status: 'success', data }
+    } catch (error: any) {
+        event.node.res.statusCode = 400
+        writeError(error.message)
+
+        return { status: 'fail', message: error.message }
+    }
+
+})

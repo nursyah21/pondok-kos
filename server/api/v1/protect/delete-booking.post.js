@@ -1,0 +1,32 @@
+export default defineEventHandler(async (event) => {
+    const { token, _id } = await readBody(event)
+    
+    
+
+    try {
+        const refreshTokens = await RefreshTokens.findOne({token})
+
+        if(!refreshTokens.id_user) throw new Error('token not valid')
+        
+        const user = await Users.findById(refreshTokens.id_user)
+        if (!user) throw new Error('user not valid')
+            
+        const { role, verified } = user
+
+        if (role != 0) throw new Error('user not authorization');
+        if (!verified) throw new Error('user not verified');
+        const booking = await Booking.findById(_id)
+        if(!booking) throw new Error('booking sudah tidak tersedia');
+
+        const {id_kamar_kos} = booking
+        const res = await Booking.findByIdAndDelete(_id)
+        await KamarKos.findByIdAndUpdate(id_kamar_kos, {available: 0})
+
+        return {status: 'success', message: 'membatalkan booking kamar kos', id: res._id.toString()}
+    } catch (error) {
+        event.node.res.statusCode = 400
+        console.log(error.message)
+        return { status: 'fail', message: error.message }
+    }
+
+})
