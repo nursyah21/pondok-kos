@@ -1,75 +1,40 @@
-# Nuxt 3 Minimal Starter
+# pondok kos nursyah
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+- alur kerja aplikasi => [/docs/alur-kerja.md](/docs/alur-kerja.md)
+- progress => [/docs/progress.md](/docs/progress.md)
+- panduan setiap page => [/docs/isi-setiap-page.md](/docs/isi-setiap-page.md)
+- api => [/docs/api.md](/docs/api.md)
 
-## Setup
+> friend reminder 
+> before to push master always check app to run (alur kerja aplikasi) to make sure app is working and free from bug
+> only run this in branch dev not another branch
 
-Make sure to install the dependencies:
+## fix bug is priority
+- bug find-kos [x]
+- fix bug foto penghuni [x]
+- fix bug foto find kos [x]
+- fix bug upload foto [x]
 
-```bash
-# npm
-npm install
+## list pekerjaan
+- admin menambahkan lebih 1 foto untuk kos [x]
+- admin menonaktifkan kos atau kamar kos [x]
+- invoice transaksi [x]
+- ubah format chat yang dikirim ke wa lebih profesional [x]
+- admin menambahkan opsi pembayaran harian atau bulanan []
+- penghuni memilih sewa harian atau bulanan []
+- memasukkan penghuni ke kos, melibatkan proses transaksi []
+--- target --- jul 26
 
-# pnpm
-pnpm install
+- penghuni mendapat data kos nya di dashboard []
+- penjaga mendapat data kos yang di jaga di dashbaord []
+- mengirim pesan saat sukses transaksi []
+- penghuni kos menambah durasi sewa []
+- cronjob check data penghuni []
 
-# yarn
-yarn install
+## refactor code
+- mengeluarkan semua api dari protect dan public
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+# fitur tambahan
+- penghuni kos meminta penundaan pembayaran sewa kos []
+- nonaktifkan penghuni [] # ketikan menonaktifkan otomatis kos yang dihuni akan menjadi tersedia
+- nonaktifkan penjaga [] 
