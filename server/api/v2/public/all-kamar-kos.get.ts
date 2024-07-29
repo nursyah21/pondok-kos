@@ -1,5 +1,3 @@
-import { checkBooking } from "~/server/utils/checkBooking"
-
 export default defineEventHandler(async (event) => {
 
     try {
@@ -35,7 +33,6 @@ export default defineEventHandler(async (event) => {
                      }
                 }
             })
-            console.log(data)
             return { status: 'success', data }
         }
 
@@ -50,6 +47,7 @@ export default defineEventHandler(async (event) => {
         let location = await Kos.find({}).select(['_id', 'location', 'name'])
         // @ts-ignore
         location = location.map(e => ({ id_kos: e._id.toString(), location: e.location, kos: e.name }))
+        
 
         // @ts-ignore
         data = data.map((e, idx) => {

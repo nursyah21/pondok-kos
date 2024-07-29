@@ -169,6 +169,7 @@ const navbar = role == 0 ? penghuni : role == 1 ? penjaga : pemilik
 const midtrans_prod = useRuntimeConfig().public.midtransProduction
 const midtransClient = midtrans_prod ? useRuntimeConfig().public.midtransClient : useRuntimeConfig().public.midtransClientSandbox
 const midtransLink = midtrans_prod ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'
+
 useHead({
     script: [
     {

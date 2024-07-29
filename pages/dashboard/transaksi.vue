@@ -264,8 +264,9 @@ const onUpdateTransaksi = async (event: any) => {
 
 // end update transaksi payment
 const openPayment = async (e: any) => {
-    const { link_payment, midtrans, createdAt } = e
+    const { link_payment, createdAt } = e
     const f = link_payment.split('/').pop()
+
 
     if (checkTime(createdAt)) {
         const res2 = await $fetch('/api/v2/protect/booking/fail-booking', {
@@ -289,7 +290,7 @@ const openPayment = async (e: any) => {
     snap.pay(f, {
         // Optional
         onSuccess: async function (result: any) {
-
+            console.log('succes nih')
             const res = await $fetch('/api/v2/protect/booking/verify-booking', {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -302,21 +303,22 @@ const openPayment = async (e: any) => {
             }
         },
         onPending: async function (result: any) {
+            console.log('pending nih', result)
+            // update data booking
             const res = await $fetch('/api/v2/protect/check-midtrans', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
                 method: 'POST',
-                body: { data: result }
+                body: { data: result, link_payment }
             })
-
+            refresh()
             if (res.status == 'success') {
                 refresh()
             }
         },
         onError: async function (result: any) {
-
-
+            console.log('error nih')
             const res = await $fetch('/api/v2/protect/booking/fail-booking', {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -331,7 +333,7 @@ const openPayment = async (e: any) => {
         },
 
         onClose: async function (result: any) {
-
+            console.log('ketutup nih')
             try {
                 if (result) {
                     const res = await $fetch('/api/v2/protect/check-midtrans', {
@@ -345,6 +347,7 @@ const openPayment = async (e: any) => {
                     if (res.status == 'success') {
                         refresh()
                     }
+                    refresh()
                 }
             } catch (error: any) {
                 console.error(error.message)

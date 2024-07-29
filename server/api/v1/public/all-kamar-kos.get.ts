@@ -1,5 +1,3 @@
-import { checkBooking } from "~/server/utils/checkBooking"
-
 export default defineEventHandler(async (event) => {
 
     try {

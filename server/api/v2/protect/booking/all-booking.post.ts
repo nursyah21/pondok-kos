@@ -1,5 +1,3 @@
-import { checkBooking } from "~/server/utils/checkBooking";
-
 export default defineEventHandler(async (event) => {
     // const { token } = await readBody(event)
     const authorizationHeader = event.node.req.headers.authorization;

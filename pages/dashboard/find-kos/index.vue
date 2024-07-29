@@ -85,6 +85,11 @@
                         </div>
                         <h1 class="text-slate-600 font-bold  pt-2">Durasi sewa: 30 hari</h1>
                         <h1 class="text-primary-600 font-bold ">{{ formatRupiahIntl(state.price) }}</h1>
+                        
+                        <div v-if="state.available == 1" class="text-center text-sm text-slate-600  p-2 rounded-md">
+                            masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat transaksi</ULink> jika anda memesan kamar ini
+                        </div>
+
                         <div class="mt-4 flex justify-between">
                             <UButton v-if="state.link" color="blue" to="/dashboard/transaksi"
                                 class="w-full text-center items-center justify-center">Buka Transaksi</UButton>
@@ -206,6 +211,8 @@ async function submitMidtrans(event: any) {
     const { price, id_kamar_kos } = event.data
     loading.value = true
 
+    // console.log(price, id_kamar_kos)
+    // return loading.value = false
     // prepare Snap API parameter ( refer to: https://snap-docs.midtrans.com ) minimum parameter example:
     const order_id = "order_id_" + Math.round((new Date()).getTime() / 1000)
     const parameter = {
@@ -224,6 +231,7 @@ async function submitMidtrans(event: any) {
         method: 'post',
         body: { parameter }
     }).then(async function (e) {
+        // console.log(e)
         try {
             const res = await $fetch('/api/v2/protect/booking/add-booking-midtrans', {
                 headers: {

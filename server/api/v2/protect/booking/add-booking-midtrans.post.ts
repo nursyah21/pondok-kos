@@ -30,7 +30,7 @@ export default defineEventHandler(async (event:any) => {
         
         const res = await Booking.create({order_id, id_kamar_kos, 
             id_user: refreshTokens.id_user, 
-            id_admin, price, method_payment: 'midtrans', link_payment, midtrans: {_data: ''} })
+            id_admin, price, method_payment: 'midtrans', link_payment })
 
         await KamarKos.findByIdAndUpdate(id_kamar_kos, {available: 1})
 

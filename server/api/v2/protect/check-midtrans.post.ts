@@ -1,21 +1,7 @@
-// @ts-ignore
-import Midtrans from "midtrans-client";
-
 export default defineEventHandler(async (event) => {
-    const { data } = await readBody(event)
+    const { data, link_payment } = await readBody(event)
     const authorizationHeader = event.node.req.headers.authorization;
     const token = authorizationHeader?.split(' ')[1]
-
-    const config = useRuntimeConfig()
-    const isProduction = config.midtransProduction
-    const serverKey = isProduction ? config.midtransServer : config.midtransServerSandbox
-    const clientKey = isProduction ? config.midtransClient : config.midtransClientSandbox
-
-    const snap = new Midtrans.Snap({
-        isProduction, 
-        serverKey, 
-        clientKey 
-    });
 
     try {
         const refreshTokens = await RefreshTokens.findOne({token})
@@ -25,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         let paid_status;
         let available;
-
+        console.log('=>', data)
         snap.transaction.notification(data)
             .then((statusResponse:any)=>{
                 let orderId = statusResponse.order_id;
@@ -54,8 +40,9 @@ export default defineEventHandler(async (event) => {
                 }
             })
 
-        
-        await Booking.findOneAndUpdate({midtrans: {_data:''}}, {midtrans: {...data}})
+        console.log(link_payment, data)
+        const res = await Booking.findOneAndUpdate({link_payment}, {midtrans: {...data}})
+        console.log(res)
         
 
         if(available != 1){
