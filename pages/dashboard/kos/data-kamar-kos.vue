@@ -288,12 +288,12 @@ const onSubmit = (e:any) => {
 }
 
 const submitEditKos = (e:any) => submitHelperPut(
-    loading, isOpen, 'merubah kos', '/api/kamar-kos/kamar-kos/edit',
+    loading, isOpen, 'merubah kos', '/api/kamar-kos/edit',
     refresh, {...e.data, image: imageKos.value}
 )
 
 const submitAddKos = (e:any) => submitHelperPost(
-    loading, isOpen, 'menambah kos', '/api/kamar-kos/kamar-kos/add',
+    loading, isOpen, 'menambah kos', '/api/kamar-kos/add',
     refresh, {...e.data, image: imageKos.value}
 )
 

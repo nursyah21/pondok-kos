@@ -1,7 +1,7 @@
 <template>
 
     <Breadcrumb />
-    <RefreshButton :refresh="refresh" v-model:status="status" />    
+    <RefreshButton :refresh="refresh" v-model:status="status" />
 
     <div v-if="status == 'error'">
         <h1 class="text-red-600">
@@ -20,7 +20,7 @@
                 {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
             </template>
             <template #duration-data="i">
-                {{moment(getNextDate(i.row.duration)).format('DD-MM-YYYY')}}
+                {{ moment(getNextDate(i.row.duration)).format('DD-MM-YYYY') }}
             </template>
             <template #name-data="i">
 
@@ -37,13 +37,14 @@
             </template>
 
             <template #link_payment-data="i">
-                <UButton v-if="i.row.paid_status == 2"  color="blue" size="2xs" @click="invoiceOpen = true; dataInvoice = i.row">
+                <UButton v-if="i.row.paid_status == 2" color="blue" size="2xs"
+                    @click="invoiceOpen = true; dataInvoice = i.row">
                     Bukti pembayaran
                 </UButton>
-                <UBadge v-if="i.row.paid_status == 0" color="red">
+                <UBadge v-if="i.row.paid_status == 0" color="red" >
                     Gagal
                 </UBadge>
-                <UButton v-if="i.row.paid_status == 1" color="blue" @click="openPayment(i.row)">
+                <UButton v-if="i.row.paid_status == 1" color="blue" @click="openPayment(i.row)" size="2xs">
                     Bayar
                 </UButton>
             </template>
@@ -89,7 +90,7 @@
         </UTable>
 
         <!-- modal bukti pembayaran -->
-        <UModal v-model="invoiceOpen" :ui="{overlay:{background:'print:bg-white'}}">
+        <UModal v-model="invoiceOpen" :ui="{ overlay: { background: 'print:bg-white' } }">
             <UCard class="print:hidden">
                 <template #header>
                     <div class="items-center justify-between flex">
@@ -264,97 +265,38 @@ const onUpdateTransaksi = async (event: any) => {
 
 // end update transaksi payment
 const openPayment = async (e: any) => {
-    const { link_payment, createdAt } = e
-    const f = link_payment.split('/').pop()
+    const { link_payment } = e
+    const midtrans = link_payment.split('/').pop()
 
-
-    if (checkTime(createdAt)) {
-        const res2 = await $fetch('/api/booking/fail-booking', {
+    const updateBooking = async (link_payment: any, result: any) => {
+        const res = await $fetch('/api/booking/update-booking', {
             headers: {
                 Authorization: `Bearer ${token}`
             },
             method: 'POST',
-            body: { link_payment }
+            body: { link_payment, result }
         })
-        // will update data payment to fail booking
-        // and we cant to open link payment again
-        if (res2.status == 'success') {
-            refresh()
-        }
-        return
+
+        refresh()
     }
 
 
-
-    // @ts-ignore this is already reload from header
-    snap.pay(f, {
-        // Optional
+    // update booking
+    snap.pay(midtrans, {
         onSuccess: async function (result: any) {
-            console.log('succes nih')
-            const res = await $fetch('/api/booking/verify-booking', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                method: 'POST',
-                body: { link_payment: e }
-            })
-            if (res.status == 'success') {
-                refresh()
-            }
+            await updateBooking(link_payment, result)
         },
         onPending: async function (result: any) {
-            console.log('pending nih', result)
-            // update data booking
-            const res = await $fetch('/api/booking/check-midtrans', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                method: 'POST',
-                body: { data: result, link_payment }
-            })
-            refresh()
-            if (res.status == 'success') {
-                refresh()
-            }
+            await updateBooking(link_payment, result)
         },
         onError: async function (result: any) {
-            console.log('error nih')
-            const res = await $fetch('/api/booking/fail-booking', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                method: 'POST',
-                body: { link_payment: e }
-            })
-
-            if (res.status == 'success') {
-                refresh()
-            }
+            await updateBooking(link_payment, result)
         },
-
         onClose: async function (result: any) {
-            console.log('ketutup nih')
-            try {
-                if (result) {
-                    const res = await $fetch('/api/booking/check-midtrans', {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                        method: 'POST',
-                        body: { data: result }
-                    })
-
-                    if (res.status == 'success') {
-                        refresh()
-                    }
-                    refresh()
-                }
-            } catch (error: any) {
-                console.error(error.message)
-            }
-            return
+            await updateBooking(link_payment, result)
         }
-    });
+    })
+    
 }
 
 
@@ -470,7 +412,6 @@ const columns_penghuni = [{
 
 if (role == 0) {
     columns = columns_penghuni
-    
 }
 
 const submitDeleteBooking = async (event: any) => {

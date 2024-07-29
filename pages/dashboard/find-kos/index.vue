@@ -183,7 +183,6 @@ watch(() => status, (e) => {
             state.link = ''
             isOpen.value = true
             const _kos = data.find((e: any) => e.id == kos)
-            console.log(_kos)
             state.image = _kos.image
             state.name = _kos.name
             state.location = _kos.location
@@ -228,7 +227,6 @@ async function submitMidtrans(event: any) {
         method: 'post',
         body: { parameter }
     }).then(async function (e) {
-        // console.log(e)
         try {
             const res = await $fetch('/api/booking/add-booking-midtrans', {
                 headers: {

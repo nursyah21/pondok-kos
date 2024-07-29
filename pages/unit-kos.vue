@@ -61,7 +61,7 @@ const rows = ref<[Kos]>()
 const totalPage = ref(0)
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const {data: raw, status, refresh} = await useFetch('/api/all-kamar-kos',{
+const {data: raw, status, refresh} = await useFetch('/api/kamar-kos/all-kamar-kos',{
     query,
     method: 'get'
 })

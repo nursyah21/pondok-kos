@@ -1,44 +1,33 @@
 
-const midtransCheckStatus = (notificationJson: any, id: string, id_kamar: string) => {
+const midtransCheckStatus = async (notificationJson: any, id_booking: string, id_kamar: string) => {
     try {
-        snap.transaction.notification(notificationJson)
-            .then(async (statusResponse: any) => {
-                let orderId = statusResponse.order_id;
-                let transactionStatus = statusResponse.transaction_status;
-                let fraudStatus = statusResponse.fraud_status;
-                console.log(transactionStatus, id)
-                // Sample transactionStatus handling logic
-                if (transactionStatus == 'capture') {
-                    // capture only applies to card transaction, which you need to check for the fraudStatus
-                    if (fraudStatus == 'challenge') {
-                        // TODO set transaction status on your databaase to 'challenge'
-                    } else if (fraudStatus == 'accept') {
-                        // TODO set transaction status on your databaase to 'success'
+        const statusResponse = await snap.transaction.notification(notificationJson)
 
-                        await Booking.findByIdAndUpdate(id, { paid_status: 2 })
+        let transactionStatus = statusResponse.transaction_status;
+        let fraudStatus = statusResponse.fraud_status;
 
-                        await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })
-                        // await KamarKos.findByIdAndUpdate(booking.id_kamar_kos, {available: 2})
-                    }
-                } else if (transactionStatus == 'settlement') {
-                    await Booking.findByIdAndUpdate(id, { paid_status: 2 })
-                    await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })
-                    // TODO set transaction status on your databaase to 'success'
-                } else if (transactionStatus == 'deny') {
-                    // TODO you can ignore 'deny', because most of the time it allows payment retries
-                    // and later can become success
-                } else if (transactionStatus == 'cancel' ||
-                    transactionStatus == 'expire') {
-                    await Booking.findByIdAndUpdate(id, { paid_status: 0 })
-                    // diubah secara manual melalui check expire
-                    await KamarKos.findByIdAndUpdate(id_kamar, {available: 0})
-                    // TODO set transaction status on your databaase to 'failure'
-                } else if (transactionStatus == 'pending') {
-                    // TODO set transaction status on your databaase to 'pending' / waiting payment
-                }
-                console.log('=end=')
-            });
-    } catch (error:any) {
+        // Sample transactionStatus handling logic
+        if (transactionStatus == 'capture') {
+            // capture only applies to card transaction, which you need to check for the fraudStatus
+            if (fraudStatus == 'challenge') {
+                // TODO set transaction status on your databaase to 'challenge'
+            } else if (fraudStatus == 'accept') {
+
+                await Booking.findByIdAndUpdate(id_booking, { paid_status: 2 })
+                await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })                
+            }
+        } else if (transactionStatus == 'settlement') {
+
+            await Booking.findByIdAndUpdate(id_booking, { paid_status: 2 })
+            await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })
+            // TODO set transaction status on your databaase to 'success'
+        } else if (transactionStatus == 'cancel' || transactionStatus == 'expire') {
+
+            await Booking.findByIdAndUpdate(id_booking, { paid_status: 0 })            
+            await KamarKos.findByIdAndUpdate(id_kamar, { available: 0 })
+            // TODO set transaction status on your databaase to 'failure'
+        }
+    } catch (error: any) {
         console.log(error)
     }
 
@@ -47,17 +36,14 @@ const midtransCheckStatus = (notificationJson: any, id: string, id_kamar: string
 
 export const checkBooking = async () => {
     try {
-        // console.log('is run 1')
-        let allmidtrans = await Booking.find({paid_status: 1})
-        // console.log('is run 2')
+        let allmidtrans = await Booking.find({ paid_status: 1 })
+        
         allmidtrans.forEach((e) => {
             if (e.midtrans) {
-                console.log('=>',e)
                 // console.log(e.midtrans, e._id.toString(), e.id_kamar_kos)
                 midtransCheckStatus(e.midtrans, e._id.toString(), e.id_kamar_kos)
             }
         })
-        // console.log('is run 3', allmidtrans)
 
 
         // let data = await Booking.find({
