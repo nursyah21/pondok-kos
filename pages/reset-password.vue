@@ -33,10 +33,10 @@
 
         <UForm v-else :state="state" class="space-y-4" @submit="onSubmitRequestReset">
             <UFormGroup label="Nomor Whatsapp" name="whatsapp" class="w-[300px]">
-                <UInput v-model="state.number_phone"  placeholder="085288509878" autocomplete="off" required/>
+                <UInput data-cy='email' v-model="state.number_phone"  placeholder="085288509878" autocomplete="off" required/>
             </UFormGroup>
 
-            <UButton :loading="loading" type="submit" class="w-full text-center items-center justify-center">
+            <UButton data-cy='reset-button' :loading="loading" type="submit" class="w-full text-center items-center justify-center">
                 Submit
             </UButton>
         </UForm>

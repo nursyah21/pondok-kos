@@ -10,15 +10,15 @@
             <UForm method="post" :state="state" class="space-y-4" @submit="onSubmit">
 
                 <UFormGroup label="Nama Lengkap" name="name" class="w-[300px]">
-                    <UInput v-model="state.name" placeholder="Ahmad Suhardi" autocomplete="off" />
+                    <UInput data-cy='name' v-model="state.name" placeholder="Ahmad Suhardi" autocomplete="off" />
                 </UFormGroup>
 
                 <UFormGroup label="Nomor Whatsapp" name="number_phone" class="w-[300px]">
-                    <UInput v-model="state.number_phone" placeholder="085288509878" autocomplete="off" />
+                    <UInput data-cy='email' v-model="state.number_phone" placeholder="085288509878" autocomplete="off" />
                 </UFormGroup>
 
                 <UFormGroup label="Password" name="password">
-                    <UInput v-model="state.password" :type="hide_pass ? 'password' : 'text'" placeholder="password"
+                    <UInput data-cy='password' v-model="state.password" :type="hide_pass ? 'password' : 'text'" placeholder="password"
                         :ui="{ icon: { trailing: { pointer: '' } } }">
                         <template #trailing>
                             <UButton color="gray" variant="link"
@@ -29,7 +29,7 @@
                 </UFormGroup>
 
                 <UFormGroup label="Konfirmasi Password" name="password2">
-                    <UInput v-model="state.password2" :type="hide_pass2 ? 'password' : 'text'" placeholder="password"
+                    <UInput data-cy='password2' v-model="state.password2" :type="hide_pass2 ? 'password' : 'text'" placeholder="password"
                         :ui="{ icon: { trailing: { pointer: '' } } }">
                         <template #trailing>
                             <UButton color="gray" variant="link"
@@ -40,7 +40,7 @@
                 </UFormGroup>
 
                 <UFormGroup>
-                    <UButton :loading="loading" type="submit" class="w-full text-center items-center justify-center">
+                    <UButton data-cy='register-button' :loading="loading" type="submit" class="w-full text-center items-center justify-center">
                         Submit
                     </UButton>
                     <div class="flex justify-center mt-2">
