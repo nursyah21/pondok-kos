@@ -62,7 +62,7 @@ const state = reactive({
 
 if(secret){
     try {
-        const res = await $fetch('/api/v2/protect/reset-password/check',{
+        const res = await $fetch('/api/reset-password/check',{
             method:'post', body: {secret}
         })
     
@@ -81,7 +81,7 @@ async function onSubmitRequestReset(event:any) {
     loading.value = true
 
     try {
-        const res = await $fetch('/api/v2/protect/reset-password/add', {
+        const res = await $fetch('/api/reset-password/add', {
             method: 'post', body: {number_phone}
         })
         
@@ -110,7 +110,7 @@ async function onSubmitReset(event:any) {
             throw new Error('konfirmasi password dan password tidak sama')
         }
 
-        const res = await $fetch('/api/v2/protect/reset-password/update', {
+        const res = await $fetch('/api/reset-password/update', {
             method: 'put', body: {secret, password}
         })
         

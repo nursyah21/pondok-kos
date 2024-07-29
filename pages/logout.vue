@@ -16,7 +16,7 @@ definePageMeta({
 
 async function logout() {
     
-    await $fetch('/api/v2/public/logout', {
+    await $fetch('/api/auth/logout', {
         headers: {
             Authorization: `Bearer ${token}`
         },method: 'POST'

@@ -56,11 +56,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         let role;
         const path = to.path;
         try {
-            const data = await $fetch('/api/v2/public/verify',{
+            const data = await $fetch('/api/auth/verify',{
                 headers: {
                     Authorization: `Bearer ${token}`
                },
-                method: 'post'
+                method: 'get'
             })
             role = data.data?.role
         } catch (error:any) {

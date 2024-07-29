@@ -93,7 +93,7 @@ async function onSubmit(event:any) {
     loading.value = true
     const { data } = event
     try {
-        const res = await $fetch('/api/v2/protect/update-profile', {
+        const res = await $fetch('/api/auth/update-profile', {
             headers: {
                 Authorization: `Bearer ${token}`
             },

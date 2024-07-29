@@ -6,6 +6,9 @@ export default defineEventHandler(async (event) => {
     const secretAccessKey = useRuntimeConfig().r2SecretKey
     const bucketName = useRuntimeConfig().r2Bucket
     const endpoint = useRuntimeConfig().r2Endpoint
+
+    const authorizationHeader = event.node.req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1]
     
     const s3 = new S3({
         credentials: {
@@ -18,23 +21,23 @@ export default defineEventHandler(async (event) => {
     
 
     if (data?.length) {
-        const token = data[0].data.toString()
-        const id = await $fetch('/api/v1/public/verify', {
-            method: 'post',
-            body: {
-                token
-            }
+        
+        const id = await $fetch('/api/auth/verify', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }, method: 'get',
         })
         
         if(id.status == 'fail') {
             event.node.res.statusCode = 400
             return {status: 'fail', message: 'you must login to upload file'}
         }
+
         // @ts-ignore
         const id_owner = id.data._id
-        const file = data[1].data
+        const file = data[0].data
         const prefix = generateName()
-        const name = prefix+data[1].filename?.replaceAll(' ','-')
+        const name = prefix+data[0].filename?.replaceAll(' ','-')
         const type = name.split('.').pop()
 
         const size = file.length
@@ -44,7 +47,7 @@ export default defineEventHandler(async (event) => {
         }
 
         try {
-
+            
             await s3.putObject({
                 Bucket: bucketName,
                 Key: name, // Use the original file name
@@ -53,13 +56,12 @@ export default defineEventHandler(async (event) => {
             })
             const link = `https://pub-042cd08660454da9bd23468fc74cf82f.r2.dev/${name}`
 
-            await Files.create({ name, type, link, id_owner, size })
-
+            await Files.create({ name, type, link, id_owner, size })            
 
             //  delete previos data
             let status = 'upload data success'
-            if(data[2] && data[2].name == 'link'){
-                const resetFile = data[2].data.toString()
+            if(data[1] && data[1].name == 'link'){
+                const resetFile = data[1].data.toString()
                 const key = resetFile.split('/').pop()
                 await s3.deleteObject({Bucket: bucketName, Key: key})
                 const res = await Files.findOneAndDelete({link: resetFile})

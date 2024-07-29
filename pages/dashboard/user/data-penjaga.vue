@@ -135,23 +135,23 @@ const pageCount = 10
 const skip = ref(0)
 const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data:raw, status, refresh } = await useFetch('/api/v2/protect/penjaga/all-penjaga-kos', {
+const { data:raw, status, refresh } = await useFetch('/api/penjaga/all-penjaga-kos', {
     headers:{
         Authorization: `Bearer ${token}`
     },
-    query, method: 'post'
+    query, method: 'get'
 })
 // @ts-ignore
-const {data: allKos} = await $fetch('/api/v2/protect/kos/get',{
+const {data: allKos} = await $fetch('/api/kos/get',{
     method: 'get'
 })
 const optionsKos = allKos.map((e:any)=>({value:e._id, name: `${e.name} - ${e.location}`}))
 
 // @ts-ignore
-const {data: allPenjaga} = await $fetch('/api/v2/protect/penjaga/all-penjaga',{
+const {data: allPenjaga} = await $fetch('/api/penjaga/all-penjaga',{
     headers:{
         Authorization: `Bearer ${token}`
-    }, method: 'post'
+    }, method: 'get'
 })
 const optionsPenjaga = allPenjaga.map((e:any)=>({value:e._id, name: `${e.name} - ${e.number_phone}`}))
 
@@ -199,17 +199,17 @@ const onSubmit = (e:any) => {
 
 
 const submitAdd = (e:any) => submitHelperPost(
-    loading, isOpen, 'addPenjaga', '/api/v2/protect/penjaga/add-penjaga',
+    loading, isOpen, 'addPenjaga', '/api/penjaga/add-penjaga',
     refresh, {...e.data}
 )
 
 const submitEdit = (e:any) => submitHelperPut(
-    loading, isOpen, 'editPenjaga', '/api/v2/protect/penjaga/edit-penjaga',
+    loading, isOpen, 'editPenjaga', '/api/penjaga/edit-penjaga',
     refresh, {...e.data}
 )
 
 const submitDelete = (e:any) => submitHelperDelete(
-    loading, isOpen, 'deletePenjaga', '/api/v2/protect/penjaga/delete-penjaga',
+    loading, isOpen, 'deletePenjaga', '/api/penjaga/delete-penjaga',
     refresh, {...e.data}
 )
 

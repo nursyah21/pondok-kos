@@ -157,7 +157,7 @@ const stateReset = () => {
 }
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data: raw, status, refresh } = await useFetch('/api/v2/public/all-kamar-kos', {
+const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-kos', {
     query,
     method: 'get',
 })
@@ -211,9 +211,6 @@ async function submitMidtrans(event: any) {
     const { price, id_kamar_kos } = event.data
     loading.value = true
 
-    // console.log(price, id_kamar_kos)
-    // return loading.value = false
-    // prepare Snap API parameter ( refer to: https://snap-docs.midtrans.com ) minimum parameter example:
     const order_id = "order_id_" + Math.round((new Date()).getTime() / 1000)
     const parameter = {
         "transaction_details": {
@@ -227,13 +224,13 @@ async function submitMidtrans(event: any) {
 
 
     // return loading.value = false
-    $fetch('/api/v2/protect/midtrans', {
+    $fetch('/api/booking/midtrans', {
         method: 'post',
         body: { parameter }
     }).then(async function (e) {
         // console.log(e)
         try {
-            const res = await $fetch('/api/v2/protect/booking/add-booking-midtrans', {
+            const res = await $fetch('/api/booking/add-booking-midtrans', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },

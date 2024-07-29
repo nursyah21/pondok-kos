@@ -199,11 +199,11 @@ const pageCount = 4
 const skip = ref(0)
 const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data:raw, status, refresh } = await useFetch('/api/v2/protect/all-user', {
+const { data:raw, status, refresh } = await useFetch('/api/all-user', {
     headers:{
         Authorization: `Bearer ${token}`
     },
-    query, method: 'post'
+    query, method: 'get'
 })
 
 
@@ -262,14 +262,14 @@ const onSubmit = (e:any) => {
 
 const submitRole = async (e:any) => {
     await submitHelperPut(
-        loading, isOpen, 'resetPassword', '/api/v2/protect/change-role',
+        loading, isOpen, 'resetPassword', '/api/change-role',
         refresh, {id: e.user_id, role: e.role}
     )
 }
 
 const submitReset = async (e:any) => {
     const res = await submitHelperPost(
-        loading, ref(false), 'changeRole', '/api/v2/protect/reset-password/generate',
+        loading, ref(false), 'changeRole', '/api/reset-password/generate',
         refresh, {number_phone: e.number_phone}
     )
     if(res.status == 'success'){

@@ -1,5 +1,6 @@
 export const myProfile = async () => {
-    const data = await $fetch('/api/v2/protect/profile', {
+    
+    const data = await $fetch('/api/auth/profile', {
         headers: {
             Authorization: `Bearer ${token}`
        },

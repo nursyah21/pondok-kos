@@ -22,7 +22,7 @@ export const uploadFile = async(event:any, loading:any, state:any, type:UploadTy
         let message = ''
 
         try {
-            const res = await $fetch('/api/v2/protect/files', {
+            const res = await $fetch('/api/files', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },

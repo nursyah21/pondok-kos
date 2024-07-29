@@ -59,11 +59,10 @@ const dashboard = ref<DataDashboard>({
         series: null
     }
 })
-const { data: dataDashboard, status, refresh } = await useFetch('/api/v2/protect/dashboard', {
+const { data: dataDashboard, status, refresh } = await useFetch('/api/dashboard', {
     headers: {
          Authorization: `Bearer ${token}`
-    },
-    method: 'post'
+    }
 })
 
 watch(() => status, e => {

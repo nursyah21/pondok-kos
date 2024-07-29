@@ -26,9 +26,17 @@ export default defineEventHandler(async (event)=>{
         
         const link = `${event.node.req.headers.origin}/reset-password?secret=${secret}`
         // send link generate id_reset with wa
-        await $fetch('/api/v1/protect/fontee',{
+        await $fetch('/api/fontee',{
             method: 'post', body: {
-                target: number_phone, message: `klik link berikut untuk reset password pondok kos nursyah: ${link}`
+                target: number_phone, message: `Kami menerima permintaan untuk mereset kata sandi akun Kos Pondok Jaya Anda. Untuk mereset kata sandi Anda, silakan klik tautan berikut:
+
+${link}
+
+Tautan ini akan kedaluwarsa dalam 24 jam. Jika Anda tidak meminta pengaturan ulang kata sandi, Anda dapat mengabaikan pesan ini.
+
+Terima kasih,
+Tim Kos Pondok Jaya
+                `
             }
         })
 

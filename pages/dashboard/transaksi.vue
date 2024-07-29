@@ -207,11 +207,11 @@ const _uploadFile = (e: any) => uploadFile(e, loading, attachment)
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
 
-const { data: raw, status, refresh } = await useFetch('/api/v2/protect/booking/all-booking', {
+const { data: raw, status, refresh } = await useFetch('/api/booking/all-booking', {
     headers: {
         Authorization: `Bearer ${token}`
     },
-    query, method: 'post'
+    query, method: 'get'
 })
 
 
@@ -234,7 +234,7 @@ const openEdit = async (e: any) => {
 const onUpdateTransaksi = async (event: any) => {
     loading.value = true
     const { _id, attachment, verified, price } = event.data
-    const link = verified ? '/api/v2/protect/booking/verify-booking' : '/api/v2/protect/booking/fail-booking'
+    const link = verified ? '/api/booking/verify-booking' : '/api/booking/fail-booking'
 
     try {
         const res = await $fetch(link, {
@@ -269,7 +269,7 @@ const openPayment = async (e: any) => {
 
 
     if (checkTime(createdAt)) {
-        const res2 = await $fetch('/api/v2/protect/booking/fail-booking', {
+        const res2 = await $fetch('/api/booking/fail-booking', {
             headers: {
                 Authorization: `Bearer ${token}`
             },
@@ -291,7 +291,7 @@ const openPayment = async (e: any) => {
         // Optional
         onSuccess: async function (result: any) {
             console.log('succes nih')
-            const res = await $fetch('/api/v2/protect/booking/verify-booking', {
+            const res = await $fetch('/api/booking/verify-booking', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -305,7 +305,7 @@ const openPayment = async (e: any) => {
         onPending: async function (result: any) {
             console.log('pending nih', result)
             // update data booking
-            const res = await $fetch('/api/v2/protect/check-midtrans', {
+            const res = await $fetch('/api/booking/check-midtrans', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -319,7 +319,7 @@ const openPayment = async (e: any) => {
         },
         onError: async function (result: any) {
             console.log('error nih')
-            const res = await $fetch('/api/v2/protect/booking/fail-booking', {
+            const res = await $fetch('/api/booking/fail-booking', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -336,7 +336,7 @@ const openPayment = async (e: any) => {
             console.log('ketutup nih')
             try {
                 if (result) {
-                    const res = await $fetch('/api/v2/protect/check-midtrans', {
+                    const res = await $fetch('/api/booking/check-midtrans', {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
@@ -478,7 +478,7 @@ const submitDeleteBooking = async (event: any) => {
     const { _id } = event
 
     try {
-        const res = await $fetch('/api/v2/protect/booking/delete-booking', {
+        const res = await $fetch('/api/booking/delete-booking', {
             headers: {
                 Authorization: `Bearer ${token}`
             },

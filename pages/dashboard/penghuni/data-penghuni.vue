@@ -187,7 +187,7 @@ const columns = [{
 ]
 
 // @ts-ignore
-const {data: allPenghuni} = await $fetch('/api/v2/protect/all-user',{
+const {data: allPenghuni} = await $fetch('/api/all-user',{
     headers:{
         Authorization: `Bearer ${token}`,
     },
@@ -197,13 +197,13 @@ const {data: allPenghuni} = await $fetch('/api/v2/protect/all-user',{
 const optionsPenghuni = allPenghuni.map((e:any)=>({value:e._id, name: `${e.name} - ${e.number_phone}`}))
 
 // @ts-ignore
-const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/v2/public/all-kamar-kos',{
+const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/all-kamar-kos',{
     method: 'get', query: {onlyName: 1}
 })
 let optionsKamarKos = <any>[]
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data: raw, status, refresh } = await useFetch('/api/v2/protect/penghuni/all-penghuni-kos', {
+const { data: raw, status, refresh } = await useFetch('/api/penghuni/all-penghuni-kos', {
     headers:{
         Authorization: `Bearer ${token}`
     },
@@ -299,14 +299,14 @@ const onSubmit = (e:any) => {
 
 const submitAdd = (e:any) => {
     submitHelperPost(
-        loading, isOpen, 'addPenjaga', '/api/v2/protect/penghuni/add-penghuni-kos',
+        loading, isOpen, 'addPenjaga', '/api/penghuni/add-penghuni-kos',
         refresh, {...e}
     )
     refreshKamarKos()
 }
 
 const submitDelete = (e:any) => submitHelperDelete(
-    loading, isOpen, 'delPenjaga', '/api/v2/protect/penghuni/delete-penghuni-kos',
+    loading, isOpen, 'delPenjaga', '/api/penghuni/delete-penghuni-kos',
     refresh, {...e}
 )
 

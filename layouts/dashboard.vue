@@ -76,8 +76,6 @@
 </template>
 
 <script setup lang="ts">
-import { profile } from '~/composables/profile'
-
 const data = profile
 
 const _data = await myProfile()

@@ -205,13 +205,13 @@ const skip = ref(0)
 const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
 // @ts-ignore
-const {data: kos} = await $fetch('/api/v2/protect/kos/get', {    
+const {data: kos} = await $fetch('/api/kos/get', {    
     method: 'get'
 })
 // @ts-ignore
 const optionsKos = kos.map(e=>({value:e._id, name: `${e.name} - ${e.location}`}))
 
-const { data:raw, status, refresh } = await useFetch('/api/v2/public/all-kamar-kos', {
+const { data:raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-kos', {
     query,
     method: 'get'
 })
@@ -288,17 +288,17 @@ const onSubmit = (e:any) => {
 }
 
 const submitEditKos = (e:any) => submitHelperPut(
-    loading, isOpen, 'merubah kos', '/api/v2/protect/kamar-kos/edit',
+    loading, isOpen, 'merubah kos', '/api/kamar-kos/kamar-kos/edit',
     refresh, {...e.data, image: imageKos.value}
 )
 
 const submitAddKos = (e:any) => submitHelperPost(
-    loading, isOpen, 'menambah kos', '/api/v2/protect/kamar-kos/add',
+    loading, isOpen, 'menambah kos', '/api/kamar-kos/kamar-kos/add',
     refresh, {...e.data, image: imageKos.value}
 )
 
 const submitDeleteKos = (e:any) => submitHelperPost(
-    loading, isOpen, 'menghapus kos', '/api/v2/protect/kamar-kos/update-hidden',
+    loading, isOpen, 'menghapus kos', '/api/kamar-kos/update-hidden',
     refresh, {...e.data, image: imageKos.value}
 )
 

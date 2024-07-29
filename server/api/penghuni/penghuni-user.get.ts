@@ -1,7 +1,6 @@
 export default defineEventHandler(async (event: any) => {
-    const { token, user_id } = await readBody(event)
-
-
+    const authorizationHeader = event.node.req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1]
     
     try {
         const refreshTokens = await RefreshTokens.findOne({ token })
@@ -10,8 +9,10 @@ export default defineEventHandler(async (event: any) => {
         if (!user) throw new Error('user not valid')
 
         const { role } = user
-        if (role == 0) throw new Error('user not authorization, you must be admin')
+        if (role == 0) throw new Error('user not authorization, you must be admin');
 
+        const user_id = getRequestURL(event).searchParams.get('user_id')
+        
         const data= await Users.findById(user_id)
 
         // { name, number_phone, verified, avatar, id_card, birthdate, address } 

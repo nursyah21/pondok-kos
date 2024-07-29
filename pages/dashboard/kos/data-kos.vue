@@ -160,7 +160,7 @@ const pageCount = 10
 const skip = ref(0)
 const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data: raw, status, refresh } = await useFetch('/api/v2/protect/kos/get', {
+const { data: raw, status, refresh } = await useFetch('/api/kos/get', {
     query,
     method: 'get'
 })
@@ -227,17 +227,17 @@ const onSubmit = (e: any) => {
 }
 
 const submitEditKos = (e: any) => submitHelperPut(
-    loading, isOpen, 'merubah kos', '/api/v2/protect/kos/edit',
+    loading, isOpen, 'merubah kos', '/api/kos/edit',
     refresh, { ...e.data, image: image.value }
 )
 
 const submitAddKos = (e: any) => submitHelperPost(
-    loading, isOpen, 'menambah kos', '/api/v2/protect/kos/add',
+    loading, isOpen, 'menambah kos', '/api/kos/add',
     refresh, { ...e.data, image: image.value }
 )
 
 const submitHiddenKos = (e: any) => submitHelperPost(
-    loading, isOpen, 'hidden kos', '/api/v2/protect/kos/update-hidden',
+    loading, isOpen, 'hidden kos', '/api/kos/update-hidden',
     refresh, { ...e.data, image: image.value }
 )
 

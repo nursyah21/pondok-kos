@@ -187,11 +187,11 @@ const loading = ref(false)
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
 
-const { data: raw, status, refresh } = await useFetch('/api/v2/protect/penghuni/all-penghuni', {
+const { data: raw, status, refresh } = await useFetch('/api/penghuni/all-penghuni', {
     headers:{
           Authorization: `Bearer ${token}`
     },
-    query,method: 'post'
+    query,method: 'get'
 })
 
 watch(() => router.query,
@@ -217,12 +217,12 @@ async function edit(data:any){
     isOpen.value = true
     
     id.value = data
-    
-    const user = await $fetch('/api/v2/protect/penghuni/penghuni-user', {
+    const query = computed(() => ({ user_id: data }))
+    const user = await $fetch('/api/penghuni/penghuni-user', {
         headers:{
           Authorization: `Bearer ${token}`
         },
-        method: 'post', body: {user_id: data}
+        query, method: 'get'
     })
     
     // @ts-ignore
@@ -248,7 +248,7 @@ async function edit(data:any){
 async function verifikasi(){
     loading.value = true
     
-    await $fetch('/api/v2/protect/penghuni/penghuni-verified', {
+    await $fetch('/api/penghuni/penghuni-verified', {
         headers:{
           Authorization: `Bearer ${token}`
         },

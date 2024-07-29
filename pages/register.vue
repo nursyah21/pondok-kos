@@ -107,7 +107,7 @@ async function onSubmit(event:any) {
     }
 
 
-    const res = await $fetch('/api/v2/public/register', {
+    const res = await $fetch('/api/auth/register', {
         method: 'POST',
         body: { name, number_phone, password }
     })
