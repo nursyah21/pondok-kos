@@ -23,11 +23,10 @@
                 {{ moment(getNextDate(i.row.duration)).format('DD-MM-YYYY') }}
             </template>
             <template #name-data="i">
-
-                <div class="items-center flex gap-x-3">
-                    <UAvatar :src="i.row.avatar" />
-                    {{ i.row.name }}
-                </div>
+                {{ i.row.user_name }}
+            </template>
+            <template #admin-data="i">
+                {{ i.row.admin_name }}
             </template>
 
             <template #price-data="i">
@@ -41,12 +40,16 @@
                     @click="invoiceOpen = true; dataInvoice = i.row">
                     Bukti pembayaran
                 </UButton>
-                <UBadge v-if="i.row.paid_status == 0" color="red" >
+                <UBadge v-if="i.row.paid_status == 0" color="red">
                     Gagal
                 </UBadge>
-                <UButton v-if="i.row.paid_status == 1" color="blue" @click="openPayment(i.row)" size="2xs">
+                <UButton v-if="i.row.paid_status == 1 && role == 0" color="blue" @click="openPayment(i.row)" size="2xs">
                     Bayar
                 </UButton>
+                <UBadge v-if="i.row.paid_status == 1 && role != 0" color="yellow">
+                    menunggu pembayaran
+                </UBadge>
+
             </template>
 
             <template #paid_status-data="i">
@@ -57,35 +60,18 @@
             </template>
 
             <template #action-data="i">
-                <template v-if="role != 0">
-                    <UDropdown :items="[[
+                <UDropdown :items="[
+                    [
                         {
                             label: 'Batalkan transaksi',
                             icon: 'i-material-symbols-light-delete',
                             click: () => submitDeleteBooking(i.row)
-                        }, {
-                            label: 'Verifikasi transaksi',
-                            icon: 'i-material-symbols-light-edit',
-                            click: () => openEdit(i.row)
-                        }]
-                    ]" :popper="{ placement: 'bottom-start' }">
-                        <UButton disabled color="gray" variant="link" icon="i-mi-options-vertical" />
+                        }
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton :disabled="i.row.paid_status != 1" :color="i.row.paid_status == 1 ? 'green' : 'gray'"
+                        variant="link" icon="i-mi-options-vertical" />
                     </UDropdown>
-                </template>
-                <template v-else>
-                    <UDropdown :items="[
-                        [
-                            {
-                                label: 'Batalkan transaksi',
-                                icon: 'i-material-symbols-light-delete',
-                                click: () => submitDeleteBooking(i.row)
-                            }
-                        ]
-                    ]" :popper="{ placement: 'bottom-start' }">
-                        <UButton :disabled="i.row.paid_status != 1" :color="i.row.paid_status == 1 ? 'green' : 'gray'"
-                            variant="link" icon="i-mi-options-vertical" />
-                    </UDropdown>
-                </template>
             </template>
         </UTable>
 
@@ -217,21 +203,6 @@ const { data: raw, status, refresh } = await useFetch('/api/booking/all-booking'
 
 
 
-// update transaksi payment
-
-const openEdit = async (e: any) => {
-    isOpen.value = true
-    const { paid_status, admin_name, _id, name_kamar_kos, user_name, attachment, price } = e
-    state.name = user_name
-    state.kamarKos = name_kamar_kos
-    state.admin = admin_name
-    state.price = price
-    state.attachment = attachment
-    state._id = _id
-    state.paid_status = paid_status
-    state.verified = paid_status ? false : true
-}
-
 const onUpdateTransaksi = async (event: any) => {
     loading.value = true
     const { _id, attachment, verified, price } = event.data
@@ -269,14 +240,14 @@ const openPayment = async (e: any) => {
     const midtrans = link_payment.split('/').pop()
 
     const updateBooking = async (link_payment: any, result: any) => {
-        const res = await $fetch('/api/booking/update-booking', {
+        await $fetch('/api/booking/update-booking', {
             headers: {
                 Authorization: `Bearer ${token}`
             },
             method: 'POST',
             body: { link_payment, result }
         })
-
+        console.log('refresh data') 
         refresh()
     }
 
@@ -296,7 +267,7 @@ const openPayment = async (e: any) => {
             await updateBooking(link_payment, result)
         }
     })
-    
+
 }
 
 
@@ -323,15 +294,15 @@ let columns = [{
 },
 {
     key: 'tgl',
-    label: 'tanggal'
+    label: 'masuk'
 },
 {
-    key: 'user_name',
-    label: 'user',
+    key: 'duration',
+    label: 'keluar'
 },
 {
-    key: 'user_phone',
-    label: 'nomor whatsapp',
+    key: 'name',
+    label: 'penghuni'
 },
 {
     key: 'name_kos',
@@ -342,12 +313,8 @@ let columns = [{
     label: 'kamar',
 },
 {
-    key: 'admin_name',
-    label: 'admin',
-},
-{
-    key: 'admin_phone',
-    label: 'nomor whatsapp',
+    key: 'admin',
+    label: 'admin'
 },
 {
     key: 'price',
@@ -358,14 +325,17 @@ let columns = [{
     label: 'metode pembayaran',
 },
 {
+    key: 'link_payment',
+    label: 'link pembayaran',
+},
+{
     key: 'paid_status',
     label: 'status pembayaran',
 },
 {
     key: 'action',
     label: 'aksi',
-},
-]
+}]
 
 const columns_penghuni = [{
     key: 'num',
@@ -409,9 +379,108 @@ const columns_penghuni = [{
 },
 ]
 
+const columns_penjaga = [{
+    key: 'num',
+    label: 'id',
+},
+{
+    key: 'tgl',
+    label: 'masuk'
+},
+{
+    key: 'duration',
+    label: 'keluar'
+},
+{
+    key: 'name',
+    label: 'penghuni'
+},
+{
+    key: 'name_kos',
+    label: 'kos',
+},
+{
+    key: 'name_kamar',
+    label: 'kamar',
+},
+{
+    key: 'price',
+    label: 'harga',
+},
+{
+    key: 'method_payment',
+    label: 'metode pembayaran',
+},
+{
+    key: 'link_payment',
+    label: 'bukti pembayaran',
+},
+{
+    key: 'paid_status',
+    label: 'status pembayaran',
+},
+{
+    key: 'action',
+    label: 'aksi',
+},
+]
+
+const columns_pemilik = [{
+    key: 'num',
+    label: 'id',
+},
+{
+    key: 'tgl',
+    label: 'masuk'
+},
+{
+    key: 'duration',
+    label: 'keluar'
+},
+{
+    key: 'name',
+    label: 'penghuni'
+},
+{
+    key: 'name_kos',
+    label: 'kos',
+},
+{
+    key: 'name_kamar',
+    label: 'kamar',
+},
+{
+    key: 'admin',
+    label: 'admin'
+},
+{
+    key: 'price',
+    label: 'harga',
+},
+{
+    key: 'method_payment',
+    label: 'metode pembayaran',
+},
+{
+    key: 'link_payment',
+    label: 'bukti pembayaran',
+},
+{
+    key: 'paid_status',
+    label: 'status pembayaran',
+},
+{
+    key: 'action',
+    label: 'aksi',
+},
+]
 
 if (role == 0) {
     columns = columns_penghuni
+} else if (role == 1) {
+    columns = columns_penjaga
+} else if (role == 2) {
+    columns = columns_pemilik
 }
 
 const submitDeleteBooking = async (event: any) => {

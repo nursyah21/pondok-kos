@@ -3,22 +3,7 @@
     <Breadcrumb />
     <main class="my-4">
         <RefreshButton :refresh="refresh" v-model:status="status" />
-        <div class="flex gap-x-4 gap-y-4 flex-col sm:flex-row">
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon  name="i-material-symbols-supervisor-account-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1 class="font-bold">Verifikasi Penghuni</h1>
-                    <UButton to="/dashboard/penghuni/data-verif">Buka</UButton>
-                </div>
-            </UCard>
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon  name="i-material-symbols-supervisor-account-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1 class="text-primary font-bold">Daftar Penghuni</h1>
-                    <UButton variant="link"  to="/dashboard/penghuni/data-penghuni">Buka</UButton>
-                </div>
-            </UCard>
-        </div>
+        <NavbarPenghuni />
 
         
         <UButton :disabled="optionsKamarKos.length == 0" @click="add" 
@@ -42,11 +27,15 @@
 
             <template #tanggal_bayar-data="i">
                 <div v-if="i.row.tanggal_bayar">
-                    {{ i.row.tanggal_bayar.split('T')[0] }}
+                    {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
                 </div>
                 <UBadge color="yellow" v-else>
                     kosong
                 </UBadge>
+            </template>
+
+            <template #price-data="i">
+                {{ formatRupiahIntl(i.row.price) }}
             </template>
 
             <template #action-data="i">
@@ -105,17 +94,17 @@
                         <UInput v-model="state.tanggal_bayar" type="date" required :disabled="mode == 'delete'" />
                     </UFormGroup>
 
-                    <UFormGroup label="Tanggal Keluar" name="birth_date" class="w-full">
+                    <UFormGroup label="Tanggal Keluar" name="birth_date" class="w-full" v-if="mode == 'add'">
                         <UInput  type="date" :value="getNextDate(state.duration, state.tanggal_bayar)" disabled />
                     </UFormGroup>
 
-                    <UFormGroup label="Durasi Sewa (Hari)" name="birth_date" class="w-full">
-                        <UInput  type="number" v-model="state.duration" required :disabled="!state.price_harian || mode == 'delete'"/>
+                    <UFormGroup label="Durasi Sewa (Hari)" name="birth_date" class="w-full" v-if="mode == 'add'">
+                        <UInput  type="number" v-model="state.duration" required :disabled="!state.price_harian"/>
                     </UFormGroup>
 
-                    <UFormGroup label="Harga" name="birth_date" class="w-full">
+                    <UFormGroup label="Harga" name="birth_date" class="w-full" v-if="mode == 'add'">
                         <div class="flex items-center gap-x-2 ">
-                            <UInput class="flex-1" type="number" max="10000000" min="10000" v-model="state.price" placeholder="harga kamar kos" autocomplete="off" required :disabled="mode == 'delete'"/>
+                            <UInput class="flex-1" type="number" max="10000000" min="10000" v-model="state.price" placeholder="harga kamar kos" autocomplete="off" required/>
                             <p class="font-bold w-[100px]">{{formatRupiahIntl(state.price)}}</p>
                         </div>
                     </UFormGroup>
@@ -123,8 +112,8 @@
                     <div class="flex justify-center">
                         <img v-if="image" :src="image" alt="image kos" class="w-[200px] h-[200px] ">
                     </div>
-                    <UFormGroup label="Bukti Pembayaran" class="w-full">
-                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="addAttachment" :disabled="mode == 'delete'" />
+                    <UFormGroup label="Bukti Pembayaran" class="w-full" v-if="mode == 'add'">
+                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="addAttachment" />
                     </UFormGroup>
 
                     <UFormGroup>
@@ -144,6 +133,7 @@
 definePageMeta({
     layout: 'dashboard'
 })
+import moment from 'moment'
 const router = useRoute()
 const page = ref(1)
 const pageCount = 10
@@ -159,10 +149,6 @@ const columns = [{
 {
     key: 'name',
     label: 'nama',
-},
-{
-    key: 'number_phone',
-    label: 'nomor whatsapp',
 },
 {
     key: 'kos',
@@ -192,12 +178,12 @@ const {data: allPenghuni} = await $fetch('/api/all-user',{
         Authorization: `Bearer ${token}`,
     },
     query: {'onlyName': 1},
-    method: 'post'
+    method: 'get'
 })
 const optionsPenghuni = allPenghuni.map((e:any)=>({value:e._id, name: `${e.name} - ${e.number_phone}`}))
 
 // @ts-ignore
-const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/all-kamar-kos',{
+const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/kamar-kos/all-kamar-kos',{
     method: 'get', query: {onlyName: 1}
 })
 let optionsKamarKos = <any>[]
@@ -207,8 +193,7 @@ const { data: raw, status, refresh } = await useFetch('/api/penghuni/all-penghun
     headers:{
         Authorization: `Bearer ${token}`
     },
-    query,
-    method: 'post'
+    query, method: 'get'
 })
 const image = ref('')
 

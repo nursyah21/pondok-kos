@@ -4,23 +4,7 @@
     <main class="my-4">
         <RefreshButton :refresh="refresh" v-model:status="status" />
 
-        <div class="flex gap-x-4 gap-y-4 flex-col sm:flex-row">
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon name="i-material-symbols-home-work-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1 class="text-primary-600 font-bold">Kos</h1>
-                    <UButton variant="link" to="/dashboard/kos/data-kos">Buka</UButton>
-                </div>
-            </UCard>
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon name="i-material-symbols-home-work-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1 class="font-bold">Kamar Kos</h1>
-                    <UButton to="/dashboard/kos/data-kamar-kos">Saat ini</UButton>
-                </div>
-            </UCard>
-        </div>
-
+        <NavbarKos />   
 
         <UButton @click="add" class="my-4">tambahkan data</UButton>
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">

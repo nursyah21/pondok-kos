@@ -6,15 +6,15 @@ const Schema = new mongoose.Schema({
         required: true,
     },
     id_kamar_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
         required: true,
     },
     id_user: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
         required: true,
     },
     id_admin: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
         required: true,
     },
     attachment: {

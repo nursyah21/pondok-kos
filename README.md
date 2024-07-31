@@ -38,33 +38,18 @@
 > before to push master always check app to run (alur kerja aplikasi) to make sure app is working and free from bug
 > only run this in branch dev not another branch
 
-## fix bug is priority
-- bug find-kos [x]
-- fix bug foto penghuni [x]
-- fix bug foto find kos [x]
-- fix bug upload foto [x]
-- fix bug when payment []
 
-## list pekerjaan
-- admin menambahkan lebih 1 foto untuk kos [x]
-- admin menonaktifkan kos atau kamar kos [x]
-- invoice transaksi [x]
-- ubah format chat yang dikirim ke wa lebih profesional [x]
+## fitur utama
+
 - admin menambahkan opsi pembayaran harian atau bulanan []
 - penghuni memilih sewa harian atau bulanan []
-- memasukkan penghuni ke kos, melibatkan proses transaksi []
---- target --- jul 26
-
+- pemilik memiliki opsi, harga kos harian dan dua orang []
 - penghuni mendapat data kos nya di dashboard []
-- penjaga mendapat data kos yang di jaga di dashbaord []
-- mengirim pesan saat sukses transaksi []
+- penjaga mendapat data kos yang di jaga di dashboard []
+- penghuni kos meminta sewa kamar untuk 2 orang []
 - penghuni kos menambah durasi sewa []
-- cronjob check data penghuni []
-
-## refactor code
-- mengeluarkan semua api dari protect dan public
-
-# fitur tambahan
 - penghuni kos meminta penundaan pembayaran sewa kos []
-- nonaktifkan penghuni [] # ketikan menonaktifkan otomatis kos yang dihuni akan menjadi tersedia
-- nonaktifkan penjaga [] 
+
+## fitur tambahan
+- fitur pencarian  []
+- mengirim pesan saat sukses transaksi ke pemilik dan penghuni []

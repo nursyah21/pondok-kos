@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         if (role == 0) throw new Error('user not authorization, you must be admin');
         
         // whats wrong with id kamar kos        
-
+        console.log(id_kamar_kos)
         await KamarKos.findByIdAndUpdate(id_kamar_kos, {available: 0})
         await PenghuniKos.findByIdAndDelete(id)
 

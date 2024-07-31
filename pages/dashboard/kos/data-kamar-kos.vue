@@ -5,32 +5,13 @@
 
         <RefreshButton :refresh="refresh" v-model:status="status" />
 
-        <div class="flex gap-x-4 gap-y-4 flex-col sm:flex-row">
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon  name="i-material-symbols-home-work-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1 activeClass="underline" class="font-bold">Kos</h1>
-                    <UButton  to="/dashboard/kos/data-kos">Buka</UButton>
-                </div>
-            </UCard>
-            <UCard class='text-slate-600 w-[260px] h-[100px]'>
-                <UIcon  name="i-material-symbols-home-work-rounded" class="text-primary text-2xl" />
-                <div class="flex justify-between items-center">
-                    <h1  class="text-primary-600 font-bold">Kamar Kos</h1>
-                    <UButton variant="link" to="/dashboard/kos/data-kamar-kos">Saat ini</UButton>
-                </div>
-            </UCard>
-        </div>
+        <NavbarKos />
 
         
         <UButton @click="add" class="my-4">tambahkan data</UButton>
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #kos-data="i">
-                <div v-if="i.row.hidden" class="flex items-center gap-x-4 text-opacity-70">
-                    {{i.row.kos}}
-                    <UBadge color="yellow">tidak aktif</UBadge>
-                </div>
-                <div v-else class="flex items-center gap-x-4 text-">
+                <div class="flex items-center gap-x-4 text-">
                     <UAvatar :src="i.row.image[0]" />
                     {{i.row.kos}}
                 </div>
@@ -42,9 +23,14 @@
                 {{ shortWord(i.row.location, 20) }}
             </template>
             <template #available-data="i">
-                <UBadge v-if="i.row.available == 0">tersedia</UBadge>
-                <UBadge color="yellow" v-if="i.row.available == 1">sedang dipesan</UBadge>
-                <UBadge color="red" v-if="i.row.available == 2">ditempati</UBadge>
+                <template v-if="i.row.hidden">
+                    <UBadge color="gray">tidak aktif</UBadge>
+                </template>
+                <template v-else>
+                    <UBadge v-if="i.row.available == 0">tersedia</UBadge>
+                    <UBadge color="yellow" v-if="i.row.available == 1">sedang dipesan</UBadge>
+                    <UBadge color="red" v-if="i.row.available == 2">ditempati</UBadge>
+                </template>
             </template>
             <template #price-data="i">
                 {{ formatRupiahIntl(i.row.price) }}
@@ -252,7 +238,7 @@ const helperState = (e:any) => {
     state.available = available == 2 ? optionsAvailable[1] : optionsAvailable[1]
     state.price = price
     state.id_kos = optionsKos.find((e:any)=>e.value == id_kos).value
-    state.hidden = false
+    state.hidden = hidden
     
     if(_image){
         console.log(_image)
