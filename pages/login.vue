@@ -113,7 +113,7 @@ async function onSubmit(event:any) {
             setToken(res.secret)
             const kos = useRoute().query.kos
             if (kos) {
-                window.location.replace('/dashboard/find-kos?kos=' + kos)
+                window.location.replace('/dashboard/cari-kos?kos=' + kos)
             } else {
                 window.location.replace('/dashboard')
             }

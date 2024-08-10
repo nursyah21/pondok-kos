@@ -1,59 +1,63 @@
 <template>
     <div class="flex min-h-screen print:hidden">
-        <aside class="flex-col p-8 hidden sm:flex  rounded-lg m-2 shadow-2xl items-center">
+        <aside class="flex-col p-8 hidden lg:flex  rounded-lg m-2 shadow-2xl items-center">
             <ULink to="/" class="text-primary font-bold text-2xl flex items-center gap-x-2">
                 <UIcon name="i-material-symbols-other-houses" />
                 <span class="hidden lg:block">
                     Pondok Jaya
                 </span>
             </ULink>
-            <div class="mt-8 flex-col flex gap-y-8 lg:gap-y-12">
+            <div class="mt-8 flex-col flex gap-y-4 lg:gap-y-8">
                 <template v-for="i in navbar">
-                    <UButton :ui="{ padding: '' }" :icon="i.icon" variant="link" class="text-md hidden lg:block"
-                        :to="i.link">{{ i.label }}</UButton>
-                    <UButton :ui="{ padding: '' }" :icon="i.icon" variant="link" class="text-md block lg:hidden"
-                        :to="i.link" />
+                    <UButton :ui="{ padding: '' }"   variant="link" class="text-md hidden lg:block" activeClass="underline"
+                        :to="i.link">
+                        <div class="flex items-center gap-x-2">
+                            <UIcon :name="i.icon" />
+                            {{ i.label }}
+                        </div>
+                    </UButton>
                 </template>
             </div>
 
         </aside>
         <main class="flex-1 pb-12 space-y-6 overflow-y-auto lg:h-screen md:space-y-8">
             <header
-                class="flex justify-between sm:justify-end my-2 border-b-2 border-gray-200 shadow-md p-3 rounded-xl w-full">
-                <UButton class="sm:hidden" @click="slide_over = true" fadded="false" variant="link"
+                class="flex justify-between lg:justify-end my-2 border-b-2 border-gray-200 shadow-md p-3 rounded-xl w-full">
+                <UButton class="lg:hidden" @click="slide_over = true" fadded="false" variant="link"
                     icon="i-charm-menu-hamburger" />
 
 
                 <UDropdown v-if="data && data.avatar"  :items="[
                         [{
-                            label: data.name,
+                            label: data.name,                            
                             avatar: {
                                 src: data.avatar
-                            }
+                            },
                         }], [
                             {
                                 label: 'Edit Profile',
+                                class: 'edit-profile',
                                 icon: 'i-material-symbols-light-settings',
                                 click: () => {
-                                    navigateTo('/dashboard/settings')
+                                    navigateTo('/dashboard/edit-profile')
                                 }
                             },
                             {
                                 label: 'Keluar',
+                                class: 'keluar',
                                 icon: 'i-material-symbols-light-exit-to-app-rounded',
                                 click: () => {
-                                    console.log('/dashboard doing logout')
                                     navigateTo('/logout')
                                 }
                             }]
                     ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton variant="link">
+                    <UButton data-cy='avatar' variant="link">
                         <UAvatar label="Options" :src="data.avatar" alt="Avatar" />
                     </UButton>
                 </UDropdown>
 
 
-                <USlideover side="left" v-model="slide_over" class="sm:hidden">
+                <USlideover side="left" v-model="slide_over" class="lg:hidden">
                     <div class="p-4 flex-1">
                         <UButton color="gray" variant="ghost" size="sm" icon="i-heroicons-x-mark-20-solid"
                             class="flex absolute end-5 top-5 z-10" square padded @click="slide_over = false" />
@@ -95,20 +99,15 @@ const penghuni = [{
     icon: 'i-material-symbols-dashboard',
     link: '/dashboard'
 },
-// {
-//     label: 'Pesan',
-//     icon: 'i-material-symbols-chat-bubble',
-//     link: '/dashboard/messages'
-// },
 {
     label: 'Cari kos',
     icon: 'i-material-symbols-search',
-    link: '/dashboard/find-kos'
+    link: '/dashboard/cari-kos'
 },
 {
-    label: 'Riwayat transaksi',
+    label: 'Riwayat Transaksi',
     icon: 'i-material-symbols-lab-profile',
-    link: '/dashboard/transaksi'
+    link: '/dashboard/riwayat-transaksi'
 },]
 const penjaga = [{
     label: 'Beranda',
@@ -116,25 +115,20 @@ const penjaga = [{
     link: '/dashboard'
 },
 {
-    label: 'Riwayat transaksi',
+    label: 'Riwayat Transaksi',
     icon: 'i-material-symbols-lab-profile',
-    link: '/dashboard/transaksi'
+    link: '/dashboard/riwayat-transaksi'
 },
 {
     label: 'Penghuni',
     icon: 'i-material-symbols-supervisor-account-rounded',
     link: '/dashboard/penghuni'
 },
-// {
-//     label: 'Manajemen user',
-//     icon: 'i-material-symbols-supervisor-account-rounded',
-//     link: '/dashboard/user'
-// },
-// {
-//     label: 'Manajemen kos',
-//     icon: 'i-material-symbols-home-work-rounded',
-//     link: '/dashboard/kos'
-// }
+{
+    label: 'Verifikasi Penghuni',
+    icon: 'i-material-symbols-supervisor-account-rounded',
+    link: '/dashboard/verifikasi-penghuni'
+},
 ]
 const pemilik = [{
     label: 'Beranda',
@@ -142,9 +136,9 @@ const pemilik = [{
     link: '/dashboard'
 },
 {
-    label: 'Riwayat transaksi',
+    label: 'Riwayat Transaksi',
     icon: 'i-material-symbols-lab-profile',
-    link: '/dashboard/transaksi'
+    link: '/dashboard/riwayat-transaksi'
 },
 {
     label: 'Penghuni',
@@ -152,14 +146,29 @@ const pemilik = [{
     link: '/dashboard/penghuni'
 },
 {
-    label: 'Manajemen user',
-    icon: 'i-material-symbols-manage-accounts-rounded',
-    link: '/dashboard/user'
+    label: 'Verifikasi Penghuni',
+    icon: 'i-material-symbols-supervisor-account-rounded',
+    link: '/dashboard/verifikasi-penghuni'
 },
 {
-    label: 'Manajemen kos',
+    label: 'Penjaga',
+    icon: 'i-material-symbols-supervisor-account-rounded',
+    link: '/dashboard/penjaga'
+},
+{
+    label: 'Manajemen User',
+    icon: 'i-material-symbols-supervisor-account-rounded',
+    link: '/dashboard/manajemen-user'
+},
+{
+    label: 'Unit Kos',
     icon: 'i-material-symbols-home-work-rounded',
-    link: '/dashboard/kos'
+    link: '/dashboard/unit-kos'
+},
+{
+    label: 'Kamar Kos',
+    icon: 'i-material-symbols-home-work-rounded',
+    link: '/dashboard/kamar-kos'
 }]
 
 const navbar = role == 0 ? penghuni : role == 1 ? penjaga : pemilik

@@ -2,8 +2,6 @@
 
     <Breadcrumb />
     <main class="my-4">
-        <NavbarUser />
-
         
         <UButton @click="add" class="my-4">tambahkan data</UButton>
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">

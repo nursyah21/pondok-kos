@@ -2,9 +2,7 @@
 
     <Breadcrumb />
     <main class="my-4">
-        <NavbarUser />
-
-
+        
         <UTable class="my-4" :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #name-data="i">
                 <div class="items-center flex gap-x-3">

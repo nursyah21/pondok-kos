@@ -40,7 +40,7 @@
 
 
 ## yang dikerjain sekarang
-- memperbarui sidebar (1 day/ 3jam)
+- memperbarui sidebar (1 day/ 3jam) [x]
 - memperbarui tampilan setiap table (1 day/ 3jam)
 - membuat tampilan dashboard (1 day / 7 jam) 
 - memperbaiki jika gambar tidak ada akan menggunakan no image (1 day / 3 jam)

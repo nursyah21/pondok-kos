@@ -3,8 +3,6 @@
     <Breadcrumb />
     <main class="my-4">
         <RefreshButton :refresh="refresh" v-model:status="status" />
-        <NavbarPenghuni />
-
         
         <UButton :disabled="optionsKamarKos.length == 0" @click="add" 
         :color="optionsKamarKos.length ? 'green' : 'red'" class="my-4">

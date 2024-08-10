@@ -6,7 +6,7 @@
 
     <main v-if="verified" class="my-4">
         <RefreshButton :refresh="refresh" v-model:status="status" />
-        <div class="my-12 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center"
+        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center"
             v-if="status == 'success'">
             <template v-for="i in rows">
                 <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
@@ -25,7 +25,7 @@
 
                     <div class=" flex justify-between items-center ">
                         <h1 class="text-primary-600 font-bold">{{ formatRupiahIntl(i.price) }}</h1>
-                        <UButton v-if="i.available == 0" @click="addBoking(i)" :to="'/dashboard/find-kos?kos=' + i.id">
+                        <UButton v-if="i.available == 0" @click="addBoking(i)" :to="'/dashboard/cari-kos?kos=' + i.id">
                             Pesan kamar</UButton>
                         <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
                         <UButton v-if="i.available == 2" color="red" disabled>Sudah ditempati</UButton>

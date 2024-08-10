@@ -3,8 +3,6 @@
     <Breadcrumb />
     <main class="my-4">
 
-        <NavbarPenghuni />
-
         <UTable class="my-4" :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #name-data="i">
                 <div class="items-center flex gap-x-3">

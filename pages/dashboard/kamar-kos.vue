@@ -4,9 +4,6 @@
     <main class="my-4">
 
         <RefreshButton :refresh="refresh" v-model:status="status" />
-
-        <NavbarKos />
-
         
         <UButton @click="add" class="my-4">tambahkan data</UButton>
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">

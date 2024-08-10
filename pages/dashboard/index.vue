@@ -8,12 +8,9 @@
                 <h1>Hi {{ name }} 👋</h1>
 
             </div>
-            <RefreshButton :refresh="refresh" v-model:status="status" />
-
+            <RefreshButton id="finish" :refresh="refresh" v-model:status="status" />
 
             <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />
-
-
 
             <AlertNotVerified :verified="verified"  :role="role"/>
 
