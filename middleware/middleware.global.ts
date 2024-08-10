@@ -56,7 +56,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             })
             role = data.data?.role
         } catch (error:any) {
-            console.error(new Date().toLocaleTimeString(), 'error', error.message)
+            // console.error(new Date().toLocaleTimeString(), 'error', error.message)
         }
         
         

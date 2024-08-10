@@ -15,7 +15,7 @@
 
         </UCard>
 
-        <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns">
+        <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
             <template #tgl-data="i">
                 {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
             </template>
@@ -54,8 +54,8 @@
 
             <template #paid_status-data="i">
                 <UBadge :color="i.row.paid_status == 0 ? 'red' : i.row.paid_status == 1 ? 'yellow' : 'green'">
-                    {{ i.row.paid_status == 0 ? 'pembayaran dibatalkan' : i.row.paid_status == 1 ? 'menunggu pembayaran'
-                        : 'pembayaran berhasil' }}
+                    {{ i.row.paid_status == 0 ? 'gagal' : i.row.paid_status == 1 ? 'menunggu'
+                        : 'sukses' }}
                 </UBadge>
             </template>
 
@@ -65,12 +65,12 @@
                         {
                             label: 'Batalkan transaksi',
                             icon: 'i-material-symbols-light-delete',
+                            disabled: i.row.paid_status == 1 ? true : false,
                             click: () => submitDeleteBooking(i.row)
                         }
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton :disabled="i.row.paid_status != 1" :color="i.row.paid_status == 1 ? 'green' : 'gray'"
-                        variant="link" icon="i-mi-options-vertical" />
+                    <UButton variant="link" icon="i-mi-options-vertical" color="gray"/>
                     </UDropdown>
             </template>
         </UTable>
@@ -270,24 +270,6 @@ const openPayment = async (e: any) => {
 
 }
 
-
-watch(() => router.query,
-    (e) => {
-        // @ts-ignore
-        skip.value = (e['page'] - 1) * pageCount
-        refresh()
-    }, { deep: true })
-
-watch(() => status,
-    (e) => {
-        if (e.value == 'success') {
-            // @ts-ignore
-            const { data, total } = raw.value
-            totalPage.value = total
-            rows.value = data
-        }
-    }, { deep: true, immediate: true })
-
 let columns = [{
     key: 'num',
     label: 'id',
@@ -430,14 +412,6 @@ const columns_pemilik = [{
     label: 'id',
 },
 {
-    key: 'tgl',
-    label: 'masuk'
-},
-{
-    key: 'duration',
-    label: 'keluar'
-},
-{
     key: 'name',
     label: 'penghuni'
 },
@@ -450,24 +424,32 @@ const columns_pemilik = [{
     label: 'kamar',
 },
 {
-    key: 'admin',
-    label: 'admin'
-},
-{
     key: 'price',
     label: 'harga',
 },
 {
-    key: 'method_payment',
-    label: 'metode pembayaran',
+    key: 'tgl',
+    label: 'tanggal'
 },
-{
-    key: 'link_payment',
-    label: 'bukti pembayaran',
-},
+// {
+//     key: 'duration',
+//     label: 'keluar'
+// },
+// {
+//     key: 'admin',
+//     label: 'admin'
+// },
+// {
+//     key: 'method_payment',
+//     label: 'metode pembayaran',
+// },
+// {
+//     key: 'link_payment',
+//     label: 'bukti pembayaran',
+// },
 {
     key: 'paid_status',
-    label: 'status pembayaran',
+    label: 'status',
 },
 {
     key: 'action',
@@ -508,6 +490,24 @@ const submitDeleteBooking = async (event: any) => {
 
     loading.value = false
 }
+
+watch(() => router.query,
+    (e) => {
+        // @ts-ignore
+        skip.value = (e['page'] - 1) * pageCount
+        refresh()
+    }, { deep: true })
+
+watch(() => status,
+    (e) => {
+        if (e.value == 'success') {
+            // @ts-ignore
+            let { data, total } = raw.value
+            totalPage.value = total
+            // change color based on paid_value:
+            rows.value = data
+        }
+    }, { deep: true, immediate: true })
 
 definePageMeta({
     layout: 'dashboard'

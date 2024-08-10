@@ -4,9 +4,8 @@ export default <Partial<Config>>{
     theme:{
         extend: {
             colors: {
-                danger: {
-                     600: '#ff0000'
-                }
+                danger: '#ff0000',
+                // primary: '#'
             }
         }
     }
