@@ -1,5 +1,5 @@
 <template>
-	<UTooltip class="fixed bottom-0 right-0   " text="refresh data">
+	<UTooltip class="fixed bottom-0 right-0   " text="refresh data" :popper="{ placement: 'top' }">
 		<UButton class="fixed bottom-4 right-2 m-4 bg-white" variant="link" @click="refresh"
 			:icon="status == 'pending' ? 'i-svg-spinners-270-ring-with-bg' : 'i-pajamas-retry'" />
 	</UTooltip>

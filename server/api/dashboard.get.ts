@@ -88,7 +88,6 @@ export default defineEventHandler(async (event) => {
                 description: `Total Transaksi ${[10, 41, 35, 51, 49, 62, 69, 91, 148].reduce((a,b)=>a+b)}`,
                 options: {
                     chart: {
-                      height: 350,
                       type: 'line',
                       zoom: {
                         enabled: false
@@ -115,7 +114,19 @@ export default defineEventHandler(async (event) => {
                     },
                     colors: [
                         '#ca8a04'
-                    ]
+                    ],
+                    responsive: [{
+                        // breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                                height: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }],
                 },
                 series: [{
                     name: "Transaksi",

@@ -39,17 +39,11 @@
 > only run this in branch dev not another branch
 
 
-## fitur utama
+## yang dikerjain sekarang
+- memperbarui sidebar (1 day/ 3jam)
+- memperbarui tampilan setiap table (1 day/ 3jam)
+- membuat tampilan dashboard (1 day / 7 jam) 
+- memperbaiki jika gambar tidak ada akan menggunakan no image (1 day / 3 jam)
+- dan jika gambar cuma satu akan bisa klik di tepi ujung gambarnya (1 day / 12 jam)
 
-- admin menambahkan opsi pembayaran harian atau bulanan []
-- penghuni memilih sewa harian atau bulanan []
-- pemilik memiliki opsi, harga kos harian dan dua orang []
-- penghuni mendapat data kos nya di dashboard []
-- penjaga mendapat data kos yang di jaga di dashboard []
-- penghuni kos meminta sewa kamar untuk 2 orang []
-- penghuni kos menambah durasi sewa []
-- penghuni kos meminta penundaan pembayaran sewa kos []
-
-## fitur tambahan
-- fitur pencarian  []
-- mengirim pesan saat sukses transaksi ke pemilik dan penghuni []
+estimasi pengerjaan (5 day / 28 jam)

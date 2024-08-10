@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import Admin from './Admin.vue'
 const _data = await myProfile()
 
 let role = 0

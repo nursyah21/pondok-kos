@@ -6,7 +6,6 @@ const props = defineProps<{
     color: string
     optionsChart: any
     series: any,
-    type: string,
     description? :string,
     status?: AsyncDataRequestStatus | string
 }>()
@@ -21,7 +20,7 @@ if (props.status == 'error') {
         <template #header>
             <h1 :class="'font-bold '+props.color">{{props.title}}</h1>
         </template>
-        <apexchart class="w-100vw" :type="props.type" :options="props.optionsChart" :series="props.series"></apexchart>
+        <apexchart :options="props.optionsChart" :series="props.series"></apexchart>
         <h1 v-if="description" class="text-xs text-slate-600">
             {{ props.description }}
         </h1>
