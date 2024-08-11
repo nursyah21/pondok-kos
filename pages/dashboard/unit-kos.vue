@@ -246,4 +246,7 @@ definePageMeta({
     layout: 'dashboard'
 })
 
+useHead({
+    title: 'Unit Kos'
+})
 </script>

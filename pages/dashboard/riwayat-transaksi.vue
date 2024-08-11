@@ -12,22 +12,70 @@
         <UCard v-if="role == 0" class="bg-blue-400 text-white my-2">
             jika anda telah melakukan pembayaran namun data masih belum berubah klik tombol refresh
             <UIcon name="i-solar-danger-bold" />
-
         </UCard>
+
+        <div class="flex">
+            <UInput
+                icon="i-heroicons-magnifying-glass-20-solid"
+                size="sm"
+                color="white"
+                :trailing="false"
+                placeholder="Cari nama penghuni"
+                class="max-w-xs"
+            />
+
+            <!-- Filter status, sukses, menunggu, gagal -->
+            <UDropdown :items="[
+                    [
+                        {
+                            label: 'Sukses',
+                            class: false ? 'bg-primary text-white opacity-95 border border-primary my-2' : 'border border-primary my-2',
+                            click: () => {}
+                        },
+                        {
+                            label: 'Menunggu',
+                            class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                            click: () => {}
+                        },
+                        {
+                            label: 'Gagal',
+                            class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => {}
+                        },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray"/>
+            </UDropdown>
+
+            <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
+            <UDropdown :items="[
+                [
+                    {
+                        label: 'Sukses',
+                        class: false ? 'bg-primary text-white opacity-95 border border-primary my-2' : 'border border-primary my-2',
+                        click: () => {}
+                    },
+                    {
+                        label: 'Menunggu',
+                        class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                        click: () => {}
+                    },
+                    {
+                        label: 'Gagal',
+                        class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => {}
+                    },
+                ]
+            ]" :popper="{ placement: 'bottom-start' }">
+                <UButton variant="link" icon="i-material-symbols-sort" color="gray"/>
+            </UDropdown>
+        </div>        
 
         <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
             <template #tgl-data="i">
                 {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
-            </template>
-            <template #duration-data="i">
-                {{ moment(getNextDate(i.row.duration)).format('DD-MM-YYYY') }}
-            </template>
-            <template #name-data="i">
-                {{ i.row.user_name }}
-            </template>
-            <template #admin-data="i">
-                {{ i.row.admin_name }}
-            </template>
+            </template>            
+            
 
             <template #price-data="i">
                 <div v-if="i.row.price">
@@ -35,22 +83,7 @@
                 </div>
             </template>
 
-            <template #link_payment-data="i">
-                <UButton v-if="i.row.paid_status == 2" color="blue" size="2xs"
-                    @click="invoiceOpen = true; dataInvoice = i.row">
-                    Bukti pembayaran
-                </UButton>
-                <UBadge v-if="i.row.paid_status == 0" color="red">
-                    Gagal
-                </UBadge>
-                <UButton v-if="i.row.paid_status == 1 && role == 0" color="blue" @click="openPayment(i.row)" size="2xs">
-                    Bayar
-                </UButton>
-                <UBadge v-if="i.row.paid_status == 1 && role != 0" color="yellow">
-                    menunggu pembayaran
-                </UBadge>
-
-            </template>
+            
 
             <template #paid_status-data="i">
                 <UBadge :color="i.row.paid_status == 0 ? 'red' : i.row.paid_status == 1 ? 'yellow' : 'green'">
@@ -65,13 +98,25 @@
                         {
                             label: 'Batalkan transaksi',
                             icon: 'i-material-symbols-light-delete',
-                            disabled: i.row.paid_status == 1 ? true : false,
+                            disabled: i.row.paid_status == 1 ? false : true,
                             click: () => submitDeleteBooking(i.row)
-                        }
+                        },
+                        {
+                            label: 'Bayar',
+                            icon: 'i-material-symbols-payments',
+                            disabled: i.row.paid_status == 1 ? false : true,
+                            click: () => openPayment(i.row)
+                        },
+                        {
+                            label: 'Invoice',
+                            icon: 'i-material-symbols-lab-profile',
+                            disabled: i.row.paid_status == 2 ? false : true,
+                            click: () => (invoiceOpen = true, dataInvoice = i.row)
+                        },
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
                     <UButton variant="link" icon="i-mi-options-vertical" color="gray"/>
-                    </UDropdown>
+                </UDropdown>
             </template>
         </UTable>
 
@@ -89,7 +134,9 @@
             <Invoice :data="dataInvoice" />
         </UModal>
 
-        <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <h1 class="text-sm text-slate-600">total: {{totalPage}}</h1>
+
             <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
                 query: { page }
             })" :ui="{
@@ -283,7 +330,7 @@ let columns = [{
     label: 'keluar'
 },
 {
-    key: 'name',
+    key: 'user_name',
     label: 'penghuni'
 },
 {
@@ -374,7 +421,7 @@ const columns_penjaga = [{
     label: 'keluar'
 },
 {
-    key: 'name',
+    key: 'user_name',
     label: 'penghuni'
 },
 {
@@ -412,7 +459,7 @@ const columns_pemilik = [{
     label: 'id',
 },
 {
-    key: 'name',
+    key: 'user_name',
     label: 'penghuni'
 },
 {
@@ -431,22 +478,6 @@ const columns_pemilik = [{
     key: 'tgl',
     label: 'tanggal'
 },
-// {
-//     key: 'duration',
-//     label: 'keluar'
-// },
-// {
-//     key: 'admin',
-//     label: 'admin'
-// },
-// {
-//     key: 'method_payment',
-//     label: 'metode pembayaran',
-// },
-// {
-//     key: 'link_payment',
-//     label: 'bukti pembayaran',
-// },
 {
     key: 'paid_status',
     label: 'status',
@@ -511,5 +542,8 @@ watch(() => status,
 
 definePageMeta({
     layout: 'dashboard'
+})
+useHead({
+    title: 'Riwayat Transaksi'
 })
 </script>

@@ -15,7 +15,7 @@
                         class="flex absolute end-5 top-5 z-10" square padded @click="slide_over = false" />
 
                     <div class="flex flex-col gap-y-2 mt-8">
-                        <UButton @click="slide_over = false" to="/unit-kos" variant="link">
+                        <UButton @click="slide_over = false" to="/cari-kos" variant="link">
                             Lihat Unit Kos
                         </UButton>
                         <UButton to="/login" variant="outline" >Masuk</UButton>
@@ -25,7 +25,7 @@
             </USlideover>
             <div class="hidden sm:flex gap-x-2">
                 <div class="border-r-2 border-primary-300 " >
-                    <UButton to="/unit-kos" variant="link">
+                    <UButton to="/cari-kos" variant="link">
                         Lihat Unit Kos
                     </UButton>
                 </div>

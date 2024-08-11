@@ -126,4 +126,7 @@ async function onSubmitReset(event:any) {
     }
     loading.value = false
 }
+useHead({
+    title: 'Reset Password'
+})
 </script>

@@ -126,5 +126,7 @@ async function onSubmit(event:any) {
 
     loading.value = false
 }
-
+useHead({
+    title: 'Login'
+})
 </script>

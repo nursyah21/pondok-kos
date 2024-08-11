@@ -330,4 +330,7 @@ watch(() => statusKamarKos, (e) => {
     }
 }, { deep: true, immediate: true })
 
+useHead({
+    title: 'Penghuni'
+})
 </script>

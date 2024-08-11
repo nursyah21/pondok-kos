@@ -218,4 +218,7 @@ definePageMeta({
     layout: 'dashboard'
 })
 
+useHead({
+    title: 'Penjaga'
+})
 </script>

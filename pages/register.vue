@@ -122,4 +122,7 @@ async function onSubmit(event:any) {
 
     loading.value = false
 }
+useHead({
+    title: 'Register'
+})
 </script>

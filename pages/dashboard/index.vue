@@ -70,6 +70,9 @@ watch(() => status, e => {
 }, { deep: true, immediate: true })
 
 definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+})
+useHead({
+    title: 'Dashboard'
 })
 </script>

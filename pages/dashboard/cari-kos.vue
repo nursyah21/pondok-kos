@@ -254,4 +254,7 @@ async function submitMidtrans(event: any) {
 definePageMeta({
     layout: 'dashboard'
 })
+useHead({
+    title: 'Cari Kos'
+})
 </script>

@@ -33,7 +33,7 @@ const pemilik = [
 ]
 const guest = [
     '/', 
-    '/unit-kos', 
+    '/cari-kos', 
     '/login', 
     '/register', 
     '/reset-password'

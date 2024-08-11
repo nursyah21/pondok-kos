@@ -81,4 +81,8 @@ watch(()=>status, (e)=>{
         totalPage.value = total
     }
 }, { deep: true, immediate:true })
+
+useHead({
+    title: 'Cari Kos'
+})
 </script>
