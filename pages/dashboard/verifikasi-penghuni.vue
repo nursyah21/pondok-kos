@@ -242,4 +242,8 @@ async function verifikasi(){
     refresh()
 }
 
+useHead({
+    title: 'Verifikasi Penghuni'
+})
+
 </script>

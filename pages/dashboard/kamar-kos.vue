@@ -322,4 +322,7 @@ definePageMeta({
     layout: 'dashboard'
 })
 
+useHead({
+    title: 'Kamar Kos'
+})
 </script>

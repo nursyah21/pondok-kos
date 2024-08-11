@@ -29,4 +29,7 @@ async function logout() {
 }
 
 logout()
+useHead({
+    title: 'Logout'
+})
 </script>

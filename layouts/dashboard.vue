@@ -95,7 +95,7 @@ if(_data.data) {
 
 const slide_over = ref(false)
 const penghuni = [{
-    label: 'Beranda',
+    label: 'Dashboard',
     icon: 'i-material-symbols-dashboard',
     link: '/dashboard'
 },
@@ -110,7 +110,7 @@ const penghuni = [{
     link: '/dashboard/riwayat-transaksi'
 },]
 const penjaga = [{
-    label: 'Beranda',
+    label: 'Dashboard',
     icon: 'i-material-symbols-dashboard',
     link: '/dashboard'
 },
@@ -131,7 +131,7 @@ const penjaga = [{
 },
 ]
 const pemilik = [{
-    label: 'Beranda',
+    label: 'Dashboard',
     icon: 'i-material-symbols-dashboard',
     link: '/dashboard'
 },

@@ -283,4 +283,7 @@ definePageMeta({
     layout: 'dashboard'
 })
 
+useHead({
+    title: 'Manajemen User'
+})
 </script>

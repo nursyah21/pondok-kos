@@ -10,7 +10,7 @@
                         Menawarkan hunian yang nyaman dan berlokasi strategis dekat kampus Unikarta Tenggarong dengan
                         harga yang terjangkau
                         <br>
-                        <UButton class="font-bold mt-4" to="/unit-kos">Booking Sekarang</UButton>
+                        <UButton class="font-bold mt-4" to="/cari-kos">Booking Sekarang</UButton>
                     </h1>
                 </div>
                 <div>
