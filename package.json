@@ -3,11 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev --dotenv .env.local",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "build": "pnpm nuxt build",
+    "dev": "pnpm nuxt dev --dotenv .env.local",
+    "generate": "pnpm nuxt generate",
+    "preview": "pnpm nuxt preview",
+    "postinstall": "pnpm nuxt prepare"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.620.0",

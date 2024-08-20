@@ -29,8 +29,7 @@ export default defineEventHandler(async (event) => {
         })
         
         if(id.status == 'fail') {
-            event.node.res.statusCode = 400
-            return {status: 'fail', message: 'you must login to upload file'}
+            throw new Error('you must login to upload file')
         }
 
         // @ts-ignore
@@ -42,8 +41,8 @@ export default defineEventHandler(async (event) => {
 
         const size = file.length
         
-        if (size > 1024 * 1024 * 10) {
-            return { message: `max 10mb, you have upload file with size ${(file.length / 1024 ** 2).toFixed(2)}mb` }
+        if (size > 1024 * 1024 * 2) {    
+            throw new Error(`max 2mb, you have upload file with size ${(file.length / 1024 ** 2).toFixed(2)}mb`)        
         }
 
         try {

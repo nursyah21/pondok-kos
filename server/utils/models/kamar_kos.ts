@@ -4,10 +4,11 @@ const Schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        maxLength:255,
     },
     description: {
         type: String,
-        default: "",
+        maxLength:255,
     },
     available: {
         type: Number,
@@ -23,9 +24,12 @@ const Schema = new mongoose.Schema({
     },
     image: [{
         type: String,
+        maxLength:255,
     }],
     id_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'kos',
+        required: true
     },
     hidden: {
         type: Boolean,

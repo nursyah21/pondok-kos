@@ -2,52 +2,154 @@
 
     <Breadcrumb />
     <main class="my-4">
-        <RefreshButton :refresh="refresh" v-model:status="status" />
-        
-        <UButton @click="add" class="my-4">tambahkan data</UButton>
+
+        <!-- search -->
+        <div :state="search" class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2">
+            <!-- pencarian berdasarkan nama penghuni -->
+            <div class="flex items-center w-full">
+                <UButton variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" />
+                <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
+                    placeholder="Cari nama penghuni" class="w-full" v-model="search.q"
+                    :ui="{ icon: { trailing: { pointer: '' } } }">
+                    <template #trailing>
+                        <UButton v-show="search.q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                            :padded="false" @click="search.q = ''" />
+                    </template>
+                </UInput>
+            </div>
+            <div class="flex mt-2 sm:mt-0">
+                <!-- Filter status, sukses, menunggu, gagal -->
+                <UDropdown :items="[
+                    [{
+                        label: 'filter status',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: 'Sukses',
+                        class: false ? '' : 'underline',
+                        click: () => { }
+                    },
+                    {
+                        label: 'Menunggu',
+                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                        click: () => { }
+                    },
+                    {
+                        label: 'Gagal',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
+                </UDropdown>
+
+                <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
+                <UDropdown :items="[
+                    [{
+                        label: 'urutkan',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: 'Terbaru',
+                        class: false ? '' : 'underline',
+                        click: () => { }
+                    },
+                    {
+                        label: 'Terlama',
+                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                        click: () => { }
+                    },
+                    {
+                        label: 'Harga Tertinggi',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { }
+                    },
+                    {
+                        label: 'Harga Terendah',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant="link" icon="i-material-symbols-sort" color="gray" />
+                </UDropdown>
+
+
+                <UDropdown :items="[
+                    [{
+                        label: 'data yang diambil',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: '5',
+                        class: false ? '' : 'underline',
+                        click: () => { pageCount = 5 }
+                    },
+                    {
+                        label: '15',
+                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                        click: () => { pageCount = 15 }
+                    },
+                    {
+                        label: '25',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { pageCount = 25 }
+                    },
+                    {
+                        label: '50',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { pageCount = 50 }
+                    },
+                    {
+                        label: '100',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { pageCount = 100 }
+                    },
+                    {
+                        label: 'tampilkan semua',
+                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        click: () => { pageCount = -1 }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant='link' color="gray" icon="i-material-symbols-data-table" />
+                </UDropdown>
+            </div>
+        </div>
+
+
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #name-data="i">
-                <div v-if="i.row.hidden" class="flex items-center gap-x-4 text-opacity-70">
-                    {{i.row.name}}
-                    <UBadge color="yellow">tidak aktif</UBadge>
+                <div v-if="i.row.hidden">
+                    <UBadge color="yellow">{{ i.row.name }}</UBadge>
                 </div>
                 <div v-else class="flex items-center gap-x-4 text-">
-                    <UAvatar :src="i.row.image" />
-                    {{i.row.name}}
+                    {{ i.row.name }}
                 </div>
             </template>
             <template #action-data="i">
                 <UDropdown :items="[
                     [{
                         label: 'Edit',
+                        disabled: i.row.hidden,
                         icon: 'i-material-symbols-light-edit',
-                        click: ()=>edit(i.row)
+                        click: () => edit(i.row)
                     },
                     {
                         label: 'Ubah status',
                         icon: 'i-material-symbols-light-edit',
-                        click: ()=>hidden(i.row)
+                        click: () => hidden(i.row)
                     }]
                 ]" :popper="{ placement: 'bottom-start' }">
 
-                    <UButton variant="link" icon="i-mi-options-vertical" />
+                    <UButton variant="link" icon="i-mi-options-vertical" color="gray"/>
                 </UDropdown>
             </template>
         </UTable>
-        <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
-                query: { page }
-            })" :ui="{
-                wrapper: 'flex items-center gap-2',
-                rounded: '!rounded-full min-w-[32px] justify-center',
-                default: {
-                    activeButton: {
-                        variant: 'outline'
-                    }
-                }
-        }" />
 
-        </div>
+        <Pagination :refresh="refresh" :total-page="totalPage" :page-count="pageCount" :page="page" :skip="skip"
+            :status="status" :rows="rows" />
 
         <!-- modal crud add, update, delete -->
         <UModal v-model="isOpen">
@@ -63,24 +165,56 @@
                 </template>
                 <UForm :state="stateKos" @submit="onSubmit" class="space-y-4">
                     <div class="flex justify-center">
-                        <img v-if="image" :src="image" alt="image kos" class="w-[200px] h-[200px] ">
+                        <UButton variant='link' @click='imageModal = true'>
+                            <img :src="image ? image : '/images/noimage.png'" alt="image kos"
+                                class="w-[200px] h-[200px] ">
+                        </UButton>
+                        <UModal v-model='imageModal'>
+                            <UCard :ui="{header:{padding:'py-2', base:'flex justify-between items-center'}}">
+                                <template #header>
+                                    <h1 class="font-bold text-slate-600">
+                                        Preview Image
+                                    </h1>
+                                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
+                                        @click="imageModal = false" />
+                                </template>
+                                <div class="flex justify-center pb-2 mb-4 border-b-2">
+                                    <div :class="loading && 'animate-pulse'">
+                                        <img :src="image ? image : '/images/noimage.png'" alt="image kos"
+                                            class="'w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] ">                                    
+                                    </div>
+                                </div>
+                                <div class="flex gap-x-2 items-center justify-between">
+                                    <UFormGroup label="Foto kos" name="poto_kos">                        
+                                        <template #label>
+                                            <div class="flex items-center gap-x-2 hover:opacity-50 cursor-pointer">
+                                                <UIcon name="i-material-symbols-add-circle"   class="text-2xl"/> Upload
+                                            </div>                                            
+                                        </template>
+                                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="changeImageKos"
+                                            :disabled="mode == 'delete'" class="hidden" />
+                                    </UFormGroup>                                    
+                                    <div @click="image = ''" class="flex items-center gap-x-2 hover:opacity-50 cursor-pointer">
+                                        <UIcon name="i-material-symbols-delete"   class="text-2xl"/> Hapus                                        
+                                    </div>                                            
+                                </div>
+                            </UCard>
+                        </UModal>
                     </div>
                     <UFormGroup label="Nama Kos" name="name" class="w-full">
+
                         <UInput v-model="stateKos.name" placeholder="nama kos" autocomplete="off"
-                            :disabled="mode == 'delete'" />
+                            :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
                     <UFormGroup label="Deskripsi Kos" name="deskripsi" class="w-full">
-                        <UInput v-model="stateKos.description" placeholder="deskripsi kos" autocomplete="off"
-                            :disabled="mode == 'delete'" />
+                        <UTextarea v-model="stateKos.description" placeholder="deskripsi kos" autocomplete="off"
+                            :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
                     <UFormGroup label="Lokasi Kos" name="deskripsi" class="w-full">
                         <UInput v-model="stateKos.location" placeholder="lokasi kos" autocomplete="off"
-                            :disabled="mode == 'delete'" />
+                            :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
-                    <UFormGroup label="Foto kos" name="poto_kos" class="w-full">
-                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="changeImageKos"
-                            :disabled="mode == 'delete'" />
-                    </UFormGroup>
+
                     <UFormGroup>
                         <template v-if="stateKos.hidden && mode == 'delete'">
                             <UButton color="green" :loading="loading" type="submit"
@@ -93,8 +227,8 @@
                                 class="w-full text-center items-center justify-center">
                                 Non Aktifkan
                             </UButton>
-                        </template>              
-                        <UButton v-else :color="mode == 'delete' ? 'yellow' : 'green'" :loading="loading" type="submit"
+                        </template>
+                        <UButton v-else :color="mode == 'delete' || stateKos.hidden ? 'yellow' : 'green'" :loading="loading" type="submit"
                             class="w-full text-center items-center justify-center">
                             {{ mode == 'add' ? 'Submit' : mode == 'edit' ? 'Update' : 'Ubah Status' }}
                         </UButton>
@@ -109,11 +243,21 @@
 </template>
 
 <script setup lang="ts">
-
+const page = ref(1)
+const pageCount = ref(5)
+const skip = ref(0)
+const totalPage = ref(0)
 const rows = ref([])
 const isOpen = ref(false)
 const mode: Ref<ModeCrud> = ref('add')
 const loading = ref(false)
+const imageModal = ref(false)
+const search = reactive({
+    q: '',
+    filter: '',
+    sort: '',
+    size: ''
+})
 
 const columns = [{
     key: 'num',
@@ -121,11 +265,11 @@ const columns = [{
 },
 {
     key: 'name',
-    label: 'nama kos',
+    label: 'nama',
 },
 {
-    key: 'description',
-    label: 'deskripsi kos',
+    key: '_description',
+    label: 'deskripsi',
 },
 {
     key: 'location',
@@ -137,10 +281,6 @@ const columns = [{
 },
 ]
 
-const page = ref(1)
-const pageCount = 10
-const skip = ref(0)
-const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
 const { data: raw, status, refresh } = await useFetch('/api/kos/get', {
     query,
@@ -226,20 +366,26 @@ const submitHiddenKos = (e: any) => submitHelperPost(
 
 const changeImageKos = (e: any) => uploadFile(e, loading, image)
 
-watch(() => useRoute().query,
-    (e) => {
-        // @ts-ignore
-        skip.value = (e['page'] - 1) * pageCount
-        refresh()
-    }, { deep: true })
+watch(useRoute().query, (e, _) => {
+    // @ts-ignore
+    skip.value = (e['page'] - 1) * pageCount
+    refresh()
+})
 
-watch(() => status, (e) => {
-    if (e.value == 'success') {
-        // @ts-ignore
-        const { data } = raw.value
-        rows.value = data
-    }
-}, { deep: true })
+watch(status, (e, _) => {
+    if(e != 'success') return
+    
+    // @ts-ignore
+    const { data } = raw.value
+    
+    rows.value = data.map((items:any)=>({
+        ...items,
+        _name: shortWord(items.name, 50), 
+        _location: shortWord(items.location, 50), 
+        _description: shortWord(items.description, 50)    
+    }))
+    
+}, {immediate: true })
 
 
 definePageMeta({

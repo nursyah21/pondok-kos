@@ -11,17 +11,44 @@ export default defineEventHandler(async (event) => {
         const user = await Users.findById(refreshTokens.id_user)
         if (!user) throw new Error('user not valid')
             
-        const { role, verified } = user
+        const { role, verified, name } = user
 
         let skip = getRequestURL(event).searchParams.get('skip')
         let limit = getRequestURL(event).searchParams.get('limit')
+        let q = getRequestURL(event).searchParams.get('q')
+        let filter = getRequestURL(event).searchParams.get('filter')
+        let sort = getRequestURL(event).searchParams.get('sort')
+        let size = getRequestURL(event).searchParams.get('sort')
+
+        // cari berdasarkan role
+        let query = role == 0 ? {id_user:refreshTokens.id_user} : 
+        role == 1 ? {id_admin:refreshTokens.id_user} : {}
+
+        const length = await Booking.find(query).countDocuments()
+
+        // cari berdasarkan nama
+        const queryUser = {}
+
+        let _User = await Users.find(queryUser).select(['_id','name', 'number_phone'])
+        
+        // @ts-ignore
+        _User = _User.map(e=>{
+            return {id_user: e._id.toString(), name: e.name, number_phone:e.number_phone}
+        })
+        const userName = await Users.find({name: {
+            $regex:/peng/, $options: 'i'
+        }})
         
 
-        const length = await Booking.find(role == 0 ? {id_user: refreshTokens.id_user} : {}).countDocuments()
-        let data = await Booking.find(role == 0 ? {id_user:refreshTokens.id_user} : {})
+        // @ts-ignore
+        query = q ? {...query, 'id_user.name': 
+            {$regex: new RegExp(q, 'i')}
+        } : {...query}
+
+        let data = await Booking.find(query)
+        .populate('id_user', 'name')
+        .sort()
         .skip(Number(skip)).limit(Number(limit))
-        
-
 
         const _Kos = await Kos.find({}).select(['_id','name'])
         let _KamarKos = await KamarKos.find({}).select(['_id','name','id_kos'])
@@ -37,12 +64,6 @@ export default defineEventHandler(async (event) => {
                     name_kos:name_kos.name
                 }
             }
-        })
-        
-        let _User = await Users.find({}).select(['_id','name', 'number_phone'])
-        // @ts-ignore
-        _User = _User.map(e=>{
-            return {id_user: e._id.toString(), name: e.name, number_phone:e.number_phone}
         })
 
         // @ts-ignore

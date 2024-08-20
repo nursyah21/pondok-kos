@@ -5,10 +5,9 @@
     <AlertNotVerified :verified="verified" :role="role" />
 
     <main v-if="verified" class="my-4">
-        <RefreshButton :refresh="refresh" v-model:status="status" />
-        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center"
-            v-if="status == 'success'">
-            <template v-for="i in rows">
+        <!-- <RefreshButton :refresh="refresh" v-model:status="status" /> -->
+        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center">
+            <template v-for="i in rows" v-if="status == 'success'">
                 <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
                     <template #header>
                         
@@ -16,15 +15,15 @@
                         <img v-else :src="i.image[0] ?? '/images/noimage.png'" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
                     </template>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600">{{ shortWord(i.name, 10) }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ shortWord(i.location, 20) }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600">{{ i.name }}</h1>
+                        <h1 class="text-xs text-slate-800">{{ i.location }}</h1>
                         <UDivider />
-                        <h1 class="my-4 text-sm text-slate-600">{{ shortWord(i.description) }}</h1>
+                        <h1 class="my-4 text-sm text-slate-600">{{ i.description }}</h1>
                         <div v-if="i.description.length < 20" class="h-[6px]"></div>
                     </div>
 
                     <div class=" flex justify-between items-center ">
-                        <h1 class="text-primary-600 font-bold">{{ formatRupiahIntl(i.price) }}</h1>
+                        <h1 class="text-primary-600 font-bold">{{ i.price }}</h1>
                         <UButton v-if="i.available == 0" @click="addBoking(i)" :to="'/dashboard/cari-kos?kos=' + i.id">
                             Pesan kamar</UButton>
                         <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
@@ -32,24 +31,12 @@
                     </div>
                 </UCard>
             </template>
-            <div class="lg:col-span-2 xl:col-span-3 flex justify-center items-center">
-                <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"
-                    :to="(page) => ({
-                        query: { page }
-                    })" :ui="{
-                wrapper: 'flex items-center gap-2',
-                rounded: '!rounded-full min-w-[32px] justify-center',
-                default: {
-                    activeButton: {
-                        variant: 'outline'
-                    }
-                }
-            }" />
-            </div>
+
+            <Pagination class='lg:col-span-2 xl:col-span-3' :refresh="refresh" :totalPage="totalPage" v-model:rows="rows" v-model:status="status" v-model:skip="skip" v-model:page="page" v-model:pageCount="pageCount" />
         </div>
-        <div v-else class="flex justify-center items-center h-[80vh]">
+        <!-- <div v-else class="flex justify-center items-center h-[80vh]">
             <UProgress class="max-w-md" />
-        </div>
+        </div> -->
         <UModal v-model="isOpen">
             <UCard>
                 <template #header>
@@ -68,23 +55,23 @@
                     </div>
                     
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600">{{ shortWord(state.name, 10) }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ shortWord(state.location, 20) }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600">{{ state.name }}</h1>
+                        <h1 class="text-xs text-slate-800">{{ state.location }}</h1>
                         <UDivider />
-                        <h1 class="my-4 text-sm text-slate-600">{{ shortWord(state.description) }}</h1>
+                        <h1 class="my-4 text-sm text-slate-600">{{ state.description }}</h1>
                         <div v-if="state.description.length < 20" class="h-[6px]"></div>
                         
                         <div class="my-2 border-t-2 pt-4">
                             <UFormGroup label="Tangal masuk">
-                                <UInput type="date" :value="getDateNow()" disabled />
+                                <UInput type="date" :value="state.tgl_masuk" disabled />
                             </UFormGroup>
 
                             <UFormGroup label="Tangal keluar">
-                                <UInput type="date" :value="getNextDate(30)" disabled />
+                                <UInput type="date" :value="state.tgl_keluar" disabled />
                             </UFormGroup>
                         </div>
                         <h1 class="text-slate-600 font-bold  pt-2">Durasi sewa: 30 hari</h1>
-                        <h1 class="text-primary-600 font-bold ">{{ formatRupiahIntl(state.price) }}</h1>
+                        <h1 class="text-primary-600 font-bold ">{{ state.price }}</h1>
                         
                         <div v-if="state.available == 1" class="text-center text-sm text-slate-600  p-2 rounded-md">
                             masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat transaksi</ULink> jika anda memesan kamar ini
@@ -114,7 +101,6 @@
 </template>
 
 <script setup lang="ts">
-
 const _data = await myProfile()
 
 let role = 0
@@ -136,8 +122,10 @@ const state = reactive({
     name: '',
     description: '',
     location: '',
+    tgl_masuk: getDateNow(),
+    tgl_keluar: getNextDate(30),
     available: 0,
-    price: 0,
+    price: formatRupiahIntl(0),
     image: [''],
     id_kamar_kos: '',
     link: '',
@@ -149,7 +137,7 @@ const state = reactive({
 const stateReset = () => {
     state.name = ''
     state.description = ''
-    state.price = 0
+    state.price = formatRupiahIntl(0)
     state.image = ['']
     // @ts-ignore
     state.id_kos = useRoute().params.id
@@ -161,38 +149,6 @@ const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-
     query,
     method: 'get',
 })
-
-watch(() => useRoute().query,
-    (e) => {
-        if (e.page) {
-            // @ts-ignore
-            skip.value = (e['page'] - 1) * pageCount
-            refresh()
-        }
-    }, { deep: true })
-
-watch(() => status, (e) => {
-    if (e.value == 'success') {
-        // @ts-ignore
-        const { data, total } = raw.value
-        rows.value = data
-        totalPage.value = total
-
-        const kos = useRoute().query.kos
-        if (kos) {
-            state.link = ''
-            isOpen.value = true
-            const _kos = data.find((e: any) => e.id == kos)
-            state.image = _kos.image
-            state.name = _kos.name
-            state.location = _kos.location
-            state.description = _kos.description
-            state.price = _kos.price
-            state.id_kamar_kos = _kos.id
-            state.available = _kos.available
-        }
-    }
-}, { deep: true, immediate: true })
 
 
 const addBoking = (e: any) => {
@@ -248,8 +204,36 @@ async function submitMidtrans(event: any) {
         loading.value = false
         // isOpen.value = false
     })
-
 }
+
+watch(page, (e, _) => {        
+    skip.value = (e - 1) * pageCount
+    refresh()        
+})
+
+watch(status, (e, _) => {
+    if(e != 'success') return
+    
+    // @ts-ignore
+    const { data, total } = raw.value
+    rows.value = data
+    totalPage.value = total
+
+    const kos = useRoute().query.kos
+    if(!kos) return
+    
+    state.link = ''
+    isOpen.value = true
+    const _kos = data.find((e: any) => e.id == kos)
+    state.image = _kos.image
+    state.name = _kos.name
+    state.location = _kos.location
+    state.description = _kos.description
+    state.price = _kos.price
+    state.id_kamar_kos = _kos.id
+    state.available = _kos.available
+    
+}, {immediate: true })
 
 definePageMeta({
     layout: 'dashboard'

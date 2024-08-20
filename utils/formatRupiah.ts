@@ -1,4 +1,4 @@
-export const formatRupiahIntl = (number:number) => {
+export const formatRupiahIntl = (number:number | any) => {
     // Handle non-numeric input
     if (isNaN(number)) {
         return 'Invalid number';

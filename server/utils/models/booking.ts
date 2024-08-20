@@ -7,28 +7,35 @@ const Schema = new mongoose.Schema({
     },
     id_kamar_kos: {
         type: mongoose.Schema.ObjectId,
+        ref: 'kamar_kos',
         required: true,
     },
     id_user: {
         type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true,
     },
     id_admin: {
         type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true,
     },
     attachment: {
         type: String,
+        maxlength:255,
     },
     method_payment: {
         type: String,
         required: true,
+        maxlength:255,
     },
     link_payment: {
         type: String,
+        maxlength:255,
     },
     order_id: {
-        type: String
+        type: String,
+        maxlength:255,
     },
     midtrans: {
         type: Object

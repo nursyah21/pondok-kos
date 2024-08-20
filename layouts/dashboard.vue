@@ -9,8 +9,8 @@
             </ULink>
             <div class="mt-8 flex-col flex gap-y-4 lg:gap-y-8">
                 <template v-for="i in navbar">
-                    <UButton :ui="{ padding: '' }"   variant="link" class="text-md hidden lg:block" activeClass="underline"
-                        :to="i.link">
+                    <UButton :ui="{ padding: '' }" variant="link" class="text-md hidden lg:block"
+                        activeClass="underline" :to="i.link">
                         <div class="flex items-center gap-x-2">
                             <UIcon :name="i.icon" />
                             {{ i.label }}
@@ -27,30 +27,32 @@
                     icon="i-charm-menu-hamburger" />
 
 
-                <UDropdown v-if="data && data.avatar"  :items="[
-                        [{
-                            label: data.name,                            
-                            avatar: {
-                                src: data.avatar
-                            },
-                        }], [
-                            {
-                                label: 'Edit Profile',
-                                class: 'edit-profile',
-                                icon: 'i-material-symbols-light-settings',
-                                click: () => {
-                                    navigateTo('/dashboard/edit-profile')
-                                }
-                            },
-                            {
-                                label: 'Keluar',
-                                class: 'keluar',
-                                icon: 'i-material-symbols-light-exit-to-app-rounded',
-                                click: () => {
-                                    navigateTo('/logout')
-                                }
-                            }]
-                    ]" :popper="{ placement: 'bottom-start' }">
+                <UDropdown v-if="data && data.avatar" :items="[
+                    [{
+                        label: data.name,
+                        avatar: {
+                            src: data.avatar
+                        },
+                    }], [
+                        {
+                            label: 'Edit Profile',
+                            class: 'edit-profile',
+                            icon: 'i-material-symbols-light-settings',
+                            click: () => {
+                                // @ts-ignore
+                                navigateTo('/dashboard/edit-profile')
+                            }
+                        },
+                        {
+                            label: 'Keluar',
+                            class: 'keluar',
+                            icon: 'i-material-symbols-light-exit-to-app-rounded',
+                            click: () => {
+                                // @ts-ignore
+                                navigateTo('/logout')
+                            }
+                        }]
+                ]" :popper="{ placement: 'bottom-start' }">
                     <UButton data-cy='avatar' variant="link">
                         <UAvatar label="Options" :src="data.avatar" alt="Avatar" />
                     </UButton>
@@ -65,8 +67,11 @@
                         <div class="flex flex-col gap-y-8 mt-12">
                             <template v-for="i in navbar">
                                 <UButton :ui="{ padding: '' }" :icon="i.icon" variant="link" class="text-md "
-                                    activeClass="text-primary-600 underline"
-                                    @click="slide_over = false; navigateTo(i.link)">{{ i.label }}</UButton>
+                                    activeClass="text-primary-600 underline" @click="
+                                    {
+                                        // @ts-ignore
+                                        slide_over = false; navigateTo(i.link)
+                                    }">{{ i.label }}</UButton>
                             </template>
                         </div>
                     </div>
@@ -84,12 +89,12 @@ const data = profile
 
 const _data = await myProfile()
 let role = 0
-if(_data.data) {
+if (_data.data) {
     data.value = _data.data
     role = _data.data.role
     // make pseudo avatar
-    if(!data.value.avatar){
-        data.value = {...data.value, avatar: '#'}
+    if (!data.value.avatar) {
+        data.value = { ...data.value, avatar: '#' }
     }
 }
 
@@ -179,11 +184,11 @@ const midtransLink = midtrans_prod ? 'https://app.midtrans.com/snap/snap.js' : '
 
 useHead({
     script: [
-    {
-      src: midtransLink,
-      "data-client-key": midtransClient, // Replace with your key
-      async: true, // Ensure the script loads asynchronously
-    }]
+        {
+            src: midtransLink,
+            "data-client-key": midtransClient, // Replace with your key
+            async: true, // Ensure the script loads asynchronously
+        }]
 })
 
 

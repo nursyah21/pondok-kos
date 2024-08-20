@@ -6,7 +6,17 @@ export default <Partial<Config>>{
             colors: {
                 danger: '#ff0000',
                 // primary: '#'
-            }
+            },
+            keyframes: {
+                pulseOpacity: {
+                  '0%': { opacity: '0.5' },
+                  '50%': { opacity: '1' },
+                  '100%': { opacity: '0.5' },
+                },
+              },
+              animation: {
+                pulseOpacity: 'pulseOpacity 1s infinite',
+              },
         }
     }
 }

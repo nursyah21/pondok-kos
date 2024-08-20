@@ -19,9 +19,14 @@ export default defineEventHandler(async (event) => {
         const res = await Kos.findByIdAndUpdate(_id, {name, description, location, image})
         if(!res) throw new Error('data kos not exist');
         return {status: 'success', message: 'merubah data kos', id: res._id.toString()}
+        
     } catch (error:any) {
         event.node.res.statusCode = 400
-        return { status: 'fail', message: error.message }
+        let message = 'error saat memasukkan data'
+        if(error.message.includes('E11000')){
+            message = 'nama tidak boleh sama'
+        }
+        return { status: 'fail', message }
     }
 
 })

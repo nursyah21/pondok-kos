@@ -22,12 +22,6 @@
 
 	</div>
 
-	<div>
-		<ChartDashboard :description="dashboard.chartLineTransaksi.description" :status="status"
-			title="Transaksi" color="text-yellow-600" :options-chart="dashboard.chartLineTransaksi.options"
-			:series="dashboard.chartLineTransaksi.series" />
-	</div>
-
 
 </template>
 

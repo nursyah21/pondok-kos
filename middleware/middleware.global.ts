@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useLocalStorage } from "@vueuse/core"
 
 const penghuni = [

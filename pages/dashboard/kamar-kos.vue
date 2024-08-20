@@ -5,7 +5,8 @@
 
         <RefreshButton :refresh="refresh" v-model:status="status" />
         
-        <UButton @click="add" class="my-4">tambahkan data</UButton>
+        <UButton @click="add" class="my-4" :disabled="optionsKos.length == 0">tambahkan data</UButton>
+        
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #kos-data="i">
                 <div class="flex items-center gap-x-4 text-">
@@ -13,12 +14,7 @@
                     {{i.row.kos}}
                 </div>
             </template>
-            <template #description-data="i">
-                {{ shortWord(i.row.description, 20) }}
-            </template>
-            <template #location-data="i">
-                {{ shortWord(i.row.location, 20) }}
-            </template>
+            
             <template #available-data="i">
                 <template v-if="i.row.hidden">
                     <UBadge color="gray">tidak aktif</UBadge>
@@ -29,9 +25,7 @@
                     <UBadge color="red" v-if="i.row.available == 2">ditempati</UBadge>
                 </template>
             </template>
-            <template #price-data="i">
-                {{ formatRupiahIntl(i.row.price) }}
-            </template>
+            
             <template #action-data="i">
             <UDropdown v-if="i.row.available == 0" :items="[
                     [{
@@ -86,8 +80,8 @@
                     </div>
                 </template>
                 <UForm :state="state" @submit="onSubmit" class="space-y-4">
+                    <img :src="image ? image : '/images/noimage.png'" alt="image kos" class="w-[200px] h-[200px] ">
                     <!-- <div class="flex justify-center">
-                        <img v-if="image" :src="image" alt="image kos" class="w-[200px] h-[200px] ">
                     </div> -->
                     <UFormGroup label="Kos" class="w-full">
                         <USelect v-model="state.id_kos" :options="optionsKos" required option-attribute="name" autocomplete="off" :disabled="mode == 'delete'"/>
@@ -101,7 +95,7 @@
                     <UFormGroup :label="'Harga Kamar Kos'" name="harga" class="w-full">
                         <div class="flex items-center gap-x-2 ">
                             <UInput class="flex-1" type="number" max="10000000" min="10000" v-model="state.price" placeholder="harga kamar kos" autocomplete="off" required :disabled="mode == 'delete'"/>
-                            <p class="font-bold w-[100px]">{{formatRupiahIntl(state.price)}}</p>
+                            <!-- <p class="font-bold w-[100px]">{{formatRupiahIntl(state.price)}}</p> -->
                         </div>
                     </UFormGroup>
 
@@ -207,7 +201,7 @@ if(status.value == 'success'){
 
 const optionsAvailable = ['tersedia', 'tidak tersedia']
 const state = reactive({
-    id_kos: optionsKos[0].value,
+    id_kos: optionsKos.length ? optionsKos[0].value : '',
     name: '',
     description: '',
     available: optionsAvailable[0], 
@@ -222,7 +216,7 @@ const resetState = () => {
     state.description = ''
     state.available = optionsAvailable[0], 
     state.price = 0,
-    state.id_kos = optionsKos[0].value,
+    state.id_kos = optionsKos.length ? optionsKos[0].value : '',
     image.value = ''
     state._id = ''
     // @ts-ignore

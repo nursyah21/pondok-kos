@@ -18,10 +18,10 @@ export default defineEventHandler(async (event) => {
             throw new Error('nama kos, deskripsi, lokasi wajib diisi')
         }
         
-        // const nameExist = await Kos.findOne({name})            
-        // if(nameExist) {
-        //     throw new Error('nama kos tidak boleh sama')
-        // }
+        const nameExist = await Kos.findOne({name})            
+        if(nameExist) {
+            throw new Error('nama kos tidak boleh sama')
+        }
         const res = await Kos.create({name, description, location, image})
         
         return {status: 'success', message: 'menambahkan data kos', id: res._id.toString()}

@@ -24,7 +24,7 @@ const updatePenghuniKosFromBooking = async () => {
             }}
         ])
 
-    console.log(res)
+    // console.error(res)
 
     // res.forEach(async (e:any)=>{
     //     const date = new Date(e.createdAt);

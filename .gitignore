@@ -23,3 +23,6 @@ logs
 .env.local
 !.env.example
 .vercel
+
+kos-jaya-test*
+.vscode

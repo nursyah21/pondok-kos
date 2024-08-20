@@ -1,7 +1,7 @@
 <template>
 
     <Breadcrumb />
-    <RefreshButton :refresh="refresh" v-model:status="status" />
+    <!-- <RefreshButton :refresh="refresh" v-model:status="status" /> -->
 
     <div v-if="status == 'error'">
         <h1 class="text-red-600">
@@ -9,116 +9,160 @@
         </h1>
     </div>
     <main class="my-4" v-else>
-        <UCard v-if="role == 0" class="bg-blue-400 text-white my-2">
+        <!-- <UCard v-if="role == 0" class="bg-blue-400 text-white my-2">
             jika anda telah melakukan pembayaran namun data masih belum berubah klik tombol refresh
             <UIcon name="i-solar-danger-bold" />
-        </UCard>
+        </UCard> -->
 
-        <div class="flex">
-            <UInput
-                icon="i-heroicons-magnifying-glass-20-solid"
-                size="sm"
-                color="white"
-                :trailing="false"
-                placeholder="Cari nama penghuni"
-                class="max-w-xs"
-            />
-
-            <!-- Filter status, sukses, menunggu, gagal -->
-            <UDropdown :items="[
-                    [
-                        {
+        <div :state="search" class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2" >            
+                <!-- pencarian berdasarkan nama penghuni -->
+                <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
+                    placeholder="Cari nama penghuni" class="w-full" v-model="search.q" 
+                    @keyup.enter="searchSubmit({q:search.q})"
+                    :ui="{ icon: { trailing: { pointer: '' } } }">
+                    <template #trailing>
+                    <UButton
+                        v-show="search.q !== ''"
+                        color="gray"
+                        variant="link"
+                        icon="i-heroicons-x-mark-20-solid"
+                        :padded="false"
+                        @click="search.q = ''"
+                    />
+                    </template>
+                </UInput>
+                <div class="flex mt-2 sm:mt-0">
+                    <!-- Filter status, sukses, menunggu, gagal -->
+                    <UDropdown :items="[
+                        [{
+                            label: 'filter status',
+                            class: 'font-bold'
+                        }],
+                        [{
                             label: 'Sukses',
-                            class: false ? 'bg-primary text-white opacity-95 border border-primary my-2' : 'border border-primary my-2',
-                            click: () => {}
+                            class: false ? '' : 'underline',
+                            click: () => { searchSubmit({filter:search.filter}) }
                         },
                         {
                             label: 'Menunggu',
-                            class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
-                            click: () => {}
+                            // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                            click: () => { }
                         },
                         {
                             label: 'Gagal',
-                            class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
-                            click: () => {}
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { }
                         },
-                    ]
-                ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray"/>
-            </UDropdown>
+                        ]
+                    ]" :popper="{ placement: 'bottom-start' }">
+                        <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
+                    </UDropdown>
 
-            <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
-            <UDropdown :items="[
-                [
-                    {
-                        label: 'Sukses',
-                        class: false ? 'bg-primary text-white opacity-95 border border-primary my-2' : 'border border-primary my-2',
-                        click: () => {}
-                    },
-                    {
-                        label: 'Menunggu',
-                        class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
-                        click: () => {}
-                    },
-                    {
-                        label: 'Gagal',
-                        class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
-                        click: () => {}
-                    },
-                ]
-            ]" :popper="{ placement: 'bottom-start' }">
-                <UButton variant="link" icon="i-material-symbols-sort" color="gray"/>
-            </UDropdown>
-        </div>        
+                    <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
+                    <UDropdown :items="[
+                        [{
+                            label: 'urutkan',
+                            class: 'font-bold'
+                        }],
+                        [{
+                            label: 'Terbaru',
+                            class: false ? '' : 'underline',
+                            click: () => { }
+                        },
+                        {
+                            label: 'Terlama',
+                            // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                            click: () => { }
+                        },
+                        {
+                            label: 'Harga Tertinggi',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { }
+                        },
+                        {
+                            label: 'Harga Terendah',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { }
+                        },
+                        ]
+                    ]" :popper="{ placement: 'bottom-start' }">
+                        <UButton variant="link" icon="i-material-symbols-sort" color="gray" />
+                    </UDropdown>
+                
+
+                    <UDropdown :items="[
+                        [{
+                            label: 'data yang diambil',
+                            class: 'font-bold'
+                        }],
+                        [{
+                            label: '5',
+                            class: false ? '' : 'underline',
+                            click: () => { pageCount = 5 }
+                        },
+                        {
+                            label: '15',
+                            // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                            click: () => { pageCount = 15 }
+                        },
+                        {
+                            label: '25',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { pageCount = 25 }
+                        },
+                        {
+                            label: '50',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { pageCount = 50 }
+                        },
+                        {
+                            label: '100',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { pageCount = 100 }
+                        },
+                        {
+                            label: 'tampilkan semua',
+                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            click: () => { pageCount = -1 }
+                        },
+                        ]
+                    ]" :popper="{ placement: 'bottom-start' }">
+                        <UButton variant='link' color="gray" icon="i-material-symbols-data-table" />
+                    </UDropdown>
+                </div>                
+        </div>
 
         <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
-            <template #tgl-data="i">
-                {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
-            </template>            
-            
-
-            <template #price-data="i">
-                <div v-if="i.row.price">
-                    {{ formatRupiahIntl(i.row.price) }}
-                </div>
-            </template>
-
-            
-
-            <template #paid_status-data="i">
-                <UBadge :color="i.row.paid_status == 0 ? 'red' : i.row.paid_status == 1 ? 'yellow' : 'green'">
-                    {{ i.row.paid_status == 0 ? 'gagal' : i.row.paid_status == 1 ? 'menunggu'
-                        : 'sukses' }}
-                </UBadge>
-            </template>
-
             <template #action-data="i">
                 <UDropdown :items="[
                     [
                         {
                             label: 'Batalkan transaksi',
                             icon: 'i-material-symbols-light-delete',
-                            disabled: i.row.paid_status == 1 ? false : true,
+                            disabled: i.row.paid_status == 'menunggu' ? false : true,
                             click: () => submitDeleteBooking(i.row)
                         },
                         {
                             label: 'Bayar',
                             icon: 'i-material-symbols-payments',
-                            disabled: i.row.paid_status == 1 ? false : true,
+                            disabled: i.row.paid_status == 'menunggu' ? false : true,
                             click: () => openPayment(i.row)
                         },
                         {
                             label: 'Invoice',
                             icon: 'i-material-symbols-lab-profile',
-                            disabled: i.row.paid_status == 2 ? false : true,
+                            // disabled: i.row.paid_status == 1 ? false : true,
                             click: () => (invoiceOpen = true, dataInvoice = i.row)
                         },
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton variant="link" icon="i-mi-options-vertical" color="gray"/>
+                    <UButton variant="link" icon="i-mi-options-vertical" color="gray" />
                 </UDropdown>
             </template>
         </UTable>
+        
+        <Pagination :refresh="refresh" :total-page="totalPage" :page-count="pageCount" :page="page" :skip="skip" :status="status" :rows="rows"/>
+        
 
         <!-- modal bukti pembayaran -->
         <UModal v-model="invoiceOpen" :ui="{ overlay: { background: 'print:bg-white' } }">
@@ -133,22 +177,6 @@
             </UCard>
             <Invoice :data="dataInvoice" />
         </UModal>
-
-        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-            <h1 class="text-sm text-slate-600">total: {{totalPage}}</h1>
-
-            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
-                query: { page }
-            })" :ui="{
-                wrapper: 'flex items-center gap-2',
-                rounded: '!rounded-full min-w-[32px] justify-center',
-                default: {
-                    activeButton: {
-                        variant: 'outline'
-                    }
-                }
-            }" />
-        </div>
 
         <!-- edit -->
         <UModal v-model="isOpen">
@@ -171,7 +199,8 @@
                     <UFormGroup label="admin" class="w-full">
                         <UInput v-model="state.admin" placeholder="admin" autocomplete="off" disabled />
                     </UFormGroup>
-                    <UFormGroup :label="'Harga Kamar Kos: ' + formatRupiahIntl(state.price)" class="w-full">
+                    <!-- <UFormGroup :label="'Harga Kamar Kos: ' + formatRupiahIntl(state.price)" class="w-full"> -->
+                    <UFormGroup label="Harga Kamar Kos" class="w-full">
                         <UInput type="number" v-model="state.price" placeholder="harga kamar kos" required
                             autocomplete="off" :disabled="state.paid_status == 2" />
                     </UFormGroup>
@@ -206,12 +235,12 @@
 
 <script setup lang="ts">
 import moment from 'moment'
-const router = useRoute()
 const page = ref(1)
-const pageCount = 10
+const pageCount = ref(5)
 const skip = ref(0)
 const rows = ref([])
 const totalPage = ref(0)
+
 const isOpen = ref(false)
 const invoiceOpen = ref(false)
 const dataInvoice = ref<any>()
@@ -223,6 +252,19 @@ if (_data.data) {
     role = _data.data.role
     verified = _data.data.verified
 }
+
+
+const search = reactive({
+    q: '',
+    filter: '',
+    sort: '',
+    size: ''
+})
+
+const searchSubmit = async (e:any) => {
+    useRouter().push({query: e})
+}
+
 
 const state = reactive({
     name: '',
@@ -239,7 +281,7 @@ const attachment = ref('')
 const loading = ref(false)
 const _uploadFile = (e: any) => uploadFile(e, loading, attachment)
 
-const query = computed(() => ({ skip: skip.value, limit: pageCount }))
+const query = computed(() => ({ skip: skip.value, limit: pageCount.value == -1 ? pageCount.value * totalPage.value : pageCount.value }))
 
 const { data: raw, status, refresh } = await useFetch('/api/booking/all-booking', {
     headers: {
@@ -294,7 +336,7 @@ const openPayment = async (e: any) => {
             method: 'POST',
             body: { link_payment, result }
         })
-        console.log('refresh data') 
+        console.log('refresh data')
         refresh()
     }
 
@@ -522,23 +564,28 @@ const submitDeleteBooking = async (event: any) => {
     loading.value = false
 }
 
-watch(() => router.query,
-    (e) => {
-        // @ts-ignore
-        skip.value = (e['page'] - 1) * pageCount
-        refresh()
-    }, { deep: true })
+watch(page, (e,_)=>{
+    skip.value = (e - 1) * pageCount.value    
+    refresh()
+})
 
-watch(() => status,
-    (e) => {
-        if (e.value == 'success') {
-            // @ts-ignore
-            let { data, total } = raw.value
-            totalPage.value = total
-            // change color based on paid_value:
-            rows.value = data
+watch(status,(e, _) => {
+    if (e != 'success') return
+    
+    // @ts-ignore
+    let { data, total } = raw.value
+    totalPage.value = total
+    // change color based on paid_value:
+    rows.value = data.map((e:any)=>{
+        return {...e, price: formatRupiahIntl(e.price),
+            tgl: moment(e.tgl).format('DD-MM-YYYY'),
+            paid_status: e.paid_status == 0 ? 'gagal' : 
+            e.paid_status == 1 ? 'menunggu'
+            : 'sukses', 
+            
         }
-    }, { deep: true, immediate: true })
+    })    
+}, {immediate: true})
 
 definePageMeta({
     layout: 'dashboard'

@@ -26,7 +26,7 @@ const midtransCheckStatus = async (notificationJson: any, id_booking: any, id_ka
             // TODO set transaction status on your databaase to 'failure'
         }
     } catch (error: any) {
-        console.log(error)
+        console.error('checkBooking.ts',error)
     }
 
 }

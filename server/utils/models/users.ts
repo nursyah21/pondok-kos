@@ -4,6 +4,7 @@ const Schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        maxlength:255
     },
     role: {
         type: Number,
@@ -12,17 +13,21 @@ const Schema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+        maxlength:255
     },
     number_phone: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        maxlength:255
     },
     avatar: {
         type: String,
+        maxlength:255
     },
     id_card: {
         type: String,
+        maxlength:255
     },
     birthdate: {
         type: Date,
@@ -30,6 +35,7 @@ const Schema = new mongoose.Schema({
     },
     address: {
         type: String,
+        maxlength:255,
         default: ''
     },
     verified: {

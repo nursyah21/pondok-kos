@@ -47,3 +47,7 @@
 - [ ] dan jika gambar cuma satu akan bisa klik di tepi ujung gambarnya (1 day / 12 jam)
 
 estimasi pengerjaan (5 day / 28 jam)
+
+
+## yang selanjutnya dikerjakan
+- [ ] melimit jumlah input yang dimasukkan  pada form (1 day / 3 jam)
