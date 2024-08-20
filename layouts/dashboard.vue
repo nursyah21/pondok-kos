@@ -27,11 +27,11 @@
                     icon="i-charm-menu-hamburger" />
 
 
-                <UDropdown v-if="data && data.avatar" :items="[
+                <UDropdown v-if="data && (data.avatar ? data.avatar : '/images/profile.png')" :items="[
                     [{
                         label: data.name,
                         avatar: {
-                            src: data.avatar
+                            src: data.avatar ? data.avatar : '/images/profile.png'
                         },
                     }], [
                         {
@@ -54,7 +54,7 @@
                         }]
                 ]" :popper="{ placement: 'bottom-start' }">
                     <UButton data-cy='avatar' variant="link">
-                        <UAvatar label="Options" :src="data.avatar" alt="Avatar" />
+                        <UAvatar label="Options" :src="data.avatar ? data.avatar : '/images/profile.png'" alt="Avatar" />
                     </UButton>
                 </UDropdown>
 
@@ -91,11 +91,7 @@ const _data = await myProfile()
 let role = 0
 if (_data.data) {
     data.value = _data.data
-    role = _data.data.role
-    // make pseudo avatar
-    if (!data.value.avatar) {
-        data.value = { ...data.value, avatar: '#' }
-    }
+    role = _data.data.role    
 }
 
 const slide_over = ref(false)

@@ -4,9 +4,10 @@
     
     <main class="my-4 flex justify-center gap-x-4 flex-col gap-y-4">
         <div class="flex justify-center">
-            <UCard class="max-w-sm w-[24rem]">
+            <UCard class="max-w-sm w-[24rem]">                
                 <div class="flex justify-center flex-col items-center gap-y-2">
-                    <UAvatar size="3xl" :src="avatar" alt="Avatar" />
+                    <ImageUpload :changeImage="changeProfile" v-model:image="avatar" v-model:loading="loading" :profile="true" />
+
                     <template v-if="role == 0">
                         <UBadge v-if="verified">terverifikasi</UBadge>
                         <UBadge v-else color="yellow">belum terverifikasi</UBadge>
@@ -27,16 +28,11 @@
                     </UFormGroup>
                     <UFormGroup label="Alamat asal" name="address" class="w-full">
                         <UInput v-model="state.address" placeholder="Alamat asal" autocomplete="off" />
-                    </UFormGroup>
-                    <UFormGroup label="Foto profile" name="poto_profile" class="w-full">
-                        <UInput  type="file" icon="i-heroicons-folder" accept="image/*"
-                            @change="changeProfile" />
-                    </UFormGroup>
-                    <img v-show="id_card && id_card != '#'" :src="id_card" alt="id card penjaga" class="w-[200px] h-[200px] ">
+                    </UFormGroup>                                        
                     <UFormGroup label="Kartu identitas" name="id_card" class="w-full">
-                        <UInput  type="file" icon="i-heroicons-folder" accept="image/*"
-                            @change="changeId" />
+                        <ImageUpload :changeImage="changeId" v-model:image="id_card" v-model:loading="loading" />                        
                     </UFormGroup>
+
                     <UFormGroup>
                         <UButton :loading="loading" type="submit" class="w-full text-center items-center justify-center">
                             Update
@@ -105,7 +101,6 @@ async function onSubmit(event:any) {
             useToast().add({ id: 'settings', title: 'success update profile' })
             
             if(_data.data){
-                // console.log()
                 profile.value = {...data, avatar: avatar.value, id_card: id_card.value}
             }
         }   

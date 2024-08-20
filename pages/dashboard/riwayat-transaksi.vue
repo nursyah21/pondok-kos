@@ -1,7 +1,6 @@
 <template>
 
     <Breadcrumb />
-    <!-- <RefreshButton :refresh="refresh" v-model:status="status" /> -->
 
     <div v-if="status == 'error'">
         <h1 class="text-red-600">
@@ -9,10 +8,6 @@
         </h1>
     </div>
     <main class="my-4" v-else>
-        <!-- <UCard v-if="role == 0" class="bg-blue-400 text-white my-2">
-            jika anda telah melakukan pembayaran namun data masih belum berubah klik tombol refresh
-            <UIcon name="i-solar-danger-bold" />
-        </UCard> -->
 
         <div :state="search" class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2" >            
                 <!-- pencarian berdasarkan nama penghuni -->

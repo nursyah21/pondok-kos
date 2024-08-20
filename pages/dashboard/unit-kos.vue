@@ -120,12 +120,11 @@
 
 
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
-            <template #name-data="i">
-                <div v-if="i.row.hidden">
-                    <UBadge color="yellow">{{ i.row.name }}</UBadge>
-                </div>
-                <div v-else class="flex items-center gap-x-4 text-">
-                    {{ i.row.name }}
+            <template #_name-data="i">
+                <div class="flex items-center gap-x-2">
+                    <UAvatar :src="i.row.image" />
+                    <UBadge v-if="i.row.hidden" color="yellow">{{ i.row._name }}</UBadge>
+                    <h1 v-else>{{i.row._name}}</h1>
                 </div>
             </template>
             <template #action-data="i">
@@ -164,46 +163,11 @@
                     </div>
                 </template>
                 <UForm :state="stateKos" @submit="onSubmit" class="space-y-4">
-                    <div class="flex justify-center">
-                        <UButton variant='link' @click='imageModal = true'>
-                            <img :src="image ? image : '/images/noimage.png'" alt="image kos"
-                                class="w-[200px] h-[200px] ">
-                        </UButton>
-                        <UModal v-model='imageModal'>
-                            <UCard :ui="{header:{padding:'py-2', base:'flex justify-between items-center'}}">
-                                <template #header>
-                                    <h1 class="font-bold text-slate-600">
-                                        Preview Image
-                                    </h1>
-                                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
-                                        @click="imageModal = false" />
-                                </template>
-                                <div class="flex justify-center pb-2 mb-4 border-b-2">
-                                    <div :class="loading && 'animate-pulse'">
-                                        <img :src="image ? image : '/images/noimage.png'" alt="image kos"
-                                            class="'w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] ">                                    
-                                    </div>
-                                </div>
-                                <div class="flex gap-x-2 items-center justify-between">
-                                    <UFormGroup label="Foto kos" name="poto_kos">                        
-                                        <template #label>
-                                            <div class="flex items-center gap-x-2 hover:opacity-50 cursor-pointer">
-                                                <UIcon name="i-material-symbols-add-circle"   class="text-2xl"/> Upload
-                                            </div>                                            
-                                        </template>
-                                        <UInput type="file" icon="i-heroicons-folder" accept="image/*" @change="changeImageKos"
-                                            :disabled="mode == 'delete'" class="hidden" />
-                                    </UFormGroup>                                    
-                                    <div @click="image = ''" class="flex items-center gap-x-2 hover:opacity-50 cursor-pointer">
-                                        <UIcon name="i-material-symbols-delete"   class="text-2xl"/> Hapus                                        
-                                    </div>                                            
-                                </div>
-                            </UCard>
-                        </UModal>
-                    </div>
+                    <ImageUpload :changeImage="changeImageKos" v-model:image="image" v-model:loading="loading" :disabled="mode == 'delete' || stateKos.hidden"/>
+
                     <UFormGroup label="Nama Kos" name="name" class="w-full">
 
-                        <UInput v-model="stateKos.name" placeholder="nama kos" autocomplete="off"
+                        <UInput v-model="stateKos.name" placeholder="nama kos" autocomplete="off" 
                             :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
                     <UFormGroup label="Deskripsi Kos" name="deskripsi" class="w-full">
@@ -264,7 +228,7 @@ const columns = [{
     label: 'id',
 },
 {
-    key: 'name',
+    key: '_name',
     label: 'nama',
 },
 {
@@ -272,7 +236,7 @@ const columns = [{
     label: 'deskripsi',
 },
 {
-    key: 'location',
+    key: '_location',
     label: 'lokasi',
 },
 {
@@ -364,7 +328,7 @@ const submitHiddenKos = (e: any) => submitHelperPost(
 )
 
 
-const changeImageKos = (e: any) => uploadFile(e, loading, image)
+const changeImageKos = (e: any) => uploadFile(e, loading, image, 'add')
 
 watch(useRoute().query, (e, _) => {
     // @ts-ignore
@@ -382,7 +346,7 @@ watch(status, (e, _) => {
         ...items,
         _name: shortWord(items.name, 50), 
         _location: shortWord(items.location, 50), 
-        _description: shortWord(items.description, 50)    
+        _description: shortWord(items.description, 50),
     }))
     
 }, {immediate: true })
