@@ -5,19 +5,19 @@ const Schema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        maxlength: 255
+        maxLength: [125, 'nama kos maksimal 125 karakter']
     },
     description: {
         type: String,
-        maxlength: 255
+        maxLength: [255, 'deskripsi kos maksimal 255 karakter']
     },
-    location: {
+    address: {
         type: String,
-        maxlength: 255
+        maxLength: [125, 'alamat kos maksimal 125 karakter']
     },
     image: {
         type: String,
-        maxlength: 255
+        maxLength: [255, 'link image maksimal 255 karakter']
     },
     hidden: {
         type: Boolean,

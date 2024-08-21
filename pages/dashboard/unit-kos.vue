@@ -4,47 +4,45 @@
     <main class="my-4">
 
         <!-- search -->
-        <div :state="search" class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2">
-            <!-- pencarian berdasarkan nama penghuni -->
+        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2">
+            
             <div class="flex items-center w-full">
                 <UButton variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" />
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
-                    placeholder="Cari nama penghuni" class="w-full" v-model="search.q"
+                    placeholder="Cari nama kos" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
-                        <UButton v-show="search.q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
-                            :padded="false" @click="search.q = ''" />
+                        <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                            :padded="false" @click="q = ''" />
                     </template>
                 </UInput>
             </div>
             <div class="flex mt-2 sm:mt-0">
-                <!-- Filter status, sukses, menunggu, gagal -->
                 <UDropdown :items="[
                     [{
                         label: 'filter status',
                         class: 'font-bold'
                     }],
                     [{
-                        label: 'Sukses',
-                        class: false ? '' : 'underline',
-                        click: () => { }
+                        label: 'semua',
+                        class: filter == 'all'  ? 'underline' : '',
+                        click: () => { filter = 'all'}
                     },
                     {
-                        label: 'Menunggu',
-                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
-                        click: () => { }
+                        label: 'non aktif',
+                        class: filter == 'non aktif'  ? 'underline' : '',
+                        click: () => { filter = 'non aktif'}
                     },
                     {
-                        label: 'Gagal',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
-                        click: () => { }
-                    },
+                        label: 'aktif',
+                        class: filter == 'aktif'  ? 'underline' : '',
+                        click: () => { filter = 'aktif' }
+                    },                    
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
                     <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
                 </UDropdown>
 
-                <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
                 <UDropdown :items="[
                     [{
                         label: 'urutkan',
@@ -52,23 +50,13 @@
                     }],
                     [{
                         label: 'Terbaru',
-                        class: false ? '' : 'underline',
-                        click: () => { }
+                        class: sort == 'asc' ? 'underline' : '',
+                        click: () => { sort = 'asc' }
                     },
                     {
                         label: 'Terlama',
-                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
-                        click: () => { }
-                    },
-                    {
-                        label: 'Harga Tertinggi',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
-                        click: () => { }
-                    },
-                    {
-                        label: 'Harga Terendah',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
-                        click: () => { }
+                        class: sort == 'desc' ? 'underline' : '',
+                        click: () => { sort = 'desc' }
                     },
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
@@ -83,32 +71,32 @@
                     }],
                     [{
                         label: '5',
-                        class: false ? '' : 'underline',
+                        class: pageCount == 5 ? 'underline' : '',
                         click: () => { pageCount = 5 }
                     },
                     {
                         label: '15',
-                        // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                        class: pageCount == 15 ? 'underline' : '',
                         click: () => { pageCount = 15 }
                     },
                     {
                         label: '25',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        class: pageCount == 25 ? 'underline' : '',
                         click: () => { pageCount = 25 }
                     },
                     {
                         label: '50',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        class: pageCount == 50 ? 'underline' : '',
                         click: () => { pageCount = 50 }
                     },
                     {
                         label: '100',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        class: pageCount == 100 ? 'underline' : '',
                         click: () => { pageCount = 100 }
                     },
                     {
                         label: 'tampilkan semua',
-                        // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                        class: pageCount == -1 ? 'underline' : '',
                         click: () => { pageCount = -1 }
                     },
                     ]
@@ -122,7 +110,7 @@
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
             <template #_name-data="i">
                 <div class="flex items-center gap-x-2">
-                    <UAvatar :src="i.row.image" />
+                    <UAvatar :src="i.row.image ? i.row.image : '/images/noimage.png'" />
                     <UBadge v-if="i.row.hidden" color="yellow">{{ i.row._name }}</UBadge>
                     <h1 v-else>{{i.row._name}}</h1>
                 </div>
@@ -147,20 +135,42 @@
             </template>
         </UTable>
 
-        <Pagination :refresh="refresh" :total-page="totalPage" :page-count="pageCount" :page="page" :skip="skip"
-            :status="status" :rows="rows" />
+        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                <h1 v-if="pageCount == -1">
+                    {{ page * pageCount + 2 }} - {{ totalPage }}
+                </h1>
+                <h1 v-else>
+                    {{skip >= 1? skip + page - 1 : skip+page}} - {{ page * pageCount }} of {{ totalPage }}
+                </h1>
+            </UButton>
+            <UButton v-else variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                tidak tersedia
+            </UButton>
+            
+            
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
+                wrapper: 'flex items-center gap-2',
+                rounded: '!rounded-full min-w-[32px] justify-center',
+                default: {
+                    activeButton: {
+                        variant: 'outline'
+                    }
+                }
+            }" />
+        </div>
 
         <!-- modal crud add, update, delete -->
         <UModal v-model="isOpen">
-            <UCard>
-                <template #header>
+            <UCard> 
+                <template #header> 
                     <div class="items-center justify-between flex">
                         <h1 v-if="mode == 'add'" class="font-bold text-slate-600">Tambahkan Kos</h1>
                         <h1 v-if="mode == 'edit'" class="font-bold text-slate-600">Edit Kos</h1>
                         <h1 v-if="mode == 'delete'" class="font-bold text-slate-600">Status Kos</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
-                    </div>
+                    </div>  
                 </template>
                 <UForm :state="stateKos" @submit="onSubmit" class="space-y-4">
                     <ImageUpload :changeImage="changeImageKos" v-model:image="image" v-model:loading="loading" :disabled="mode == 'delete' || stateKos.hidden"/>
@@ -170,12 +180,12 @@
                         <UInput v-model="stateKos.name" placeholder="nama kos" autocomplete="off" 
                             :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
-                    <UFormGroup label="Deskripsi Kos" name="deskripsi" class="w-full">
+                    <UFormGroup label="Deskripsi Kos" class="w-full">
                         <UTextarea v-model="stateKos.description" placeholder="deskripsi kos" autocomplete="off"
                             :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
-                    <UFormGroup label="Lokasi Kos" name="deskripsi" class="w-full">
-                        <UInput v-model="stateKos.location" placeholder="lokasi kos" autocomplete="off"
+                    <UFormGroup label="Alamat Kos" class="w-full">
+                        <UInput v-model="stateKos.address" placeholder="alamat kos" autocomplete="off"
                             :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
 
@@ -215,13 +225,10 @@ const rows = ref([])
 const isOpen = ref(false)
 const mode: Ref<ModeCrud> = ref('add')
 const loading = ref(false)
-const imageModal = ref(false)
-const search = reactive({
-    q: '',
-    filter: '',
-    sort: '',
-    size: ''
-})
+const image = ref('')
+const q = ref('')
+const filter = ref<'aktif' | 'non aktif' | 'all'>('aktif')
+const sort = ref<'asc' | 'desc'>('asc')
 
 const columns = [{
     key: 'num',
@@ -236,8 +243,8 @@ const columns = [{
     label: 'deskripsi',
 },
 {
-    key: '_location',
-    label: 'lokasi',
+    key: '_address',
+    label: 'alamat',
 },
 {
     key: 'action',
@@ -245,40 +252,40 @@ const columns = [{
 },
 ]
 
-const query = computed(() => ({ skip: skip.value, limit: pageCount }))
+const query = computed(() => ({ 
+    skip: skip.value, 
+    limit: pageCount.value == -1 ? pageCount.value * totalPage.value : pageCount.value,
+    filter: filter.value,
+    sort: sort.value,
+    q: q.value,
+}))
+
 const { data: raw, status, refresh } = await useFetch('/api/kos/get', {
     query,
     method: 'get'
 })
-if (status.value == 'success') {
-    // @ts-ignore
-    const { total, data } = raw.value
-    totalPage.value = total
-    rows.value = data
-}
 
 const stateKos = reactive({
     name: '',
     description: '',
-    location: '',
+    address: '',
     _id: '',
     hidden: false
 })
-const image = ref('')
 
 const resetState = () => {
     stateKos.name = ''
     stateKos.description = ''
-    stateKos.location = ''
+    stateKos.address = ''
     image.value = ''
     stateKos.hidden = false
     stateKos._id = ''
 }
 const helperState = (e: any) => {
-    const { name, description, location, image: _image, _id, hidden } = e
+    const { name, description, address, image: _image, _id, hidden } = e
     stateKos.name = name
     stateKos.description = description
-    stateKos.location = location
+    stateKos.address = address
     stateKos.hidden = hidden
 
     if (_image) {
@@ -330,9 +337,14 @@ const submitHiddenKos = (e: any) => submitHelperPost(
 
 const changeImageKos = (e: any) => uploadFile(e, loading, image, 'add')
 
-watch(useRoute().query, (e, _) => {
+watch(page, (e, _) => {    
     // @ts-ignore
-    skip.value = (e['page'] - 1) * pageCount
+    skip.value = (e - 1) * pageCount.value
+    refresh()
+})
+
+watch([q, sort, filter], (e,_)=>{
+    console.log(e)
     refresh()
 })
 
@@ -340,15 +352,16 @@ watch(status, (e, _) => {
     if(e != 'success') return
     
     // @ts-ignore
-    const { data } = raw.value
+    const { total, data } = raw.value
     
+    totalPage.value = total
+
     rows.value = data.map((items:any)=>({
         ...items,
         _name: shortWord(items.name, 50), 
-        _location: shortWord(items.location, 50), 
+        _address: shortWord(items.address, 50), 
         _description: shortWord(items.description, 50),
     }))
-    
 }, {immediate: true })
 
 

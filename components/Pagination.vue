@@ -8,7 +8,8 @@
 	                tidak tersedia
 	            </UButton>
 	
-	            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
+				<!-- <UPagination :disabled="status == 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{ -->
+	            <UPagination v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
 	                wrapper: 'flex items-center gap-2',
 	                rounded: '!rounded-full min-w-[32px] justify-center',
 	                default: {
@@ -22,12 +23,21 @@
 
 <script setup lang="ts">
 defineProps<{ 
-	refresh: any,
+	// refresh: any,
 	totalPage: number,	
 }>()
+const refresh = ref<any>() //defineModel<any>('refresh',{required:true})
 const rows = defineModel<[any] | any>('rows', { required: true })
-const status = defineModel<any>()
+const status = defineModel<any>('status')
 const skip = defineModel<number>('skip', { required: true })
+// const page = ref<number>()
 const page = defineModel<number>('page', { required: true })
 const pageCount = defineModel<number>('pageCount', { required: true })
+
+watch(page, (e,_)=>{
+	skip.value = (e - 1) * pageCount.value
+	// @ts-ignore
+    // refresh()
+	console.log('=>',refresh)
+})
 </script>

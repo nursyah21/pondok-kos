@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema({
     token: {
         type: String,
-        maxlength: 255,
+        maxLength: 255,
         required: true,
     },
     last_used: {

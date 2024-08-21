@@ -276,7 +276,10 @@ const attachment = ref('')
 const loading = ref(false)
 const _uploadFile = (e: any) => uploadFile(e, loading, attachment)
 
-const query = computed(() => ({ skip: skip.value, limit: pageCount.value == -1 ? pageCount.value * totalPage.value : pageCount.value }))
+const query = computed(() => ({ 
+    skip: skip.value, 
+    limit: pageCount.value == -1 ? pageCount.value * totalPage.value : pageCount.value 
+}))
 
 const { data: raw, status, refresh } = await useFetch('/api/booking/all-booking', {
     headers: {
@@ -331,7 +334,6 @@ const openPayment = async (e: any) => {
             method: 'POST',
             body: { link_payment, result }
         })
-        console.log('refresh data')
         refresh()
     }
 

@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 defineProps<{
-	refresh: any, //(opts?: import("/home/nursyah/programmer/kos-ta-nursyah/node_modules/nuxt/dist/app/composables/asyncData").AsyncDataExecuteOptions) => Promise<void>;
+	refresh: any
 	status: any
 }>()
-// const status = defineModel<import("/home/nursyah/programmer/kos-ta-nursyah/node_modules/nuxt/dist/app/index").AsyncDataRequestStatus>('status', { required: true })
+
 </script>

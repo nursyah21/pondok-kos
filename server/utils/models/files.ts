@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema({
     name: {
         type: String,
-        maxlength:255,
+        maxLength:255,
         required: true,
     },
     link: {
         type: String,
-        maxlength:255,
+        maxLength:255,
         required: true,
     },
     type: {

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
         const { role } = user
         if (role != 2) throw new Error('user not authorization, you must be admin');
         
-        // if(!name || !description || !location){
+        // if(!name || !description || !address){
         //     throw new Error('nama kos, deskripsi, lokasi wajib diisi')
         // }
         

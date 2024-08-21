@@ -25,9 +25,10 @@ const abstrackSubmit = async (
     } catch (error:any) {
         if (error.data) {
             error = error.data
+        }        
+        if (error.message.toLowerCase().includes('validation')){
+            error.message = error.message.split(':')[2]        
         }
-        // disabled id toast
-        // useToast().add({ id: idToast, title: error.message, color: 'red' })
         useToast().add({ title: error.message, color: 'red' })
         loading.value = false
         return;

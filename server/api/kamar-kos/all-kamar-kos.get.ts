@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
             .limit(Number(limit))
 
 
-        let location = await Kos.find({}).select(['_id', 'location', 'name'])
+        let location = await Kos.find({}).select(['_id', 'address', 'name'])
         // @ts-ignore
         location = location.map(e => ({ id_kos: e._id.toString(), location: e.location, kos: e.name }))
         

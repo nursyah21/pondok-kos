@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema({
     secret_key: {
         type: String,
-        maxlength:255,
+        maxLength:255,
         required: true,
     },
     id_user: {

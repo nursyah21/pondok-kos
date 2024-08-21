@@ -7,7 +7,8 @@
     "dev": "pnpm nuxt dev --dotenv .env.local",
     "generate": "pnpm nuxt generate",
     "preview": "pnpm nuxt preview",
-    "postinstall": "pnpm nuxt prepare"
+    "postinstall": "pnpm nuxt prepare",
+    "seed": "tsx seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.620.0",
@@ -35,7 +36,9 @@
     "@iconify-json/pajamas": "^1.1.48",
     "@iconify-json/solar": "^1.1.9",
     "@types/jsonwebtoken": "^9.0.6",
-    "cypress": "^13.13.1"
+    "cypress": "^13.13.1",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.17.0"
   },
   "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf"
 }

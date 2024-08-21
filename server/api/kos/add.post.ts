@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-    const { name, description, location, image } = await readBody(event)
+    const { name, description, address, image } = await readBody(event)
     const authorizationHeader = event.node.req.headers.authorization;
     const token = authorizationHeader?.split(' ')[1]
 
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         const { role } = user
         if (role != 2) throw new Error('user not authorization, you must be admin');
     
-        if(!name || !description || !location){
+        if(!name || !description || !address){
             throw new Error('nama kos, deskripsi, lokasi wajib diisi')
         }
         
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
         if(nameExist) {
             throw new Error('nama kos tidak boleh sama')
         }
-        const res = await Kos.create({name, description, location, image})
+        const res = await Kos.create({name, description, address, image})
         
         return {status: 'success', message: 'menambahkan data kos', id: res._id.toString()}
     } catch (error:any) {

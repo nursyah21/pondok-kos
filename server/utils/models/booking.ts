@@ -4,6 +4,8 @@ const Schema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
+        min: [10_000, 'harga minimal 10rb'],
+        max: [10_000_000, 'harga maksimal 10jt']
     },
     id_kamar_kos: {
         type: mongoose.Schema.ObjectId,
@@ -22,20 +24,20 @@ const Schema = new mongoose.Schema({
     },
     attachment: {
         type: String,
-        maxlength:255,
+        maxLength:255,
     },
     method_payment: {
         type: String,
         required: true,
-        maxlength:255,
+        maxLength:255,
     },
     link_payment: {
         type: String,
-        maxlength:255,
+        maxLength:255,
     },
     order_id: {
         type: String,
-        maxlength:255,
+        maxLength:255,
     },
     midtrans: {
         type: Object

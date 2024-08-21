@@ -4,7 +4,7 @@ const Schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        maxlength:255
+        maxLength: [125, 'nama maksimal 125 karakter']
     },
     role: {
         type: Number,
@@ -13,21 +13,21 @@ const Schema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        maxlength:255
+        maxLength: 255
     },
     number_phone: {
         type: String,
         required: true,
         unique: true,
-        maxlength:255
+        maxLength: [50, 'nomor whatsapp maksimal 50 karakter']
     },
     avatar: {
         type: String,
-        maxlength:255
+        maxLength:255
     },
     id_card: {
         type: String,
-        maxlength:255
+        maxLength:255
     },
     birthdate: {
         type: Date,
@@ -35,8 +35,7 @@ const Schema = new mongoose.Schema({
     },
     address: {
         type: String,
-        maxlength:255,
-        default: ''
+        maxLength: [125, 'alamat maksimal 125 karakter'],        
     },
     verified: {
         type: Boolean,
