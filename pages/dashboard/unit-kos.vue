@@ -176,7 +176,6 @@
                     <ImageUpload :changeImage="changeImageKos" v-model:image="image" v-model:loading="loading" :disabled="mode == 'delete' || stateKos.hidden"/>
 
                     <UFormGroup label="Nama Kos" name="name" class="w-full">
-
                         <UInput v-model="stateKos.name" placeholder="nama kos" autocomplete="off" 
                             :disabled="mode == 'delete' || stateKos.hidden" />
                     </UFormGroup>
@@ -344,7 +343,6 @@ watch(page, (e, _) => {
 })
 
 watch([q, sort, filter], (e,_)=>{
-    console.log(e)
     refresh()
 })
 

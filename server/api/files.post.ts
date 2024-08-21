@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     const secretAccessKey = useRuntimeConfig().r2SecretKey
     const bucketName = useRuntimeConfig().r2Bucket
     const endpoint = useRuntimeConfig().r2Endpoint
+    const publicPath = useRuntimeConfig().r2PublicPath
 
     const authorizationHeader = event.node.req.headers.authorization;
     const token = authorizationHeader?.split(' ')[1]
@@ -17,8 +18,8 @@ export default defineEventHandler(async (event) => {
         },
         region: 'auto',
         endpoint,
+        forcePathStyle: true
     })
-    
 
     if (data?.length) {
         
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event) => {
         const file = data[0].data
         const prefix = generateName()
         const name = prefix+data[0].filename?.replaceAll(' ','-')
-        const type = name.split('.').pop()
+        const type = data[0].type
 
         const size = file.length
         
@@ -46,14 +47,15 @@ export default defineEventHandler(async (event) => {
         }
 
         try {
-            
-            await s3.putObject({
+            await s3.putObject({                
                 Bucket: bucketName,
                 Key: name, // Use the original file name
                 Body: file,
                 ContentType: type
             })
-            const link = `https://pub-042cd08660454da9bd23468fc74cf82f.r2.dev/${name}`
+            
+            const link = `${publicPath}/${name}`
+            console.log(link)
 
             await Files.create({ name, type, link, id_owner, size })            
 

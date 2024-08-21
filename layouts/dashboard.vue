@@ -25,8 +25,6 @@
                 class="flex justify-between lg:justify-end my-2 border-b-2 border-gray-200 shadow-md p-3 rounded-xl w-full">
                 <UButton class="lg:hidden" @click="slide_over = true" fadded="false" variant="link"
                     icon="i-charm-menu-hamburger" />
-
-
                 <UDropdown v-if="data && (data.avatar ? data.avatar : '/images/profile.png')" :items="[
                     [{
                         label: data.name,

@@ -45,13 +45,13 @@
 
 <script setup lang="ts">
 defineProps<{
-	changeImage: (e: any) => Promise<string | undefined>,
+	changeImage: any,
 	disabled?: boolean,
 	profile?: boolean
 }>()
 const imageModal = ref(false)
 // const disabled = defineModel<boolean>({default: false})
-const image = defineModel<string>('image', { required: true })
+const image = defineModel<any>('image', { required: true })
 const loading = defineModel<boolean>('loading', { required: true })
 
 </script>
