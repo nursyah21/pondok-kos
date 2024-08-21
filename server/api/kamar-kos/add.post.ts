@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-    const { id_kos, name, description, available:_available, image, price } = await readBody(event)
+    const { _id_kos, name, description, available, image, _price: price, _price_harian:price_harian } = await readBody(event)
     const authorizationHeader = event.node.req.headers.authorization;
     const token = authorizationHeader?.split(' ')[1]
 
@@ -13,18 +13,11 @@ export default defineEventHandler(async (event) => {
             
         const { role } = user
         if (role != 2) throw new Error('user not authorization, you must be admin');
-        const kosExists = await Kos.findById(id_kos);
-        if(!kosExists){
-            throw new Error('id kos tidak terdaftar')
-        }
-        let available = _available
-        if(_available == 'tersedia'){
-            available = 0
-        }
-        if(_available == 'tidak tersedia'){
-            available = 2
-        }
-        const res = await KamarKos.create({id_kos, name, description, available, image, price})
+
+        console.log(_id_kos)
+
+        // const res = await KamarKos.create({id_kos:_id_kos, name, description, available, image, price})
+        const res = await KamarKos.create({id_kos:_id_kos, name, description, image, price, price_harian})
         
         return {status: 'success', message: 'menambahkan data kamar kos', id: res._id.toString()}
     } catch (error:any) {

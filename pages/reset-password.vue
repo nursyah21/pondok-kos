@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-2xl text-slate-600 font-bold">
+    <h1 class="text-2xl text-slate-600 font-bold dark:text-slate-200">
         Reset Password
     </h1>
     <UCard class="my-4">
@@ -26,9 +26,18 @@
                     </UInput>
                 </UFormGroup>
 
-            <UButton :loading="loading" type="submit" class="w-full text-center items-center justify-center">
-                Submit
-            </UButton>
+            
+            <UFormGroup>
+                <UButton :loading="loading" type="submit" class="w-full text-center items-center justify-center">
+                    Submit
+                </UButton>
+                <div class="flex justify-center mt-2">
+                    <ULink to="/login" class="text-primary text-center text-sm hover:underline">
+                        kembali login
+                    </ULink>
+                </div>
+            </UFormGroup>
+            
         </UForm>
 
         <UForm v-else :state="state" class="space-y-4" @submit="onSubmitRequestReset">
@@ -36,9 +45,16 @@
                 <UInput data-cy='email' v-model="state.number_phone"  placeholder="085288509878" autocomplete="off" required/>
             </UFormGroup>
 
-            <UButton data-cy='reset-button' :loading="loading" type="submit" class="w-full text-center items-center justify-center">
-                Submit
-            </UButton>
+            <UFormGroup>
+                <UButton data-cy='reset-button' :loading="loading" type="submit" class="w-full text-center items-center justify-center">
+                    Submit
+                </UButton>
+                <div class="flex justify-center mt-2">
+                    <ULink to="/login" class="text-primary text-center text-sm hover:underline">
+                        kembali login
+                    </ULink>
+                </div>
+            </UFormGroup>
         </UForm>
     </UCard>
 </template>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {Config} from 'tailwindcss'
 
 export default <Partial<Config>>{
@@ -5,7 +6,8 @@ export default <Partial<Config>>{
         extend: {
             colors: {
                 danger: '#ff0000',
-                // primary: '#'
+                // base: '#4ade80',
+                // 'base-dark': '#e5e5e5'
             },
             keyframes: {
                 pulseOpacity: {
@@ -18,5 +20,5 @@ export default <Partial<Config>>{
                 pulseOpacity: 'pulseOpacity 1s infinite',
               },
         }
-    }
+    }    
 }

@@ -9,7 +9,6 @@
                     Hi {{ name }} 👋
                 </UButton>
             </div>
-            <!-- <RefreshButton id="finish" :refresh="refresh" v-model:status="status" /> -->
 
             <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />
 

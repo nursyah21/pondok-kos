@@ -2,12 +2,12 @@
 	<div class="flex justify-center">
 		<UButton variant='link' @click='imageModal = true'>
 			<UAvatar v-if="profile" size="3xl" :src="image ? image : '/images/profile.png'" alt="Avatar" />
-			<img v-else :src="image ? image : '/images/noimage.png'" alt="image kos" class="w-[200px] h-[200px] ">
+			<img v-else :src="image ? image : '/images/noimage.png'" alt="image kos" class="w-[200px] h-[200px] rounded-lg">
 		</UButton>
 		<UModal v-model='imageModal'>
 			<UCard :ui="{ header: { padding: 'py-2', base: 'flex justify-between items-center' } }">
 				<template #header>
-					<h1 class="font-bold text-slate-600">
+					<h1 class="font-bold text-slate-600 dark:text-slate-200">
 						Preview Image
 					</h1>
 					<UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
@@ -18,7 +18,7 @@
 						<img v-if="profile" size="3xl" :src="image ? image : '/images/profile.png'" alt="Avatar" 
 							class="'w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] rounded-full"/>
 						<img v-else :src="image ? image : '/images/noimage.png'" alt="image kos"
-							class="'w-[200px] h-[200px] sm:w-[300px] sm:h-[300px]">
+							class="'w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] rounded-lg">
 					</div>
 				</div>
 				<div v-if="!disabled"  class="flex gap-x-2 items-center justify-between">

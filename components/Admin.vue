@@ -8,7 +8,6 @@
 			color="bg-yellow-400" :total="dashboard.totalKamarKos" type="kamar" />
 		<CardDashboard :status="status" title="Pendapatan" icon="i-material-symbols-attach-money"
 			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" />
-
 	</div>
 
 	<div class="flex gap-4 flex-col md:flex-row">

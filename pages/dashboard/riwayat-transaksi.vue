@@ -164,7 +164,7 @@
             <UCard class="print:hidden">
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 class="font-bold text-slate-600">Invoice</h1>
+                        <h1 class="font-bold text-slate-600 dark:text-slate-200">Invoice</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="invoiceOpen = false" />
                     </div>
@@ -178,7 +178,7 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 class="font-bold text-slate-600">Verifikasi transaksi</h1>
+                        <h1 class="font-bold text-slate-600 dark:text-slate-200">Verifikasi transaksi</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>

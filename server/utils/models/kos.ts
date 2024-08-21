@@ -9,10 +9,12 @@ const Schema = new mongoose.Schema({
     },
     description: {
         type: String,
+        required: true,
         maxLength: [255, 'deskripsi kos maksimal 255 karakter']
     },
     address: {
         type: String,
+        required: true,
         maxLength: [125, 'alamat kos maksimal 125 karakter']
     },
     image: {

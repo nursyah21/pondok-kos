@@ -15,10 +15,10 @@
                         <img v-else :src="i.image[0] ?? '/images/noimage.png'" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
                     </template>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600">{{ i.name }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.name }}</h1>
                         <h1 class="text-xs text-slate-800">{{ i.location }}</h1>
                         <UDivider />
-                        <h1 class="my-4 text-sm text-slate-600">{{ i.description }}</h1>
+                        <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ i.description }}</h1>
                         <div v-if="i.description.length < 20" class="h-[6px]"></div>
                     </div>
 
@@ -41,7 +41,7 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 class="font-bold text-slate-600">Pesan Kamar Kos</h1>
+                        <h1 class="font-bold text-slate-600 dark:text-slate-200">Pesan Kamar Kos</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>
@@ -55,10 +55,10 @@
                     </div>
                     
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600">{{ state.name }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.name }}</h1>
                         <h1 class="text-xs text-slate-800">{{ state.location }}</h1>
                         <UDivider />
-                        <h1 class="my-4 text-sm text-slate-600">{{ state.description }}</h1>
+                        <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ state.description }}</h1>
                         <div v-if="state.description.length < 20" class="h-[6px]"></div>
                         
                         <div class="my-2 border-t-2 pt-4">
@@ -70,10 +70,10 @@
                                 <UInput type="date" :value="state.tgl_keluar" disabled />
                             </UFormGroup>
                         </div>
-                        <h1 class="text-slate-600 font-bold  pt-2">Durasi sewa: 30 hari</h1>
+                        <h1 class="text-slate-600 dark:text-slate-200 font-bold  pt-2">Durasi sewa: 30 hari</h1>
                         <h1 class="text-primary-600 font-bold ">{{ state.price }}</h1>
                         
-                        <div v-if="state.available == 1" class="text-center text-sm text-slate-600  p-2 rounded-md">
+                        <div v-if="state.available == 1" class="text-center text-sm text-slate-600 dark:text-slate-200  p-2 rounded-md">
                             masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat transaksi</ULink> jika anda memesan kamar ini
                         </div>
 
@@ -145,7 +145,7 @@ const stateReset = () => {
 }
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-kos', {
+const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
     query,
     method: 'get',
 })

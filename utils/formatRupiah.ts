@@ -1,4 +1,4 @@
-export const formatRupiahIntl = (number:number | any, currency = true) => {    
+export const formatRupiahIntl = (number:number | any, currency = false) => {    
     if(typeof number == 'string'){
         number = parseInt(number.replaceAll(',','').replaceAll('.',''))
     }
@@ -6,5 +6,7 @@ export const formatRupiahIntl = (number:number | any, currency = true) => {
         return '0'
     }
 
-    return new Intl.NumberFormat('en-En').format(number)
+    number = new Intl.NumberFormat('en-En').format(number)
+    return currency ? 'Rp '+number: number
+    
 }

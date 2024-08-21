@@ -51,9 +51,9 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600">Tambahkan Penjaga</h1>
-                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600">Edit Penjaga</h1>
-                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600">Hapus Penjaga</h1>
+                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600 dark:text-slate-200">Tambahkan Penjaga</h1>
+                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600 dark:text-slate-200">Edit Penjaga</h1>
+                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600 dark:text-slate-200">Hapus Penjaga</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>

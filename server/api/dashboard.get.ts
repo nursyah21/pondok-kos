@@ -40,7 +40,17 @@ export default defineEventHandler(async (event) => {
                     }],
                     labels: ['Kos Arsapati', 'Kos Beringin'],
                     dataLabels: {
-                        enabled: false
+                        enabled: false,
+                    },
+                    theme: {
+                        mode: 'light', 
+                        palette: 'palette1', 
+                        monochrome: {
+                            enabled: false,
+                            color: '#255aee',
+                            shadeTo: 'light',
+                            shadeIntensity: 0.65
+                        },
                     }
                 },
                 series: [10, 5]

@@ -74,9 +74,9 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 v-if="mode == 'verif'" class="font-bold text-slate-600">Verifikasi</h1>
-                        <h1 v-if="mode == 'role'" class="font-bold text-slate-600">Ubah sebagai penjaga</h1>
-                        <h1 v-if="mode == 'reset'" class="font-bold text-slate-600">Reset Password</h1>
+                        <h1 v-if="mode == 'verif'" class="font-bold text-slate-600 dark:text-slate-200">Verifikasi</h1>
+                        <h1 v-if="mode == 'role'" class="font-bold text-slate-600 dark:text-slate-200">Ubah sebagai penjaga</h1>
+                        <h1 v-if="mode == 'reset'" class="font-bold text-slate-600 dark:text-slate-200">Reset Password</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>

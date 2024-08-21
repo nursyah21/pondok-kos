@@ -7,6 +7,11 @@ export default defineEventHandler(async (event) => {
         const limit = getRequestURL(event).searchParams.get('limit')
         const sort = getRequestURL(event).searchParams.get('sort') ?? 'asc'
         const filter = getRequestURL(event).searchParams.get('filter') ?? ''        
+        const only = getRequestURL(event).searchParams.get('only') ?? ''        
+
+        if(only == 'name'){
+            return await Kos.find({hidden: false}).select(['name'])
+        }
 
         const queryName = q ? {
             name:  new RegExp(q, 'i'),

@@ -4,10 +4,10 @@
     <main class="my-4">
 
         <!-- search -->
-        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2">
+        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2 dark:border-gray-700">
 
             <div class="flex items-center w-full">
-                <UButton variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" />
+                <UButton :disabled="!optionsKos.length" variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" />
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
                     placeholder="Cari nama kamar" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
@@ -29,14 +29,24 @@
                         click: () => { filter = 'all' }
                     },
                     {
-                        label: 'tersedia',
-                        class: filter == 'tersedia' ? 'underline' : '',
-                        click: () => { filter = 'tersedia' }
+                        label: 'dibooking',
+                        class: filter == 'dibooking' ? 'underline' : '',
+                        click: () => { filter = 'dibooking' }
                     },
                     {
-                        label: 'tidak tersedia',
-                        class: filter == 'tidak tersedia' ? 'underline' : '',
-                        click: () => { filter = 'tidak tersedia' }
+                        label: 'ditempati',
+                        class: filter == 'ditempati' ? 'underline' : '',
+                        click: () => { filter = 'ditempati' }
+                    },
+                    {
+                        label: 'non aktif',
+                        class: filter == 'non aktif' ? 'underline' : '',
+                        click: () => { filter = 'non aktif' }
+                    },
+                    {
+                        label: 'aktif',
+                        class: filter == 'aktif' ? 'underline' : '',
+                        click: () => { filter = 'aktif' }
                     },
                     ]
                 ]" :popper="{ placement: 'bottom-start' }">
@@ -107,54 +117,52 @@
         </div>
 
         <UTable :loading="status != 'success'" :rows="rows" :columns="columns">
-            <template #kos-data="i">
+            <template #_kamar-data="i">
                 <div class="flex items-center gap-x-4 text-">
-                    <UAvatar :src="i.row.image[0]" />
-                    {{ i.row.kos }}
+                    <UAvatar :src="i.row.image[0] ? i.row.image[0] : '/images/noimage.png'" />
+                    <UBadge v-if="i.row.hidden" color="gray">{{ i.row._kamar }}</UBadge>
+                    <UBadge v-else-if="i.row.available == 1" color="yellow">{{ i.row._kamar }}</UBadge>
+                    <UBadge v-else-if="i.row.available == 2" color="red">{{ i.row._kamar }}</UBadge>
+                    <h1 v-else>{{ i.row._kamar }}</h1>
                 </div>
             </template>
 
-            <template #available-data="i">
-                <template v-if="i.row.hidden">
-                    <UBadge color="gray">tidak aktif</UBadge>
-                </template>
-                <template v-else>
-                    <UBadge v-if="i.row.available == 0">tersedia</UBadge>
-                    <UBadge color="yellow" v-if="i.row.available == 1">sedang dipesan</UBadge>
-                    <UBadge color="red" v-if="i.row.available == 2">ditempati</UBadge>
-                </template>
-            </template>
-
             <template #action-data="i">
-                <UDropdown v-if="i.row.available == 0" :items="[
+                <UDropdown :items="[
                     [{
                         label: 'Edit',
+                        disabled: i.row.available != 0 || i.row.hidden ? true : false,
                         icon: 'i-material-symbols-light-edit',
                         click: () => edit(i.row)
                     },
                     {
                         label: 'Ubah status',
+                        disabled: i.row.available == 0 || i.row.hidden ? false : true,
                         icon: 'i-material-symbols-light-edit',
                         click: () => del(i.row)
                     }]
                 ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton variant="link" icon="i-mi-options-vertical" />
-                </UDropdown>
-                <UDropdown v-else :items="[
-                    [{
-                        label: 'Edit',
-                        icon: 'i-material-symbols-light-edit',
-                        click: () => edit(i.row)
-                    }]
-                ]" :popper="{ placement: 'bottom-start' }">
-                    <UButton variant="link" icon="i-mi-options-vertical" />
-                </UDropdown>
+                    <UButton variant="link" icon="i-mi-options-vertical" color="gray"/>
+                </UDropdown>                
             </template>
         </UTable>
-        <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
-                query: { page }
-            })" :ui="{
+
+        <!-- pagination -->
+        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                <h1 v-if="pageCount == -1">
+                    {{ page * pageCount + 2 }} - {{ totalPage }}
+                </h1>
+                <h1 v-else>
+                    {{skip >= 1? skip + page - 1 : skip+page}} - {{ page * pageCount }} of {{ totalPage }}
+                </h1>
+            </UButton>
+            <UButton v-else variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                tidak tersedia
+            </UButton>
+            
+            
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
                 wrapper: 'flex items-center gap-2',
                 rounded: '!rounded-full min-w-[32px] justify-center',
                 default: {
@@ -163,7 +171,6 @@
                     }
                 }
             }" />
-
         </div>
 
         <!-- modal crud add, update, delete -->
@@ -171,16 +178,14 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600">Tambahkan Kos</h1>
-                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600">Edit Kos</h1>
-                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600">Status Kos</h1>
+                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600 dark:text-slate-200">Tambahkan Kos</h1>
+                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600 dark:text-slate-200">Edit Kos</h1>
+                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600 dark:text-slate-200">Status Kos</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>
                 </template>
                 <UForm :state="state" @submit="onSubmit" class="space-y-4">
-                    <!-- <img :src="image ? image : '/images/noimage.png'" alt="image kos" class="w-[200px] h-[200px] "> -->
-
                     <UCarousel v-slot="{ item }" :items="[...imageKos, '']" 
                         :ui="{
                             item: 'basis-full',
@@ -203,18 +208,23 @@
                     </UCarousel>
 
                     <UFormGroup label="Kos" class="w-full">
-                        <USelect v-model="state.id_kos" :options="optionsKos" required option-attribute="name"
-                            autocomplete="off" :disabled="mode == 'delete'" />
+                        <USelectMenu v-model="state.id_kos" :options="optionsKos" :disabled="mode == 'delete'" />
                     </UFormGroup>
+
+
+                    <UFormGroup label="Tipe" name="name" class="w-full">
+                        <USelectMenu v-model="state.tipe" :options="['Kos', 'Kontrakan']" :disabled="mode == 'delete'" />
+                    </UFormGroup>
+
                     <UFormGroup label="Nama Kamar Kos" name="name" class="w-full">
                         <UInput v-model="state.name" placeholder="nama kos" autocomplete="off"
                             :disabled="mode == 'delete'" />
                     </UFormGroup>
+
                     <UFormGroup label="Deskripsi Kamar Kos" name="deskripsi" class="w-full">
-                        <UInput v-model="state.description" placeholder="deskripsi kos" autocomplete="off"
+                        <UTextarea v-model="state.description" placeholder="deskripsi kos" autocomplete="off"
                             :disabled="mode == 'delete'" />
                     </UFormGroup>
-
 
                     <UFormGroup :label="'Harga Kamar Kos'" name="harga" class="w-full">
                         <UInput class="flex-1" v-model="state.price" placeholder="harga kamar kos" autocomplete="off"
@@ -223,7 +233,18 @@
                                 <span class="text-gray-500 dark:text-gray-400 text-xs">Rp</span>
                             </template>
                         </UInput>
+                    </UFormGroup>
 
+                    <UFormGroup :label="'Harga Harian'" name="harga" class="w-full">
+                        <template #label>
+                            <UCheckbox v-model="state.price_harian_on" name="notifications" label="Harga Harian Kamar Kos" />
+                        </template>
+                        <UInput class="flex-1" v-model="state.price_harian" placeholder="harga harian kamar kos" autocomplete="off"
+                            :disabled="mode == 'delete' || !state.price_harian_on">
+                            <template #leading>
+                                <span class="text-gray-500 dark:text-gray-400 text-xs">Rp</span>
+                            </template>
+                        </UInput>
                     </UFormGroup>
 
                     <UFormGroup>
@@ -263,7 +284,7 @@ const rows = ref([])
 const isOpen = ref(false)
 const mode: Ref<ModeCrud> = ref('add')
 const q = ref('')
-const filter = ref<'tersedia' | 'tidak tersedia' | 'all'>('all')
+const filter = ref<'ditempati' | 'dibooking' | 'all' | 'non aktif' | 'aktif'>('aktif')
 const sort = ref<'asc' | 'desc'>('asc')
 
 const loading = ref(false)
@@ -274,23 +295,19 @@ const columns = [{
     label: 'id',
 },
 {
-    key: 'kos',
-    label: 'kos',
-},
-{
-    key: 'name',
+    key: '_kamar',
     label: 'kamar',
 },
 {
-    key: 'description',
+    key: '_kos',
+    label: 'kos',
+},
+{
+    key: '_description',
     label: 'deskripsi',
 },
 {
-    key: 'available',
-    label: 'tersedia',
-},
-{
-    key: 'price',
+    key: '_price',
     label: 'harga',
 },
 {
@@ -308,13 +325,16 @@ const query = computed(() => ({
 }))
 
 // @ts-ignore
-const { data: kos } = await $fetch('/api/kos/get', {
+const { data: kos } = await useFetch('/api/kos/get', {
+    query: {only: 'name'},
     method: 'get'
 })
-// @ts-ignore
-const optionsKos = kos.map(e => ({ value: e._id, name: `${e.name} - ${e.location}` }))
 
-const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-kos', {
+// @ts-ignore
+const optionsKosValue = kos.value.map(e=>({ value: e._id, name: e.name}))
+const optionsKos = optionsKosValue.map((e:any) => e.name) 
+
+const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
     query,
     method: 'get'
 })
@@ -322,13 +342,19 @@ const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/all-kamar-
 const optionsAvailable = ['tersedia', 'tidak tersedia']
 
 const state = reactive({
-    id_kos: optionsKos.length ? optionsKos[0].value : '',
+    id_kos: optionsKos[0],
     name: '',
     description: '',
     available: optionsAvailable[0],
-    price: '0',
+    price: '350,000',
+    _price: 350_000,
+    price_harian: '50,000',
+    _price_harian: 0,
+    price_harian_on: false,
+    _id_kos: optionsKosValue[0].value,
     hidden: false,
-    _id: ''
+    _id: '',
+    tipe: 'Kos'    
 })
 
 const image = ref('')
@@ -337,20 +363,34 @@ const resetState = () => {
     state.name = ''
     state.description = ''
     state.available = optionsAvailable[0],
-        state.price = '0',
-        state.id_kos = optionsKos.length ? optionsKos[0].value : '',
-        image.value = ''
+    state.price = '350,000',
+    state.price_harian = '50,000',
+    state._price_harian = 0,
+    state.price_harian_on = false,
+    state.id_kos = optionsKos[0]    
+    image.value = ''
     state._id = ''
     // @ts-ignore
     imageKos.value = []
 }
+
 const helperState = (e: any) => {
-    const { name, description, available, price, image: _image, id, id_kos, hidden } = e
-    state.name = name
+    const { kamar,name, description, available, price, image: _image, id, id_kos, hidden, price_harian, price_harian_on } = e
+    console.log(e)
+    state.name = kamar
     state.description = description
     state.available = available == 2 ? optionsAvailable[1] : optionsAvailable[1]
     state.price = price
-    state.id_kos = optionsKos.find((e: any) => e.value == id_kos).value
+    // state.id_kos = optionsKos.find((e: any) => e.value == id_kos).value
+    // state._id_kos = optionsKosValue.find((e:any) => e.name == id_kos).value
+    
+    if(typeof price == 'string'){
+        state._price = parseInt(price.replaceAll(',',''))
+    }
+
+    if(price_harian_on){
+        state._price_harian = parseInt(price_harian.replaceAll(',',''))
+    }
     state.hidden = hidden
 
     if (_image) {
@@ -359,6 +399,7 @@ const helperState = (e: any) => {
         imageKos.value = _image
     }
     state._id = id
+    console.log(state)
 }
 
 
@@ -401,22 +442,11 @@ const submitDeleteKos = (e: any) => submitHelperPost(
     refresh, { ...e.data, image: imageKos.value }
 )
 
-const deleteImageKos = async (e: any) => {
-    // @ts-ignore
-    imageKos.value = imageKos.value?.filter((img: any) => img != e)
-}
-
-
 const changeImageKos = async (e: any) => {
     const res = await uploadFile(e, loading, image, 'add')
+    
     // @ts-ignore
-    if (imageKos.value) {
-        // @ts-ignore
-        imageKos.value = [...imageKos.value, res]
-    } else {
-        // @ts-ignore
-        imageKos.value = [res]
-    }
+    imageKos.value = imageKos.value ? [...imageKos.value, res] : [res]    
 }
 
 watch([q, sort, filter], (e, _) => {
@@ -425,16 +455,22 @@ watch([q, sort, filter], (e, _) => {
 
 watch(status, (e, _) => {
     if (e != 'success') return
-
     // @ts-ignore
     const { total, data } = raw.value
-
     totalPage.value = total
-    rows.value = data
+    rows.value = data.map((items:any)=>({
+        ...items,
+        _kamar: shortWord(items.kamar, 50), 
+        _kos: shortWord(items.kos, 50), 
+        _description: shortWord(items.description, 50),
+        _price: formatRupiahIntl(items.price, true) //shortWord(items.description, 50),
+    }))
+
 }, { immediate: true })
 
 watch([state], (e, _) => {
     e[0].price = formatRupiahIntl(e[0].price, false)
+    e[0].price_harian = formatRupiahIntl(e[0].price_harian, false)
 })
 
 

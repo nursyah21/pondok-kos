@@ -17,8 +17,6 @@ const abstrackSubmit = async (
         })
 
         if (res.status == 'success') {
-            // disabled id toast
-            //useToast().add({ id: idToast, title: res.message })
             useToast().add({  title: res.message })
             refresh()
         }
@@ -26,9 +24,9 @@ const abstrackSubmit = async (
         if (error.data) {
             error = error.data
         }        
-        if (error.message.toLowerCase().includes('validation')){
-            error.message = error.message.split(':')[2]        
-        }
+        // if (error.message.toLowerCase().includes('validation')){
+        //     error.message = error.message.split(':')[2]        
+        // }
         useToast().add({ title: error.message, color: 'red' })
         loading.value = false
         return;

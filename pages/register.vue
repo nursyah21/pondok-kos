@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-2xl text-slate-600 font-bold">
+    <h1 class="text-2xl text-slate-600 font-bold dark:text-slate-200">
         Daftar
     </h1>
     <UCard class="my-4">

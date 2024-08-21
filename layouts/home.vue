@@ -1,6 +1,6 @@
 <template>
     <UContainer class="my-2">
-        <nav class="flex justify-between border-b-2 border-gray-200 shadow-md p-3 rounded-xl ">
+        <nav class="flex justify-between border-b-2 border-gray-200 dark:border-gray-800 shadow-md p-3 rounded-xl ">
             <div>
                 <ULink to="/" class="text-primary font-bold text-2xl flex items-center gap-x-2">
                     <UIcon name="i-material-symbols-other-houses" />
@@ -34,8 +34,8 @@
             </div>
         </nav>
         <slot />
-        <footer class="flex p-3 text-slate-600 justify-center flex-col border-t">
-            <p class="text-slate-500 text-xs sm:text-sm text-center">
+        <footer class="flex p-3 text-slate-600 dark:text-slate-200 justify-center flex-col border-t">
+            <p class="text-slate-500 dark:text-slate-200 text-xs sm:text-sm text-center">
                 Alamat:
                 Jl. Gn. Galunggung 2 No.4, RT.47, Loa Ipuh, Kec. Tenggarong, Kabupaten Kutai Kartanegara, Kalimantan
                 Timur 75513 <br>
@@ -43,7 +43,7 @@
                     <UIcon name="i-bi-whatsapp" /> 085250579806
                 </ULink>
             </p>
-            <h1 class="text-center text-slate-500 mt-2 text-xs sm:text-sm">
+            <h1 class="text-center text-slate-500 mt-2 text-xs sm:text-sm dark:text-slate-300">
                 Copyright - 2024
             </h1>
         </footer>

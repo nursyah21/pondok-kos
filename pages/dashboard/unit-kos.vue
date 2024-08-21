@@ -4,7 +4,7 @@
     <main class="my-4">
 
         <!-- search -->
-        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2">
+        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
             
             <div class="flex items-center w-full">
                 <UButton variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" />
@@ -135,6 +135,7 @@
             </template>
         </UTable>
 
+        <!-- pagination -->
         <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
             <UButton v-if="rows && rows.length" variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
                 <h1 v-if="pageCount == -1">
@@ -165,9 +166,9 @@
             <UCard> 
                 <template #header> 
                     <div class="items-center justify-between flex">
-                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600">Tambahkan Kos</h1>
-                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600">Edit Kos</h1>
-                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600">Status Kos</h1>
+                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600 dark:text-slate-200">Tambahkan Kos</h1>
+                        <h1 v-if="mode == 'edit'" class="font-bold text-slate-600 dark:text-slate-200">Edit Kos</h1>
+                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600 dark:text-slate-200">Status Kos</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                             @click="isOpen = false" />
                     </div>  
@@ -235,7 +236,7 @@ const columns = [{
 },
 {
     key: '_name',
-    label: 'nama',
+    label: 'kos',
 },
 {
     key: '_description',

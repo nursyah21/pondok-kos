@@ -8,6 +8,7 @@ const Schema = new mongoose.Schema({
     },
     description: {
         type: String,
+        required: true,
         maxLength: [255, 'deskripsi kos maksimal 255 karakter']
     },
     available: {
@@ -16,13 +17,14 @@ const Schema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        min: [10_000, 'harga minimal 10rb'],
+        required: true,
+        // min: [10_000, 'harga minimal 10rb'],
         max: [10_000_000, 'harga maksimal 10jt']
     },
     price_harian: {
         type: Number,
         default: 0, // 0 it mean only bulanan not harian
-        min: [10_000, 'harga minimal 10rb'],
+        // min: [10_000, 'harga minimal 10rb'],
         max: [10_000_000, 'harga maksimal 10jt']
     },
     image: [{

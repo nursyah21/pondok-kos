@@ -70,8 +70,8 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600">Tambahkan penghuni</h1>
-                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600">Hapus penghuni</h1>
+                        <h1 v-if="mode == 'add'" class="font-bold text-slate-600 dark:text-slate-200">Tambahkan penghuni</h1>
+                        <h1 v-if="mode == 'delete'" class="font-bold text-slate-600 dark:text-slate-200">Hapus penghuni</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
                     </div>                    
                 </template>
@@ -181,7 +181,7 @@ const {data: allPenghuni} = await $fetch('/api/all-user',{
 const optionsPenghuni = allPenghuni.map((e:any)=>({value:e._id, name: `${e.name} - ${e.number_phone}`}))
 
 // @ts-ignore
-const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/kamar-kos/all-kamar-kos',{
+const {data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos} = await useFetch('/api/kamar-kos/get',{
     method: 'get', query: {onlyName: 1}
 })
 let optionsKamarKos = <any>[]

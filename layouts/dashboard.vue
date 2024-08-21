@@ -22,7 +22,7 @@
         </aside>
         <main class="flex-1 pb-12 space-y-6 overflow-y-auto lg:h-screen md:space-y-8">
             <header
-                class="flex justify-between lg:justify-end my-2 border-b-2 border-gray-200 shadow-md p-3 rounded-xl w-full">
+                class="flex justify-between lg:justify-end my-2 border-b-2 border-gray-200 dark:border-gray-800 shadow-md p-3 rounded-xl w-full">
                 <UButton class="lg:hidden" @click="slide_over = true" fadded="false" variant="link"
                     icon="i-charm-menu-hamburger" />
                 <UDropdown v-if="data && (data.avatar ? data.avatar : '/images/profile.png')" :items="[
@@ -39,6 +39,14 @@
                             click: () => {
                                 // @ts-ignore
                                 navigateTo('/dashboard/edit-profile')
+                            }
+                        },
+                        {
+                            label: !isDark ? 'Siang' : 'Malam',
+                            class: 'tema',
+                            icon: isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid',
+                            click: () => {
+                                isDark = !isDark
                             }
                         },
                         {
@@ -81,6 +89,14 @@
         </main>
     </div>
 </template>
+
+<style>
+
+.apexcharts-legend-text{
+    color: rgb(var(--color-primary-400) / var(--tw-text-opacity)) !important;
+}
+
+</style>
 
 <script setup lang="ts">
 const data = profile
@@ -175,6 +191,16 @@ const navbar = role == 0 ? penghuni : role == 1 ? penjaga : pemilik
 const midtrans_prod = useRuntimeConfig().public.midtransProduction
 const midtransClient = midtrans_prod ? useRuntimeConfig().public.midtransClient : useRuntimeConfig().public.midtransClientSandbox
 const midtransLink = midtrans_prod ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'
+
+const colorMode = useColorMode()
+const isDark = computed({
+  get () {
+    return colorMode.value === 'dark'
+  },
+  set () {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  }
+})
 
 useHead({
     script: [
