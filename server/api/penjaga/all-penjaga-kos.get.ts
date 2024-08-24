@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
         const kos = await Kos.find({_id: 
             {$in: data_kos}
-        }).select(['_id', 'name', 'location'])
+        }).select(['_id', 'name', 'address'])
         
         
         

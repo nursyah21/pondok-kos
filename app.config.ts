@@ -1,3 +1,7 @@
+// @ts-nocheck
+
+
+
 export default defineAppConfig({
   ui: {
     primary: 'green',

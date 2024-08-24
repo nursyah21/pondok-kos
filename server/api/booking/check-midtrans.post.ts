@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         let paid_status;
         let available;
-        console.log('=>', data)
+        
         snap.transaction.notification(data)
             .then((statusResponse:any)=>{
                 let orderId = statusResponse.order_id;
@@ -40,9 +40,7 @@ export default defineEventHandler(async (event) => {
                 }
             })
 
-        console.log(link_payment, data)
         const res = await Booking.findOneAndUpdate({link_payment}, {midtrans: {...data}})
-        console.log(res)
         
 
         if(available != 1){

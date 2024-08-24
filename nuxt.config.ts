@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "nuxt-vuefire"],
+  modules: ["@nuxt/ui",  "@nuxt/test-utils/module"],
   colorMode: {
     preference: 'light', // Set preference to 'light'
     // Other colorMode options (optional)
@@ -19,21 +19,12 @@ export default defineNuxtConfig({
     "r2SecretKey": process.env.R2_SECRET_KEY,
     "r2Endpoint": process.env.R2_ENDPOINT,
     "r2Bucket": process.env.R2_BUCKET,
+    "r2PublicPath": process.env.R2_PUBLIC_PATH,
     "fontee": process.env.FONTEE,
     public: {
       "midtransProduction": false,
       "midtransClientSandbox": process.env.MIDTRANS_CLIENT_SANDBOX,
       "midtransClient": process.env.MIDTRANS_CLIENT,
     }
-  },  
-  vuefire: {
-    config: {
-      apiKey: process.env.FIREBASE_API_KEY,
-      databaseURL: process.env.FIREBASE_DATABASE_URL,
-      projectId: process.env.FIREBASE_PROJECTID
-    }
-  },
-  build: {
-    transpile: ['echarts']
   }
 })

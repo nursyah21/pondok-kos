@@ -32,15 +32,16 @@ export const uploadFile = async(event:any, loading:any, state:any, type:UploadTy
             
             // @ts-ignore
             if (res.message) {
-                useToast().add({ id: 'upload file', title: 'success upload file' })
+                // @ts-ignore
+                useToast().add({ id: 'upload file', title: 'upload file success' })
                 // @ts-ignore
                 state.value = res.message
                 // @ts-ignore
                 message = res.message
             }   
-        } catch (error:any) {
-            console.error('uploadFile.ts', error.message)
-            useToast().add({ id: 'upload file', title: 'uploadfile error' , color: 'red'})
+        } catch (error:any) {            
+            const message = error.data.message
+            useToast().add({ id: 'upload file', title: 'uploadfile error', description: message, color: 'red'})
         }
         
         loading.value = false

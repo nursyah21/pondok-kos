@@ -2,15 +2,18 @@ import mongoose from "mongoose";
 
 const Schema = new mongoose.Schema({
     id_user: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true,
     },
     id_kamar_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'kamar_kos',
         required: true,
     },
     id_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'kos',
         required: true,
     },
     tanggal_bayar: {

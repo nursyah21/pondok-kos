@@ -1,5 +1,6 @@
+import mongoose, { ObjectId } from "mongoose";
 
-const midtransCheckStatus = async (notificationJson: any, id_booking: string, id_kamar: string) => {
+const midtransCheckStatus = async (notificationJson: any, id_booking: any, id_kamar: any, id_user: any, id_kos: any, created_at: any) => {
     try {
         const statusResponse = await snap.transaction.notification(notificationJson)
 
@@ -12,23 +13,20 @@ const midtransCheckStatus = async (notificationJson: any, id_booking: string, id
             if (fraudStatus == 'challenge') {
                 // TODO set transaction status on your databaase to 'challenge'
             } else if (fraudStatus == 'accept') {
-
-                await Booking.findByIdAndUpdate(id_booking, { paid_status: 2 })
-                await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })                
+                await addPenghuniKos(id_booking, id_kamar, id_user, created_at, id_kos);
             }
         } else if (transactionStatus == 'settlement') {
 
-            await Booking.findByIdAndUpdate(id_booking, { paid_status: 2 })
-            await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 })
+            await addPenghuniKos(id_booking, id_kamar, id_user, created_at, id_kos);
             // TODO set transaction status on your databaase to 'success'
         } else if (transactionStatus == 'cancel' || transactionStatus == 'expire') {
 
-            await Booking.findByIdAndUpdate(id_booking, { paid_status: 0 })            
+            await Booking.findByIdAndUpdate(id_booking, { paid_status: 0 })
             await KamarKos.findByIdAndUpdate(id_kamar, { available: 0 })
             // TODO set transaction status on your databaase to 'failure'
         }
     } catch (error: any) {
-        console.log(error)
+        console.error('checkBooking.ts',error)
     }
 
 }
@@ -37,28 +35,21 @@ const midtransCheckStatus = async (notificationJson: any, id_booking: string, id
 export const checkBooking = async () => {
     try {
         let allmidtrans = await Booking.find({ paid_status: 1 })
-        
+
         allmidtrans.forEach((e) => {
             if (e.midtrans) {
-                // console.log(e.midtrans, e._id.toString(), e.id_kamar_kos)
-                midtransCheckStatus(e.midtrans, e._id.toString(), e.id_kamar_kos)
+                midtransCheckStatus(e.midtrans, e._id, e.id_kamar_kos, e.id_user, e.id_admin, e.createdAt)
             }
         })
-
-
-        // let data = await Booking.find({
-        //     paid_status: 1, createdAt: {
-        //         $lt: new Date(Date.now() - 60 * 60 * 1000)
-        //     }
-        // }, { paid_status: 0 }).select(['id_kamar_kos'])
-
-        // data.find(async e => {
-        //     const kos = await KamarKos.findByIdAndUpdate(e.id_kamar_kos, { available: 0 })
-        //     const booking = await Booking.findByIdAndUpdate(e._id, { paid_status: 0 })
-        // })
 
     } catch (error: any) {
         console.error(error.message)
     }
 
+}
+
+async function addPenghuniKos(id_booking: any, id_kamar: any, id_user: any, created_at: any, id_kos: any) {
+    await Booking.findByIdAndUpdate(id_booking, { paid_status: 2 });
+    await KamarKos.findByIdAndUpdate(id_kamar, { available: 2 });
+    await PenghuniKos.create({ id_user, id_kamar_kos: id_kamar, tanggal_bayar: created_at, id_kos })
 }

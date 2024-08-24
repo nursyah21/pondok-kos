@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema({
     name: {
         type: String,
+        maxLength:255,
         required: true,
     },
     link: {
         type: String,
+        maxLength:255,
         required: true,
     },
     type: {
@@ -17,7 +19,8 @@ const Schema = new mongoose.Schema({
         type: Number
     },
     id_owner: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true
     }
     

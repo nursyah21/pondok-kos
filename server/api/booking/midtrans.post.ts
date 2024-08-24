@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
         })
         // @ts-ignore
         .catch((e) => {
-            console.log('midtranst.post', e.message)
+            console.error('midtranst.post', e.message)
             throw createError({
                 statusCode: 500,
                 statusMessage: e.message,

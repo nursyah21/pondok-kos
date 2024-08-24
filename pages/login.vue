@@ -1,6 +1,6 @@
 <template>
 
-    <h1 class="text-2xl text-slate-600 font-bold">
+    <h1 class="text-2xl text-slate-600 font-bold dark:text-slate-200">
         Masuk
     </h1>
     <UCard class="my-4">
@@ -113,7 +113,7 @@ async function onSubmit(event:any) {
             setToken(res.secret)
             const kos = useRoute().query.kos
             if (kos) {
-                window.location.replace('/dashboard/find-kos?kos=' + kos)
+                window.location.replace('/dashboard/cari-kos?kos=' + kos)
             } else {
                 window.location.replace('/dashboard')
             }
@@ -126,5 +126,7 @@ async function onSubmit(event:any) {
 
     loading.value = false
 }
-
+useHead({
+    title: 'Login'
+})
 </script>

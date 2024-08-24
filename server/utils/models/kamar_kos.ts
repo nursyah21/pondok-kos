@@ -4,10 +4,16 @@ const Schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        maxLength: [125, 'nama kos maksimal 125 karakter'],
+    },
+    kontrakan: {
+        type: Boolean,
+        default: false
     },
     description: {
         type: String,
-        default: "",
+        required: true,
+        maxLength: [255, 'deskripsi kos maksimal 255 karakter']
     },
     available: {
         type: Number,
@@ -15,17 +21,24 @@ const Schema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        default: 1
+        required: true,
+        // min: [10_000, 'harga minimal 10rb'],
+        max: [10_000_000, 'harga maksimal 10jt']
     },
     price_harian: {
         type: Number,
-        default: 0 // 0 it mean only bulanan not harian
+        default: 0, // 0 it mean only bulanan not harian
+        // min: [10_000, 'harga minimal 10rb'],
+        max: [10_000_000, 'harga maksimal 10jt']
     },
     image: [{
         type: String,
+        maxLength:255,
     }],
     id_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'kos',
+        required: true
     },
     hidden: {
         type: Boolean,

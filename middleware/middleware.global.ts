@@ -1,47 +1,40 @@
+// @ts-ignore
 import { useLocalStorage } from "@vueuse/core"
 
 const penghuni = [
     '/logout',
     '/dashboard',
-    '/dashboard/find-kos',
+    '/dashboard/cari-kos',
     '/dashboard/laporan',
     '/dashboard/messages',
-    '/dashboard/transaksi',
-    '/dashboard/settings'
+    '/dashboard/riwayat-transaksi',
+    '/dashboard/edit-profile'
 ]
 const penjaga = [
     '/logout',
     '/dashboard',
     '/dashboard/laporan',
     '/dashboard/messages',
-    '/dashboard/transaksi',
-    '/dashboard/settings',
+    '/dashboard/riwayat-transaksi',
+    '/dashboard/edit-profile',
     '/dashboard/penghuni',
-    '/dashboard/penghuni/data-penghuni',
-    '/dashboard/penghuni/data-verif',
-    '/dashboard/pengeluaran'
+    '/dashboard/verifikasi-penghuni'
 ]
 const pemilik = [
     '/logout',
     '/dashboard',
-    '/dashboard/laporan',
-    '/dashboard/messages',
-    '/dashboard/transaksi',
-    '/dashboard/settings',
+    '/dashboard/riwayat-transaksi',
+    '/dashboard/edit-profile',
     '/dashboard/penghuni',
-    '/dashboard/penghuni/data-penghuni',
-    '/dashboard/penghuni/data-verif',
-    '/dashboard/user',
-    '/dashboard/user/data-penjaga',
-    '/dashboard/user/data-user',
+    '/dashboard/verifikasi-penghuni',
+    '/dashboard/manajemen-user',
     '/dashboard/penjaga',
-    '/dashboard/kos',
-    '/dashboard/kos/data-kamar-kos',
-    '/dashboard/kos/data-kos'
+    '/dashboard/kamar-kos',
+    '/dashboard/unit-kos',
 ]
 const guest = [
     '/', 
-    '/unit-kos', 
+    '/cari-kos', 
     '/login', 
     '/register', 
     '/reset-password'
@@ -64,7 +57,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             })
             role = data.data?.role
         } catch (error:any) {
-            console.error(new Date().toLocaleTimeString(), 'error', error.message)
+            // console.error(new Date().toLocaleTimeString(), 'error', error.message)
         }
         
         

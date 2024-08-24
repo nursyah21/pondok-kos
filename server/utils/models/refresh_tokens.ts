@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema({
     token: {
         type: String,
+        maxLength: 255,
         required: true,
     },
     last_used: {
@@ -11,7 +12,8 @@ const Schema = new mongoose.Schema({
     },
     
     id_user: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true
     }
 }, { timestamps: true })

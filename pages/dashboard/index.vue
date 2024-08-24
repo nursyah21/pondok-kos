@@ -5,15 +5,12 @@
         <div class="flex flex-col gap-y-4">
             <div>
                 <h1 class="font-bold">{{ today }}</h1>
-                <h1>Hi {{ name }} 👋</h1>
-
+                <UButton variant="ghost" @click="refresh" color='gray' :class="status == 'pending' ? 'animate-pulseOpacity' : ''">
+                    Hi {{ name }} 👋
+                </UButton>
             </div>
-            <RefreshButton :refresh="refresh" v-model:status="status" />
-
 
             <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />
-
-
 
             <AlertNotVerified :verified="verified"  :role="role"/>
 
@@ -23,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import Admin from './Admin.vue'
 const _data = await myProfile()
 
 let role = 0
@@ -74,6 +70,9 @@ watch(() => status, e => {
 }, { deep: true, immediate: true })
 
 definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+})
+useHead({
+    title: 'Dashboard'
 })
 </script>

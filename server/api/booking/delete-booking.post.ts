@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
         if(!booking) throw new Error('booking sudah tidak tersedia');
 
         const {id_kamar_kos} = booking
-        const res = await Booking.findByIdAndDelete(_id)
+        const res = await Booking.findByIdAndUpdate(_id, {paid_status: 0})
         if(!res){
             throw Error('booking didnt exist')
         }

@@ -4,31 +4,40 @@ const Schema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
+        min: [10_000, 'harga minimal 10rb'],
+        max: [10_000_000, 'harga maksimal 10jt']
     },
     id_kamar_kos: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'kamar_kos',
         required: true,
     },
     id_user: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true,
     },
     id_admin: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
         required: true,
     },
     attachment: {
         type: String,
+        maxLength:255,
     },
     method_payment: {
         type: String,
         required: true,
+        maxLength:255,
     },
     link_payment: {
         type: String,
+        maxLength:255,
     },
     order_id: {
-        type: String
+        type: String,
+        maxLength:255,
     },
     midtrans: {
         type: Object
