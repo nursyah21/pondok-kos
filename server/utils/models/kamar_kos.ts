@@ -6,6 +6,10 @@ const Schema = new mongoose.Schema({
         required: true,
         maxLength: [125, 'nama kos maksimal 125 karakter'],
     },
+    kontrakan: {
+        type: Boolean,
+        default: false
+    },
     description: {
         type: String,
         required: true,

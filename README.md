@@ -5,49 +5,48 @@
 ![image](/public/use-case.drawio.png)
 
 - [x] login
-- [x] login - reset password
+- [x] reset password
 - [x] logout
+- [x] register
 - [x] edit profile
-- [x] manage penghuni - generate reset password penghuni
-- [x] manage penghuni - verifikasi penghuni
-- [x] manage penghuni - menambahkan penghuni
-- [x] manage penghuni - nonaktifkan penghuni
+
+- [x] manage penghuni - generate reset password penghuni (need fix)
+- [x] manage penghuni - verifikasi penghuni (need fix)
+- [x] manage penghuni - menambahkan penghuni (need fix)
+- [x] manage penghuni - nonaktifkan penghuni (need fix)
+
 - [x] manajemen kos - menambahkan kos
 - [x] manajemen kos - edit kos 
 - [x] manajemen kos - menonaktifkan kos 
+
 - [x] manajemen kamar kos - menambahkan kamar kos 
 - [x] manajemen kamar kos - edit kamar kos 
 - [x] manajemen kamar kos - menonaktifkan kamar kos 
+
 - [x] manajemen transaksi - membatalkan transaksi 
 - [x] manajemen transaksi - melihat invoice 
-- [x] manajemen user - menonaktifkan penjaga 
-- [x] manajemen user - generate reset password penjaga 
-- [x] manajemen user - ubah role user 
-- [x] manajemen user - menambahkan penjaga 
+
+- [x] manajemen user - menonaktifkan penjaga (need fix)
+- [x] manajemen user - generate reset password penjaga (need fix, tombol mengirimkan link reset ke whatsapp)
+- [x] manajemen user - ubah role user (need fix)
+- [x] manajemen user - menambahkan penjaga (need fix)
+
 - [x] booking kamar kos 
-- [x] booking kamar kos - melakukan pembayaran 
-- [x] register sebagai penghuni 
-- [x] melihat unit kos 
+- [x] melakukan pembayaran 
+
+
+- [x] melihat unit kos (need fix)
 - [ ] menambah durasi sewa kos
 - [ ] mengajukan penundaan pembayaran
 - [ ] permintaan penambahan orang
 
+- [ ] dashboard
 
+progres: 
+- 24/28
 
-> friend reminder 
-> before to push master always check app to run (alur kerja aplikasi) to make sure app is working and free from bug
-> only run this in branch dev not another branch
+fix bug:
+- 0/8
 
-
-## yang dikerjain sekarang
-- [x] memperbarui sidebar (1 day/ 3jam)
-- [ ] memperbarui tampilan setiap table (1 day/ 3jam)
-- [ ] membuat tampilan dashboard (1 day / 7 jam) 
-- [ ] memperbaiki jika gambar tidak ada akan menggunakan no image (1 day / 3 jam)
-- [ ] dan jika gambar cuma satu akan bisa klik di tepi ujung gambarnya (1 day / 12 jam)
-
-estimasi pengerjaan (5 day / 28 jam)
-
-
-## yang selanjutnya dikerjakan
-- [ ] melimit jumlah input yang dimasukkan  pada form (1 day / 3 jam)
+total progres:
+- 24/36 (67%)

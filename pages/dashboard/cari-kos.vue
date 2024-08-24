@@ -5,9 +5,116 @@
     <AlertNotVerified :verified="verified" :role="role" />
 
     <main v-if="verified" class="my-4">
-        <!-- <RefreshButton :refresh="refresh" v-model:status="status" /> -->
-        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center">
-            <template v-for="i in rows" v-if="status == 'success'">
+
+        <!-- search -->
+        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
+            
+            <div class="flex items-center w-full">                
+                <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
+                    placeholder="Cari nama kos" class="w-full" v-model="q"
+                    :ui="{ icon: { trailing: { pointer: '' } } }">
+                    <template #trailing>
+                        <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                            :padded="false" @click="q = ''" />
+                    </template>
+                </UInput>
+            </div>
+            <div class="flex mt-2 sm:mt-0">
+                <UDropdown :items="[
+                    [{
+                        label: 'filter status',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: 'semua',
+                        class: filter == 'all'  ? 'underline' : '',
+                        click: () => { filter = 'all'}
+                    },
+                    {
+                        label: 'tersedia',
+                        class: filter == 'tersedia'  ? 'underline' : '',
+                        click: () => { filter = 'tersedia'}
+                    },
+                    {
+                        label: 'dibooking',
+                        class: filter == 'dibooking'  ? 'underline' : '',
+                        click: () => { filter = 'dibooking' }
+                    },                    
+                    {
+                        label: 'ditempati',
+                        class: filter == 'ditempati'  ? 'underline' : '',
+                        click: () => { filter = 'ditempati' }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
+                </UDropdown>
+
+                <UDropdown :items="[
+                    [{
+                        label: 'urutkan',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: 'Terbaru',
+                        class: sort == 'asc' ? 'underline' : '',
+                        click: () => { sort = 'asc' }
+                    },
+                    {
+                        label: 'Terlama',
+                        class: sort == 'desc' ? 'underline' : '',
+                        click: () => { sort = 'desc' }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant="link" icon="i-material-symbols-sort" color="gray" />
+                </UDropdown>
+
+
+                <UDropdown :items="[
+                    [{
+                        label: 'data yang diambil',
+                        class: 'font-bold'
+                    }],
+                    [{
+                        label: '5',
+                        class: pageCount == 5 ? 'underline' : '',
+                        click: () => { pageCount = 5 }
+                    },
+                    {
+                        label: '15',
+                        class: pageCount == 15 ? 'underline' : '',
+                        click: () => { pageCount = 15 }
+                    },
+                    {
+                        label: '25',
+                        class: pageCount == 25 ? 'underline' : '',
+                        click: () => { pageCount = 25 }
+                    },
+                    {
+                        label: '50',
+                        class: pageCount == 50 ? 'underline' : '',
+                        click: () => { pageCount = 50 }
+                    },
+                    {
+                        label: '100',
+                        class: pageCount == 100 ? 'underline' : '',
+                        click: () => { pageCount = 100 }
+                    },
+                    {
+                        label: 'tampilkan semua',
+                        class: pageCount == -1 ? 'underline' : '',
+                        click: () => { pageCount = -1 }
+                    },
+                    ]
+                ]" :popper="{ placement: 'bottom-start' }">
+                    <UButton variant='link' color="gray" icon="i-material-symbols-data-table" />
+                </UDropdown>
+            </div>
+        </div>
+        
+        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center" v-if="status == 'success' && totalPage">
+            <template v-for="i in rows">
                 <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
                     <template #header>
                         
@@ -31,19 +138,49 @@
                     </div>
                 </UCard>
             </template>
-
-            <Pagination class='lg:col-span-2 xl:col-span-3' :refresh="refresh" :totalPage="totalPage" v-model:rows="rows" v-model:status="status" v-model:skip="skip" v-model:page="page" v-model:pageCount="pageCount" />
         </div>
-        <!-- <div v-else class="flex justify-center items-center h-[80vh]">
-            <UProgress class="max-w-md" />
-        </div> -->
+
+        <div v-else class="flex h-[80vh] justify-center items-center w-full text-slate-600 dark:text-slate-300 ">
+            mohon maaf data kos belum tersedia
+        </div>
+
+        <!-- pagination -->
+        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                <h1 v-if="pageCount == -1">
+                    {{ page * pageCount + 2 }} - {{ totalPage }}
+                </h1>
+                <h1 v-else>
+                    {{skip >= 1? skip + page - 1 : skip+page}} - {{ page * pageCount }} of {{ totalPage }}
+                </h1>
+            </UButton>
+            <UButton v-else variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+                tidak tersedia
+            </UButton>
+            
+            
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
+                wrapper: 'flex items-center gap-2',
+                rounded: '!rounded-full min-w-[32px] justify-center',
+                default: {
+                    activeButton: {
+                        variant: 'outline'
+                    }
+                }
+            }" />
+        </div>
+        
         <UModal v-model="isOpen">
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
                         <h1 class="font-bold text-slate-600 dark:text-slate-200">Pesan Kamar Kos</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                            @click="isOpen = false" />
+                            @click="{                                
+                                isOpen = false;
+                                // @ts-ignore
+                                navigateTo('/dashboard/cari-kos')
+                            }" />
                     </div>
                 </template>
 
@@ -101,6 +238,7 @@
 </template>
 
 <script setup lang="ts">
+
 const _data = await myProfile()
 
 let role = 0
@@ -109,14 +247,17 @@ if (_data.data) {
     role = _data.data.role
     verified = _data.data.verified
 }
-
+const page = ref(1)
+const pageCount = ref(5)
+const skip = ref(0)
+const totalPage = ref(0)
 const loading = ref(false)
 const isOpen = ref(false)
-const pageCount = 9
-const page = ref(1)
-const skip = ref(0)
 const rows = ref<[Kos]>()
-const totalPage = ref(0)
+const q = ref('')
+const filter = ref<'tersedia' | 'dibooking' | 'ditempati' | 'all'>('all')
+const sort = ref<'asc' | 'desc'>('asc')
+
 
 const state = reactive({
     name: '',
@@ -133,16 +274,6 @@ const state = reactive({
     _id: ''
 })
 
-
-const stateReset = () => {
-    state.name = ''
-    state.description = ''
-    state.price = formatRupiahIntl(0)
-    state.image = ['']
-    // @ts-ignore
-    state.id_kos = useRoute().params.id
-    state._id = ''
-}
 
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
 const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
@@ -207,8 +338,13 @@ async function submitMidtrans(event: any) {
 }
 
 watch(page, (e, _) => {        
-    skip.value = (e - 1) * pageCount
+    skip.value = (e - 1) * pageCount.value
     refresh()        
+})
+
+watch(isOpen, (e,_)=>{
+    // if(isOpen)  return
+    navigateTo('/dashboard/cari-kos') 
 })
 
 watch(status, (e, _) => {

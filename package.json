@@ -8,7 +8,7 @@
     "generate": "pnpm nuxt generate",
     "preview": "pnpm nuxt preview",
     "postinstall": "pnpm nuxt prepare",
-    "test": "pnpx vitest",
+    "test": "pnpx vitest --run",    
     "seed": "tsx seed.ts"
   },
   "dependencies": {

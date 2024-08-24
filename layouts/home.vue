@@ -34,7 +34,7 @@
             </div>
         </nav>
         <slot />
-        <footer class="flex p-3 text-slate-600 dark:text-slate-200 justify-center flex-col border-t">
+        <footer class="flex p-3 text-slate-600 dark:text-slate-200 justify-center flex-col border-t dark:border-gray-700">
             <p class="text-slate-500 dark:text-slate-200 text-xs sm:text-sm text-center">
                 Alamat:
                 Jl. Gn. Galunggung 2 No.4, RT.47, Loa Ipuh, Kec. Tenggarong, Kabupaten Kutai Kartanegara, Kalimantan

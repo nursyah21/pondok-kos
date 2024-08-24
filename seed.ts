@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import argon2 from 'argon2'
 import {Kos} from './server/utils/models/kos'
 import {Users} from './server/utils/models/users'
+import {KamarKos} from './server/utils/models/kamar_kos'
 import dotenv from 'dotenv'
 dotenv.config({path:''})
 
@@ -49,17 +50,18 @@ const kosData = [
     { name: 'Kost Transit Medan', description: 'Sangat strategis', address: 'Jl. Gatot Subroto, Medan' }
 ].map(items=>({...items, image: random(linkImageKamar)}));
 
+
 const userData = [
-    {name: 'pemilik', role: 2, password: makePassword('password'), number_phone: '081234567890'},
-    {name: 'penjaga1', role: 1, password: makePassword('password'), number_phone: '081234567891'},
-    {name: 'penjaga2', role: 1, password: makePassword('password'), number_phone: '081234567892'},
-    {name: 'penjaga3', role: 1, password: makePassword('password'), number_phone: '081234567893'},
-    {name: 'penghuni1', role: 0, password: makePassword('password'), number_phone: '081234567894', verified: true},
-    {name: 'penghuni2', role: 0, password: makePassword('password'), number_phone: '081234567895'},        
-    {name: 'penghuni3', role: 0, password: makePassword('password'), number_phone: '081234567896'},
-    {name: 'penghuni4', role: 0, password: makePassword('password'), number_phone: '081234567897', verified: true},
-    {name: 'penghuni5', role: 0, password: makePassword('password'), number_phone: '081234567898', verified: true},
-    {name: 'penghuni6', role: 0, password: makePassword('password'), number_phone: '081234567899', verified: true},
+    {name: 'pemilik', role: 2, password: await makePassword('password'), number_phone: '081234567890'},
+    {name: 'penjaga1', role: 1, password: await makePassword('password'), number_phone: '081234567891'},
+    {name: 'penjaga2', role: 1, password: await makePassword('password'), number_phone: '081234567892'},
+    {name: 'penjaga3', role: 1, password: await makePassword('password'), number_phone: '081234567893'},
+    {name: 'penghuni1', role: 0, password: await makePassword('password'), number_phone: '081234567894', verified: true},
+    {name: 'penghuni2', role: 0, password: await makePassword('password'), number_phone: '081234567895'},        
+    {name: 'penghuni3', role: 0, password: await makePassword('password'), number_phone: '081234567896'},
+    {name: 'penghuni4', role: 0, password: await makePassword('password'), number_phone: '081234567897', verified: true},
+    {name: 'penghuni5', role: 0, password: await makePassword('password'), number_phone: '081234567898', verified: true},
+    {name: 'penghuni6', role: 0, password: await makePassword('password'), number_phone: '081234567899', verified: true},
 ].map(items=>({...items, avatar: random(linkImageProfile)}));
 
 await Users.deleteMany({})
@@ -72,5 +74,29 @@ await Kos.insertMany(kosData).catch(e=>{
     console.log(e.message)
 })
 
+const data = await Kos.find().select('name')
+const listIdKos = data.map(e=>e._id)
+
+const kamarKosData = [
+    { name: 'kamar 1', description: 'Hunian asri dekat kampus', price: 300_000, price_harian:40_000 },
+    { name: 'kamar 2', description: 'Hunian asri dekat kampus', price: 500_000, price_harian:50_000 },
+    { name: 'kamar 3', description: 'Hunian asri dekat kampus', price: 650_000, price_harian:60_000 },
+    { name: 'kontrakan 1', description: 'Hunian keluarga murah', price: 1_200_000, price_harian:100_000, kontrakan:true },
+    { name: 'kontrakan 2', description: 'Hunian keluarga murah', price: 1_500_000, price_harian:150_000, kontrakan:true },
+    { name: 'kontrakan 3', description: 'Hunian keluarga murah', price: 1_000_000, price_harian:100_000, kontrakan:true },    
+].map(items=>(
+    {
+        ...items, 
+        image: [random(linkImageKamar), random(linkImageKamar)],
+        id_kos: random(listIdKos)
+    }
+));
+
+await KamarKos.deleteMany({})
+await KamarKos.insertMany(kamarKosData).catch(e=>{
+    console.log(e.message)
+})
+
+
 await mongoose.disconnect()
-console.log('finish seeding users, kos')
+console.log('finish seeding users, kos, kamar_kos')
