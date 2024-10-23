@@ -2,14 +2,28 @@
 
 ## todo
 
-- list semua yg perlu diperbaiki []
+- list semua yg perlu diperbaiki [x]
 - perbaiki seadanya []
 - ngefix bug kalo ada dan mempercantik tampilan []
 - test dan deploy []
 
 ## list yg mesti diperbaiki
 - memperbaiki midtrans [x]
-- dashboard []
+- dashboard pemilik[] 
+   - bar chart pendapatan kos []
+   - list penghuni []
+   - list penjaga []
+- dashboard penjaga[]
+   - card kos yang dijaga []
+   - list penghuni[]
+- dashboard penghuni[]
+   - card kos yang dihuni[]
+   - list tagihan yang udh dibayar[]
+- fix verifikasi penghuni[]
+- fix lihat unit kos[]
+- harga kos yang bisa diubah[]
+- pesan yang terkirim ke penghuni jika sudah h-0 pembayaran[]
+- pesan yang terkirim jika penghuni jika sudah membayar ke pemilik dan penjaga[]
 
 ## use case sistem informasi pembayaran kos
 ![image](/public/use-case.drawio.png)

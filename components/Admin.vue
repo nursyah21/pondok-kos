@@ -10,7 +10,7 @@
 			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" />
 	</div>
 
-	<div class="flex gap-4 flex-col md:flex-row">
+	<!-- <div class="flex gap-4 flex-col md:flex-row">
 		<ChartDashboard :description="dashboard.chartPiePenghuni.description"  :status="status"
 			title="Penghuni" color="text-blue-600" :options-chart="dashboard.chartPiePenghuni.options"
 			:series="dashboard.chartPiePenghuni.series" />
@@ -19,7 +19,7 @@
 			title="Pendapatan" color="text-primary-600" :options-chart="dashboard.chartBarPendapatan.options"
 			:series="dashboard.chartBarPendapatan.series" />
 
-	</div>
+	</div> -->
 
 
 </template>

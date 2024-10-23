@@ -41,14 +41,14 @@
                                 navigateTo('/dashboard/edit-profile')
                             }
                         },
-                        {
-                            label: !isDark ? 'Siang' : 'Malam',
-                            class: 'tema',
-                            icon: isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid',
-                            click: () => {
-                                isDark = !isDark
-                            }
-                        },
+                        // {
+                        //     label: !isDark ? 'Siang' : 'Malam',
+                        //     class: 'tema',
+                        //     icon: isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid',
+                        //     click: () => {
+                        //         isDark = !isDark
+                        //     }
+                        // },
                         {
                             label: 'Keluar',
                             class: 'keluar',
