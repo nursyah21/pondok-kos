@@ -1,5 +1,15 @@
 # pondok kos nursyah
 
+## todo
+
+- list semua yg perlu diperbaiki []
+- perbaiki seadanya []
+- ngefix bug kalo ada dan mempercantik tampilan []
+- test dan deploy []
+
+## list yg mesti diperbaiki
+- memperbaiki midtrans [x]
+- dashboard []
 
 ## use case sistem informasi pembayaran kos
 ![image](/public/use-case.drawio.png)

@@ -9,7 +9,7 @@
             </ULink>
             <div class="mt-8 flex-col flex gap-y-4 lg:gap-y-8">
                 <template v-for="i in navbar">
-                    <UButton :ui="{ padding: '' }" variant="link" class="text-md hidden lg:block"
+                    <UButton :ui="{  }" variant="link" class="text-md hidden lg:block"
                         activeClass="underline" :to="i.link">
                         <div class="flex items-center gap-x-2">
                             <UIcon :name="i.icon" />
@@ -72,7 +72,7 @@
 
                         <div class="flex flex-col gap-y-8 mt-12">
                             <template v-for="i in navbar">
-                                <UButton :ui="{ padding: '' }" :icon="i.icon" variant="link" class="text-md "
+                                <UButton :ui="{ }" :icon="i.icon" variant="link" class="text-md "
                                     activeClass="text-primary-600 underline" @click="
                                     {
                                         // @ts-ignore
