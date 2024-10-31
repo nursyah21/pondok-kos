@@ -40,7 +40,8 @@
                     [{
                         label: 'Verifikasi penghuni',
                         icon: 'i-material-symbols-light-edit',
-                        click: ()=>edit(i.row.id)
+                        click: ()=>edit(i.row.id),
+                        disabled: i.row.verified
                     }]
                 ]" :popper="{ placement: 'bottom-start' }">
                 
