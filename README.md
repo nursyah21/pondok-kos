@@ -7,12 +7,11 @@
 - ngefix bug kalo ada dan mempercantik tampilan []
 - test dan deploy []
 
-## list yg mesti diperbaiki
+## list yg mesti diperbaiki seadanya
 - memperbaiki midtrans [x]
-- dashboard pemilik[] 
-   - bar chart pendapatan kos []
-   - list penghuni []
-   - list penjaga []
+- dashboard pemilik[x] 
+   - bar chart pendapatan kos [x]
+   - list penghuni [x]
 - dashboard penjaga[]
    - card kos yang dijaga []
    - list penghuni[]

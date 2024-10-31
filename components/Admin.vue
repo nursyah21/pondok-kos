@@ -10,28 +10,30 @@
 			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" />
 	</div>
 
-	<!-- <div class="flex gap-4 flex-col md:flex-row">
-		<ChartDashboard :description="dashboard.chartPiePenghuni.description"  :status="status"
-			title="Penghuni" color="text-blue-600" :options-chart="dashboard.chartPiePenghuni.options"
-			:series="dashboard.chartPiePenghuni.series" />
+	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
+		<div class="flex-1">
+			<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
+				<template #header>
+					List Penghuni
+				</template>
+			</UCard>
+			<UTable :columns="data.penghuni.columns">
 
-		<ChartDashboard :description="dashboard.chartBarPendapatan.description" :status="status"
-			title="Pendapatan" color="text-primary-600" :options-chart="dashboard.chartBarPendapatan.options"
-			:series="dashboard.chartBarPendapatan.series" />
+			</UTable>
+		</div>
 
-	</div> -->
+		<UCard class="flex-1" :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
+			<template #header>
+				Chart Pendapatan 2024
+			</template>
+			<apexchart :options="props.options" :series="props.series"></apexchart>
+		</UCard>
+	</div>
 
-	<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }" >
-		<template #header>
-			Chart Pendapatan 2024
-		</template>
-		<apexchart :options="props.options" :series="props.series" ></apexchart>
-	</UCard>
 
 	<!-- - dashboard pemilik[] 
    - bar chart pendapatan kos []
-   - list penghuni []
-   - list penjaga []
+   - list penghuni []  
 - dashboard penjaga[]
    - card kos yang dijaga []
    - list penghuni[]
@@ -48,6 +50,34 @@ defineProps<{
 	status: any;
 	dashboard: { totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number; chartPiePenghuni: { description?: string; options: any; series: any; }; chartBarPendapatan: { description?: string; options: any; series: any; }; chartLineTransaksi: { description?: string; options: any; series: any; }; };
 }>()
+
+const data = {
+	penghuni: {
+		columns: [
+		{
+			key: 'num',
+			label: 'id',
+		},
+		{
+			key: 'name',
+			label: 'nama',
+		},
+		{
+			key: 'kos',
+			label: 'kos',
+		},
+		{
+			key: 'kamar',
+			label: 'kamar',
+		},
+		{
+			key: 'tanggal_bayar',
+			label: 'tanggal bayar',
+		},
+
+		]
+	}
+}
 
 const props = {
 	options: {

@@ -17,9 +17,10 @@ export default defineEventHandler(async (event) => {
             name:  new RegExp(q, 'i'),
         } : {}
         
-        const queryHidden = filter != 'all' ? {
-            hidden: filter != 'aktif'
-        } : {}
+        const queryHidden ={}
+        // = filter != 'all' ? {
+        //     hidden: filter != 'aktif'
+        // } : {}
 
         const length = await Kos.find({...queryName, ...queryHidden}).countDocuments()
 
