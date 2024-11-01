@@ -1,20 +1,44 @@
 <template>
-	<div class="flex gap-4 flex-col md:flex-row">
-		<CardDashboard :status="status" title="Penghuni" icon="i-material-symbols-person" link="/dashboard/penghuni"
-			color="bg-primary-400" :total="dashboard.totalPenghuni" type="orang" />
-		<CardDashboard :status="status" title="Penjaga" icon="i-material-symbols-person" link="/dashboard/user/data-penjaga"
-			color="bg-blue-400" :total="dashboard.totalPenjaga" type="orang" />
-		<CardDashboard :status="status" title="Kos" icon="i-material-symbols-house" link="/dashboard/kos/data-kamar-kos"
-			color="bg-yellow-400" :total="dashboard.totalKamarKos" type="kamar" />
-		<CardDashboard :status="status" title="Pendapatan" icon="i-material-symbols-attach-money"
-			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" />
-	</div>
+	<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
+		<template #header>
+			<h1>Kos yang ditempati</h1>
+		</template>
+		<div class="flex gap-4 py-2 overflow-scroll">
+			<template v-for="i in 2">
+				<UCard class="max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
+					<template #header>
+						<img src="https://static.mamikos.com/uploads/cache/data/style/2023-04-20/pfIeVtm1-360x480.jpg" alt="" />
+					</template>
+					<div>
+						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
+							Kamar 1
+						</h1>
+						<UDivider />
+						<h1 class="text-xs text-slate-800">
+							Jl. Ketintang
+						</h1>
+						<h1 class="text-primary-600 font-bold pt-4 ">Rp{{ formatRupiahIntl("100000") }}</h1>
+						<UDivider  class="my-2"/>
+						<div class="flex gap-x-2 items-center">
+							<UToggle v-model="bayarBulanan" />bulanan
+						</div>
+						<h1 v-if="bayarBulanan" class="text-slate-600 dark:text-slate-200 pt-2">Jatuh Tempo: <span class="font-bold">
+							{{getNextDate(30)}}
+						</span>
+						</h1>
+						<h1 class="pt-2 h-[32px]" v-else></h1>
+						<!-- <UButton class="w-full text-center items-center justify-center">Kirimkan tagihan Bayar Bulanan</UButton> -->
+					</div>
+				</UCard>
+			</template>
+		</div>
+	</UCard>
 
 	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
 		<div class="flex-1">
 			<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
 				<template #header>
-					List Penghuni
+					Riwayat Pembayaran
 				</template>
 			</UCard>
 			<UTable :columns="data.penghuni.columns">
@@ -22,24 +46,7 @@
 			</UTable>
 		</div>
 
-		<UCard class="flex-1" :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
-			<template #header>
-				Chart Pendapatan 2024
-			</template>
-			<apexchart :options="props.options" :series="props.series"></apexchart>
-		</UCard>
-	</div>
-	ini penghuni
-
-	<!-- - dashboard pemilik[] 
-   - bar chart pendapatan kos []
-   - list penghuni []  
-- dashboard penjaga[]
-   - card kos yang dijaga []
-   - list penghuni[]
-- dashboard penghuni[]
-   - card kos yang dihuni[]
-   - list tagihan yang udh dibayar[] -->
+	</div>	
 
 
 
@@ -50,6 +57,7 @@ defineProps<{
 	status: any;
 	dashboard: { totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number; chartPiePenghuni: { description?: string; options: any; series: any; }; chartBarPendapatan: { description?: string; options: any; series: any; }; chartLineTransaksi: { description?: string; options: any; series: any; }; };
 }>()
+const bayarBulanan = ref(false)
 
 const data = {
 	penghuni: {
@@ -57,11 +65,7 @@ const data = {
 		{
 			key: 'num',
 			label: 'id',
-		},
-		{
-			key: 'name',
-			label: 'nama',
-		},
+		},		
 		{
 			key: 'kos',
 			label: 'kos',
@@ -69,6 +73,10 @@ const data = {
 		{
 			key: 'kamar',
 			label: 'kamar',
+		},
+		{
+			key: 'price',
+			label: 'harga',
 		},
 		{
 			key: 'tanggal_bayar',

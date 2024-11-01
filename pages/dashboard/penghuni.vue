@@ -215,7 +215,7 @@ const resetState = () => {
     if(optionsPenghuni[0]){
         state.id_user = optionsPenghuni[0].value
     }
-    if(optionsKamarKos[0]){
+    if(optionsKamarKos[0]){        
         state.id_kamar_kos = optionsKamarKos[0].value
     }
     state.price = optionsKamarKos[0].price
@@ -234,6 +234,7 @@ const getKamarKos = (id_kos:string, id_kamar_kos:string) => {
     console.log(exist)
     return exist.value
 }
+
 
 const helperState = (e:any) => {
     const {id_kamar_kos, id,id_user, id_kos, tanggal_bayar, avatar} = e
@@ -317,9 +318,8 @@ watch(() => statusKamarKos, (e) => {
     if (e.value == 'success') {
         // @ts-ignore
         const { data } = allKamarKos.value
-        
         optionsKamarKos = data.map((e:any)=>({
-            value:e.id_kos_id_kamar_kos, name: `${e.name}`,
+            value:e.id_kos_id_kamar_kos, name: `${e.kamar} - ${e.kos}`,
             ...e
         }))
         

@@ -1,19 +1,36 @@
 <template>
-	<div class="flex gap-4 flex-col md:flex-row">
-ini penjaga
-
-		<!-- <CardDashboard :status="status" title="Penghuni" icon="i-material-symbols-person" link="/dashboard/penghuni"
-			color="bg-primary-400" :total="dashboard.totalPenghuni" type="orang" />
-		<CardDashboard :status="status" title="Penjaga" icon="i-material-symbols-person" link="/dashboard/user/data-penjaga"
-			color="bg-blue-400" :total="dashboard.totalPenjaga" type="orang" />
-		<CardDashboard :status="status" title="Kos" icon="i-material-symbols-house" link="/dashboard/kos/data-kamar-kos"
-			color="bg-yellow-400" :total="dashboard.totalKamarKos" type="kamar" />
-		<CardDashboard :status="status" title="Pendapatan" icon="i-material-symbols-attach-money"
-			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" /> -->
-	</div>
+	<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
+		<template #header>
+			<h1>Kos yang dijaga</h1>
+		</template>
+		<div class="flex gap-4  overflow-scroll">
+			<template v-for="i in 10">
+				<UCard class="max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
+					<template #header>
+						<img src="https://static.mamikos.com/uploads/cache/data/style/2023-04-20/pfIeVtm1-360x480.jpg" alt="" />
+					</template>
+					<div>
+						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
+							Kos Ketintang
+						</h1>
+						<UDivider />
+						<h1 class="text-xs text-slate-800">
+							Jl. Ketintang, Surabaya
+						</h1>
+						<h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">
+							<!-- {{ i.description }} -->
+						</h1>
+						<!-- <div v-if="i.description.length < 20" class="h-[6px]">
+		
+						</div> -->
+					</div>
+				</UCard>
+			</template>
+		</div>
+	</UCard>
 
 	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
-		<!-- <div class="flex-1">
+		<div class="flex-1">
 			<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
 				<template #header>
 					List Penghuni
@@ -24,23 +41,9 @@ ini penjaga
 			</UTable>
 		</div>
 
-		<UCard class="flex-1" :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
-			<template #header>
-				Chart Pendapatan 2024
-			</template>
-			<apexchart :options="props.options" :series="props.series"></apexchart>
-		</UCard> -->
+		
 	</div>
 
-	<!-- - dashboard pemilik[] 
-   - bar chart pendapatan kos []
-   - list penghuni []  
-- dashboard penjaga[]
-   - card kos yang dijaga []
-   - list penghuni[]
-- dashboard penghuni[]
-   - card kos yang dihuni[]
-   - list tagihan yang udh dibayar[] -->
 
 
 
@@ -55,26 +58,26 @@ defineProps<{
 const data = {
 	penghuni: {
 		columns: [
-		{
-			key: 'num',
-			label: 'id',
-		},
-		{
-			key: 'name',
-			label: 'nama',
-		},
-		{
-			key: 'kos',
-			label: 'kos',
-		},
-		{
-			key: 'kamar',
-			label: 'kamar',
-		},
-		{
-			key: 'tanggal_bayar',
-			label: 'tanggal bayar',
-		},
+			{
+				key: 'num',
+				label: 'id',
+			},
+			{
+				key: 'name',
+				label: 'nama',
+			},
+			{
+				key: 'kos',
+				label: 'kos',
+			},
+			{
+				key: 'kamar',
+				label: 'kamar',
+			},
+			{
+				key: 'tanggal_bayar',
+				label: 'tanggal bayar',
+			},
 
 		]
 	}
