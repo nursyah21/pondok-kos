@@ -11,6 +11,8 @@
             </div>
 
             <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />
+            <Penjaga v-if="role == 1" :status="status" :dashboard="dashboard" />
+            <Penghuni v-if="role == 0" :status="status" :dashboard="dashboard" />
 
             <AlertNotVerified :verified="verified"  :role="role"/>
 

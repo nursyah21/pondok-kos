@@ -51,6 +51,10 @@ const kosData = [
 ].map(items=>({...items, image: random(linkImageKamar)}));
 
 
+// pemilik: 081234567890, password
+// penjaga: 081234567891, password
+// penghuni (verified): 081234567894, password
+// penghuni (not verified): 081234567895, password
 const userData = [
     {name: 'pemilik', role: 2, password: await makePassword('password'), number_phone: '081234567890'},
     {name: 'penjaga1', role: 1, password: await makePassword('password'), number_phone: '081234567891'},
