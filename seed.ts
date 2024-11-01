@@ -3,6 +3,7 @@ import argon2 from 'argon2'
 import {Kos} from './server/utils/models/kos'
 import {Users} from './server/utils/models/users'
 import {KamarKos} from './server/utils/models/kamar_kos'
+import {PenghuniKos} from './server/utils/models/penghuni_kos '
 import dotenv from 'dotenv'
 dotenv.config({path:''})
 
@@ -50,7 +51,6 @@ const kosData = [
     { name: 'Kost Transit Medan', description: 'Sangat strategis', address: 'Jl. Gatot Subroto, Medan' }
 ].map(items=>({...items, image: random(linkImageKamar)}));
 
-
 // pemilik: 081234567890, password
 // penjaga: 081234567891, password
 // penghuni (verified): 081234567894, password
@@ -96,11 +96,29 @@ const kamarKosData = [
     }
 ));
 
+
+
 await KamarKos.deleteMany({})
 await KamarKos.insertMany(kamarKosData).catch(e=>{
     console.log(e.message)
 })
 
 
+const penghunikos = []
+const kos = await KamarKos.findOne({name: 'kamar 1'})
+const penghuni = await Users.findOne({name:'penghuni1'})
+if(kos && penghuni){
+    penghunikos.push({
+        id_kos:kos.id_kos, 
+        id_kamar_kos: kos._id, 
+        id_user: penghuni._id, 
+        tanggal_bayar: new Date(new Date().getTime()+1000*60*60*24*14)
+    })
+}
+
+await PenghuniKos.insertMany(penghunikos).catch(e=>{
+    console.log(e.message)
+})
+
 await mongoose.disconnect()
-console.log('finish seeding users, kos, kamar_kos')
+console.log('finish seeding users, kos, kamar_kos, penghuni')

@@ -3,26 +3,9 @@
 ## todo
 
 - list semua yg perlu diperbaiki [x]
-- perbaiki seadanya []
-- ngefix bug kalo ada dan mempercantik tampilan []
+- perbaiki seadanya [x]
+- ngefix bug kalo ada dan melengkapi semuanya []
 - test dan deploy []
-
-## list yg mesti diperbaiki seadanya
-- memperbaiki midtrans [x]
-- dashboard pemilik[x] 
-   - bar chart pendapatan kos [x]
-   - list penghuni [x]
-- dashboard penjaga[]
-   - card kos yang dijaga [x]
-   - list penghuni[x]
-- dashboard penghuni[x]
-   - card kos yang dihuni[x]
-   - list tagihan yang udh dibayar[x]
-- fix verifikasi penghuni[x]
-- fix lihat unit kos[x]
-- harga kos yang bisa diubah[]
-- pesan yang terkirim ke penghuni jika sudah h-0 pembayaran[]
-- pesan yang terkirim jika penghuni jika sudah membayar ke pemilik dan penjaga[]
 
 ## use case sistem informasi pembayaran kos
 ![image](/public/use-case.drawio.png)
@@ -49,19 +32,14 @@
 - [x] manajemen transaksi - membatalkan transaksi 
 - [x] manajemen transaksi - melihat invoice 
 
-- [x] manajemen user - menonaktifkan penjaga (need fix)
-- [x] manajemen user - generate reset password penjaga (need fix, tombol mengirimkan link reset ke whatsapp)
-- [x] manajemen user - ubah role user (need fix)
-- [x] manajemen user - menambahkan penjaga (need fix)
+- [x] manajemen user - menonaktifkan penjaga
+- [x] manajemen user - generate reset password penjaga 
+- [x] manajemen user - ubah role user
+- [x] manajemen user - menambahkan penjaga 
 
 - [x] booking kamar kos 
 - [x] melakukan pembayaran 
-
-
-- [x] melihat unit kos (need fix)
-- [ ] menambah durasi sewa kos
-- [ ] mengajukan penundaan pembayaran
-- [ ] permintaan penambahan orang
+- [x] melihat unit kos 
 
 - [ ] dashboard
 
