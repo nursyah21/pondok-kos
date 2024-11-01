@@ -122,15 +122,15 @@
                         <img v-else :src="i.image[0] ?? '/images/noimage.png'" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
                     </template>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.name }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ i.location }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
+                        <h1 class="text-xs text-slate-800">{{ i.address }}</h1>
                         <UDivider />
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ i.description }}</h1>
                         <div v-if="i.description.length < 20" class="h-[6px]"></div>
                     </div>
 
                     <div class=" flex justify-between items-center ">
-                        <h1 class="text-primary-600 font-bold">{{ i.price }}</h1>
+                        <h1 class="text-primary-600 font-bold">Rp{{ formatRupiahIntl(i.price) }}</h1>
                         <UButton v-if="i.available == 0" @click="addBoking(i)" :to="'/dashboard/cari-kos?kos=' + i.id">
                             Pesan kamar</UButton>
                         <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
@@ -198,7 +198,7 @@
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ state.description }}</h1>
                         <div v-if="state.description.length < 20" class="h-[6px]"></div>
                         
-                        <div class="my-2 border-t-2 pt-4">
+                        <!-- <div class="my-2 border-t-2 pt-4">
                             <UFormGroup label="Tangal masuk">
                                 <UInput type="date" :value="state.tgl_masuk" disabled />
                             </UFormGroup>
@@ -206,9 +206,9 @@
                             <UFormGroup label="Tangal keluar">
                                 <UInput type="date" :value="state.tgl_keluar" disabled />
                             </UFormGroup>
-                        </div>
+                        </div> -->
                         <h1 class="text-slate-600 dark:text-slate-200 font-bold  pt-2">Durasi sewa: 30 hari</h1>
-                        <h1 class="text-primary-600 font-bold ">{{ state.price }}</h1>
+                        <h1 class="text-primary-600 font-bold ">Rp{{ formatRupiahIntl(state.price) }}</h1>
                         
                         <div v-if="state.available == 1" class="text-center text-sm text-slate-600 dark:text-slate-200  p-2 rounded-md">
                             masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat transaksi</ULink> jika anda memesan kamar ini
@@ -285,8 +285,8 @@ const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
 const addBoking = (e: any) => {
     state.link = ''
     state.image = e.image
-    state.name = e.name
-    state.location = e.location
+    state.name = e.kos
+    state.location = e.address
     state.description = e.description
     state.price = e.price
     state.id_kamar_kos = e.id

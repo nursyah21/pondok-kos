@@ -18,6 +18,9 @@ type Res = {
 type Kos = {
     name: string
     location: string
+    kamar:string
+    kos:string
+    address: string
     description: string
     image: string
     available: number

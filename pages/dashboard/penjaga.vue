@@ -128,7 +128,8 @@ const { data:raw, status, refresh } = await useFetch('/api/penjaga/all-penjaga-k
 const {data: allKos} = await $fetch('/api/kos/get',{
     method: 'get'
 })
-const optionsKos = allKos.map((e:any)=>({value:e._id, name: `${e.name} - ${e.location}`}))
+console.log("=>", allKos)
+const optionsKos = allKos.map((e:any)=>({value:e._id, name: `${e.name} - ${e.address}`}))
 
 // @ts-ignore
 const {data: allPenjaga} = await $fetch('/api/penjaga/all-penjaga',{
@@ -140,7 +141,7 @@ const optionsPenjaga = allPenjaga.map((e:any)=>({value:e._id, name: `${e.name} -
 
 const state = reactive({
     id_penjaga: optionsPenjaga[0].value,
-    id_kos: optionsKos[0].value,
+    id_kos: optionsKos[0]?.value,
     _id: ''
 })
 
