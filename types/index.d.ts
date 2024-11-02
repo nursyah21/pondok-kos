@@ -18,8 +18,8 @@ type Res = {
 type Kos = {
     name: string
     location: string
-    kamar:string
-    kos:string
+    kamar: string
+    kos: string
     address: string
     description: string
     image: string
@@ -33,9 +33,10 @@ type DataDashboard = {
     totalPenjaga: string
     totalKamarKos: string
     pendapatan: number // because it will use function to rupiah
-    chartPiePenghuni: Chart,
-    chartBarPendapatan: Chart,
-    chartLineTransaksi: Chart,
+    chartPiePenghuni?: Chart,
+    chartBarPendapatan?: Chart,
+    chartLineTransaksi?: Chart,
+    listpenghuni?: any[]
 }
 
 type ModeCrud = 'add' | 'edit' | 'delete'
@@ -48,12 +49,12 @@ type Profile = {
     number_phone: string
     verified: boolean
     avatar?: string | null | undefined
-    id_card?: string | null |undefined
+    id_card?: string | null | undefined
     birthdate: string | Date
     address: string
 }
 
-interface ErrorMessage  {
+interface ErrorMessage {
     data?: {
         message: string
     },

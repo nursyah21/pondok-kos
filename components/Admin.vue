@@ -17,7 +17,7 @@
 					List Penghuni
 				</template>
 			</UCard>
-			<UTable :columns="data.penghuni.columns">
+			<UTable :columns="data.penghuni.columns" :rows="rows">
 
 			</UTable>
 		</div>
@@ -26,80 +26,53 @@
 			<template #header>
 				Chart Pendapatan 2024
 			</template>
-			<apexchart :options="props.options" :series="props.series"></apexchart>
+			<apexchart :options="dashboard.chartBarPendapatan.options" :series="dashboard.chartBarPendapatan.series">
+			</apexchart>
 		</UCard>
 	</div>
-
-
-	<!-- - dashboard pemilik[] 
-   - bar chart pendapatan kos []
-   - list penghuni []  
-- dashboard penjaga[]
-   - card kos yang dijaga []
-   - list penghuni[]
-- dashboard penghuni[]
-   - card kos yang dihuni[]
-   - list tagihan yang udh dibayar[] -->
-
-
 
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
 	status: any;
-	dashboard: { totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number; chartPiePenghuni: { description?: string; options: any; series: any; }; chartBarPendapatan: { description?: string; options: any; series: any; }; chartLineTransaksi: { description?: string; options: any; series: any; }; };
+	dashboard: {
+		totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number;
+		chartBarPendapatan: { options: any; series: any; };
+		listpenghuni: any[];
+	};
 }>()
-
+const rows = ref([])
 const data = {
 	penghuni: {
 		columns: [
-		{
-			key: 'num',
-			label: 'id',
-		},
-		{
-			key: 'name',
-			label: 'nama',
-		},
-		{
-			key: 'kos',
-			label: 'kos',
-		},
-		{
-			key: 'kamar',
-			label: 'kamar',
-		},
-		{
-			key: 'tanggal_bayar',
-			label: 'tanggal bayar',
-		},
+			{
+				key: 'num',
+				label: 'id',
+			},
+			{
+				key: 'name',
+				label: 'nama',
+			},
+			{
+				key: 'kos',
+				label: 'kos',
+			},
+			{
+				key: 'kamar',
+				label: 'kamar',
+			},
+			{
+				key: 'tanggal_bayar',
+				label: 'tanggal bayar',
+			},
 
 		]
 	}
 }
 
-const props = {
-	options: {
-		chart: {
-			type: 'bar'
-		}
-	},
-	series: [{
-		data: [
-			{ x: 'jan', y: 100 },
-			{ x: 'feb', y: 100 },
-			{ x: 'mar', y: 100 },
-			{ x: 'apr', y: 100 },
-			{ x: 'mei', y: 100 },
-			{ x: 'jun', y: 100 },
-			{ x: 'jul', y: 100 },
-			{ x: 'agu', y: 100 },
-			{ x: 'sep', y: 100 },
-			{ x: 'okt', y: 100 },
-			{ x: 'nov', y: 100 },
-			{ x: 'dec', y: 100 },
-		]
-	}]
-}
+watch(props.dashboard, (e) => {
+	console.log(e.listpenghuni)
+}, { immediate: true })
+
 </script>

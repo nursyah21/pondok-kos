@@ -12,123 +12,50 @@ export default defineEventHandler(async (event) => {
 
         const user = await Users.findById(refreshTokens.id_user)
         if (!user) throw new Error('user not valid')
-        // const { role } = user
+        const { role } = user
+
+        // penghuni
+        const totalPenghuni = (await PenghuniKos.find({}).countDocuments()).toString()
+        const totalPenjaga = (await PenjagaKos.find({}).countDocuments()).toString()
+        const totalKamarKos = (await KamarKos.find({}).countDocuments()).toString()
+
+        const temp = await PenghuniKos.find({}).populate(['id_kamar_kos']).select('id_kamar_kos')
+        let pendapatan = 0
+        temp.forEach((e: any) => {
+            pendapatan += e?.id_kamar_kos?.price ?? 0
+        })
+        const listpenghuni = await PenghuniKos.find({}).populate(['id_kamar_kos','id_user'])        
 
         let data: DataDashboard;
         data = {
-            totalPenghuni: "32",
-            totalPenjaga: "4",
-            totalKamarKos: "12",
-            pendapatan: 123000,
-            chartPiePenghuni: {
-                description: "Total Penghuni 15 orang",
-                options: {
-                    chart: {
-                        type: 'donut',
-                    },
-                    responsive: [{
-                        // breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200,
-                                height: 200
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }],
-                    labels: ['Kos Arsapati', 'Kos Beringin'],
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    theme: {
-                        mode: 'light', 
-                        palette: 'palette1', 
-                        monochrome: {
-                            enabled: false,
-                            color: '#255aee',
-                            shadeTo: 'light',
-                            shadeIntensity: 0.65
-                        },
-                    }
-                },
-                series: [10, 5]
-            },
+            totalPenghuni,
+            totalPenjaga,
+            totalKamarKos,
+            pendapatan,
             chartBarPendapatan: {
-                description: "Total Penghuni 15 orang",
                 options: {
                     chart: {
-                        type: 'donut',
-                    },
-                    responsive: [{
-                        // breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200,
-                                height: 200
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }],
-                    labels: ['Kos Arsapati', 'Kos Beringin'],
-                    dataLabels: {
-                        enabled: false
+                        type: 'bar'
                     }
-                },
-                series: [10, 5]
-            },
-            chartLineTransaksi: {
-                description: `Total Transaksi ${[10, 41, 35, 51, 49, 62, 69, 91, 148].reduce((a, b) => a + b)}`,
-                options: {
-                    chart: {
-                        type: 'line',
-                        zoom: {
-                            enabled: false
-                        }
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        curve: 'straight'
-                    },
-                    title: {
-                        text: 'Transaksi per bulan',
-                        align: 'left'
-                    },
-                    grid: {
-                        row: {
-                            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                            opacity: 0.5
-                        },
-                    },
-                    xaxis: {
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                    },
-                    colors: [
-                        '#ca8a04'
-                    ],
-                    responsive: [{
-                        // breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200,
-                                height: 200
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }],
                 },
                 series: [{
-                    name: "Transaksi",
-                    data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                    data: [
+                        { x: 'jan', y: 100 },
+                        { x: 'feb', y: 100 },
+                        { x: 'mar', y: 100 },
+                        { x: 'apr', y: 100 },
+                        { x: 'mei', y: 100 },
+                        { x: 'jun', y: 100 },
+                        { x: 'jul', y: 100 },
+                        { x: 'agu', y: 100 },
+                        { x: 'sep', y: 100 },
+                        { x: 'okt', y: 100 },
+                        { x: 'nov', y: 100 },
+                        { x: 'dec', y: 100 },
+                    ]
                 }]
-            }
+            },
+            listpenghuni
         }
 
         return { status: 'success', data }
