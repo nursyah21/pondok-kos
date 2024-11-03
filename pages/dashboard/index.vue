@@ -9,10 +9,10 @@
                     Hi {{ name }} 👋
                 </UButton>
             </div>
-
-            <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />
+            
+            <Admin v-if="role == 2" :status="status" :dashboard="dashboard" />            
             <Penjaga v-if="role == 1" :status="status" :dashboard="dashboard" />
-            <Penghuni v-if="role == 0" :status="status" :dashboard="dashboard" />
+            <Penghuni v-if="role == 0" :status="status" :dashboard="dashboard" /> 
 
             <AlertNotVerified :verified="verified"  :role="role"/>
 
@@ -44,18 +44,11 @@ const dashboard = ref<DataDashboard>({
     totalPenjaga: "0",
     totalKamarKos: "0",
     pendapatan: 0,
-    chartPiePenghuni: {
-        options: null,
-        series: null
-    },
     chartBarPendapatan: {
         options: null,
         series: null
     },
-    chartLineTransaksi: {
-        options: null,
-        series: null
-    }
+    listpenghuni:[]
 })
 const { data: dataDashboard, status, refresh } = await useFetch('/api/dashboard', {
     headers: {

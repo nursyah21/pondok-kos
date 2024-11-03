@@ -55,7 +55,11 @@
 <script setup lang="ts">
 defineProps<{
 	status: any;
-	dashboard: { totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number; chartPiePenghuni: { description?: string; options: any; series: any; }; chartBarPendapatan: { description?: string; options: any; series: any; }; chartLineTransaksi: { description?: string; options: any; series: any; }; };
+	dashboard: {
+		totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number;
+		chartBarPendapatan: { options: any; series: any; };
+		listpenghuni: any[];
+	};
 }>()
 const bayarBulanan = ref(false)
 

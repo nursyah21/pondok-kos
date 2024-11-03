@@ -33,7 +33,7 @@ if(props.status == 'error'){
         <div class="flex justify-between items-center">
             <h1 class="font-bold">
                 <span v-if="typeof props.total == 'number'" class="text-2xl">
-                    {{shortWord(
+                    Rp{{shortWord(
                         formatRupiahIntl(props.total), 20
                     )}}
                 </span>

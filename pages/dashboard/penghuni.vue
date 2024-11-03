@@ -151,6 +151,7 @@ const columns = [{
     key: 'kos',
     label: 'kos',
 },
+
 {
     key: 'kamar',
     label: 'kamar',
