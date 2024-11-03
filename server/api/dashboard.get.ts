@@ -78,33 +78,36 @@ export default defineEventHandler(async (event) => {
             const penjagakos = await PenjagaKos.find({ id_user: _id }).populate(['id_kos']).limit(10)
             const _listkos: any[] = []
             const _listpenghuni: any[] = []
-            const idkos:any[] = []
+            const idkos: any[] = []
             penjagakos.forEach((e: any) => {
-                idkos.push(e.id_kos._id)                
+                idkos.push(e.id_kos._id.toString())
                 _listkos.push({
                     kos: e.id_kos.name,
                     address: e.id_kos.address,
                     imgkos: e.id_kos.image
                 })
             })
-            const penghuni = await PenghuniKos.find({}).populate(['id_user', 'id_kos','id_kamar_kos']).limit(10)
-            penghuni.forEach((e:any)=>{
-                
-                console.log(idkos.indexOf(e.id_kos._id))
+            const penghuni = await PenghuniKos.find({}).populate(['id_user', 'id_kos', 'id_kamar_kos']).limit(10)
+            let num = 1
+            penghuni.forEach((e: any) => {
+                if (idkos.indexOf(e.id_kos._id.toString()) === -1) {
+                    return
+                }
+                _listpenghuni.push({
+                    num,
+                    name: e.id_user.name,
+                    kos: e.id_kos.name,
+                    kamar: e.id_kamar_kos.name,
+                    tanggal_bayar: moment(e.tanggal_bayar).format('DD-MM-YYYY')
+                })
+                num++
             })
-            // penghuni.filter(e=>{
-            //     console.log(e.id_kos)
-            // })
 
-            // penghuni.filter(e=>{
-            //     console.log(e)
-            // })
 
             data = {
                 listkos: _listkos,
                 listpenghuni: _listpenghuni
             }
-            // console.log(penghuni)
         }
         // penghuni
         if (role == 0) {

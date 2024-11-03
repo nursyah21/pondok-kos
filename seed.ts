@@ -122,22 +122,33 @@ await PenghuniKos.insertMany(penghunikos).catch(e => {
 })
 
 const penjagakos: any[] = []
-const penjaga = await Users.find({ role: 1 }).select(['_id'])
-const tempkos = await Kos.find({}).select(['_id'])
-
-penjaga.forEach(e => {
-    if (!tempkos) return
-    const rand = (Math.floor(Math.random() * tempkos.length))
+const penjaga = await Users.findOne({name: 'penjaga1'}).select(['_id'])
+const tempkos = await PenghuniKos.findOne({}).populate(['id_kos'])
+if(penjaga && tempkos){
     penjagakos.push({
-        id_user: e._id,
-        id_kos: tempkos[rand]._id
+        id_user: penjaga._id,
+        id_kos: tempkos.id_kos._id
     })
-})
+}
+// penjaga random
+// const penjaga = await Users.find({ role: 1 }).select(['_id'])
+// const tempkos = await Kos.find({}).select(['_id'])
+
+// penjaga.forEach(e => {
+//     if (!tempkos) return
+//     const rand = (Math.floor(Math.random() * tempkos.length))
+//     penjagakos.push({
+//         id_user: e._id,
+//         id_kos: tempkos[rand]._id
+//     })
+// })
 
 await PenjagaKos.deleteMany({})
 await PenjagaKos.insertMany(penjagakos).catch(e => {
     console.log(e.message)
 })
+
+// 
 
 await mongoose.disconnect()
 console.log('finish seeding users, kos, kamar_kos, penghuni, penjaga')

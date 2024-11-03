@@ -30,9 +30,7 @@
 					List Penghuni
 				</template>
 			</UCard>
-			<UTable :columns="data.penghuni.columns">
-
-			</UTable>
+			<UTable :columns="data.penghuni.columns" :rows="rows"></UTable>
 		</div>
 
 		
@@ -44,11 +42,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
 	status: any;
 	dashboard: DataDashboard;
 }>()
 
+const rows = ref<any[] | undefined>()
 const data = {
 	penghuni: {
 		columns: [
@@ -77,27 +76,8 @@ const data = {
 	}
 }
 
-const props = {
-	options: {
-		chart: {
-			type: 'bar'
-		}
-	},
-	series: [{
-		data: [
-			{ x: 'jan', y: 100 },
-			{ x: 'feb', y: 100 },
-			{ x: 'mar', y: 100 },
-			{ x: 'apr', y: 100 },
-			{ x: 'mei', y: 100 },
-			{ x: 'jun', y: 100 },
-			{ x: 'jul', y: 100 },
-			{ x: 'agu', y: 100 },
-			{ x: 'sep', y: 100 },
-			{ x: 'okt', y: 100 },
-			{ x: 'nov', y: 100 },
-			{ x: 'dec', y: 100 },
-		]
-	}]
-}
+watch(props.dashboard, (e) => {
+	rows.value = e.listpenghuni
+	console.log(e.listpenghuni)
+}, { immediate: true })
 </script>
