@@ -39,17 +39,7 @@ let name: string | undefined;
 if (profile) {
     name = profile.value?.name
 }
-const dashboard = ref<DataDashboard>({
-    totalPenghuni: "0",
-    totalPenjaga: "0",
-    totalKamarKos: "0",
-    pendapatan: 0,
-    chartBarPendapatan: {
-        options: null,
-        series: null
-    },
-    listpenghuni:[]
-})
+const dashboard = ref<DataDashboard>({})
 const { data: dataDashboard, status, refresh } = await useFetch('/api/dashboard', {
     headers: {
          Authorization: `Bearer ${token}`

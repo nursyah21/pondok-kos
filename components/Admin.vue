@@ -1,13 +1,13 @@
 <template>
 	<div class="flex gap-4 flex-col md:flex-row">
 		<CardDashboard :status="status" title="Penghuni" icon="i-material-symbols-person" link="/dashboard/penghuni"
-			color="bg-primary-400" :total="dashboard.totalPenghuni" type="orang" />
+			color="bg-primary-400" :total="dashboard.totalPenghuni ?? 0" type="orang" />
 		<CardDashboard :status="status" title="Penjaga" icon="i-material-symbols-person" link="/dashboard/user/data-penjaga"
-			color="bg-blue-400" :total="dashboard.totalPenjaga" type="orang" />
+			color="bg-blue-400" :total="dashboard.totalPenjaga ?? 0" type="orang" />
 		<CardDashboard :status="status" title="Kos" icon="i-material-symbols-house" link="/dashboard/kos/data-kamar-kos"
-			color="bg-yellow-400" :total="dashboard.totalKamarKos" type="kamar" />
+			color="bg-yellow-400" :total="dashboard.totalKamarKos ?? 0" type="kamar" />
 		<CardDashboard :status="status" title="Pendapatan" icon="i-material-symbols-attach-money"
-			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan" />
+			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan ?? 0" />
 	</div>
 
 	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
@@ -26,7 +26,7 @@
 			<template #header>
 				Chart Pendapatan 2024
 			</template>
-			<apexchart :options="dashboard.chartBarPendapatan.options" :series="dashboard.chartBarPendapatan.series">
+			<apexchart :options="dashboard.chartBarPendapatan?.options" :series="dashboard.chartBarPendapatan?.series">
 			</apexchart>
 		</UCard>
 	</div>
@@ -36,13 +36,9 @@
 <script setup lang="ts">
 const props = defineProps<{
 	status: any;
-	dashboard: {
-		totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number;
-		chartBarPendapatan: { options: any; series: any; };
-		listpenghuni: any[];
-	};
+	dashboard: DataDashboard;
 }>()
-const rows = ref([])
+const rows = ref<any[] | undefined>()
 const data = {
 	penghuni: {
 		columns: [
@@ -72,6 +68,7 @@ const data = {
 }
 
 watch(props.dashboard, (e) => {
+	rows.value = e.listpenghuni
 	console.log(e.listpenghuni)
 }, { immediate: true })
 

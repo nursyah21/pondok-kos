@@ -5,7 +5,7 @@
 		</template>
 		<div class="flex gap-4 py-2 overflow-scroll">
 			<template v-for="i in 2">
-				<UCard class="max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
+				<UCard class="flex-shrink-0 max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
 					<template #header>
 						<img src="https://static.mamikos.com/uploads/cache/data/style/2023-04-20/pfIeVtm1-360x480.jpg" alt="" />
 					</template>
@@ -55,11 +55,7 @@
 <script setup lang="ts">
 defineProps<{
 	status: any;
-	dashboard: {
-		totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number;
-		chartBarPendapatan: { options: any; series: any; };
-		listpenghuni: any[];
-	};
+	dashboard: DataDashboard;
 }>()
 const bayarBulanan = ref(false)
 

@@ -14,6 +14,9 @@ logs
 *.log
 log.txt
 
+# ipynb
+*.ipynb
+
 # Misc
 .DS_Store
 .fleet

@@ -4,25 +4,19 @@
 			<h1>Kos yang dijaga</h1>
 		</template>
 		<div class="flex gap-4  overflow-scroll">
-			<template v-for="i in 10">
-				<UCard class="max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
+			<template v-for="i in dashboard.listkos">
+				<UCard class="flex-shrink-0 max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
 					<template #header>
-						<img src="https://static.mamikos.com/uploads/cache/data/style/2023-04-20/pfIeVtm1-360x480.jpg" alt="" />
+						<img :src="i.imgkos" alt="" />
 					</template>
 					<div>
 						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
-							Kos Ketintang
+							{{i.kos}}
 						</h1>
 						<UDivider />
 						<h1 class="text-xs text-slate-800">
-							Jl. Ketintang, Surabaya
-						</h1>
-						<h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">
-							<!-- {{ i.description }} -->
-						</h1>
-						<!-- <div v-if="i.description.length < 20" class="h-[6px]">
-		
-						</div> -->
+							{{i.address}}
+						</h1>						
 					</div>
 				</UCard>
 			</template>
@@ -52,11 +46,7 @@
 <script setup lang="ts">
 defineProps<{
 	status: any;
-	dashboard: {
-		totalPenghuni: string; totalPenjaga: string; totalKamarKos: string; pendapatan: number;
-		chartBarPendapatan: { options: any; series: any; };
-		listpenghuni: any[];
-	};
+	dashboard: DataDashboard;
 }>()
 
 const data = {

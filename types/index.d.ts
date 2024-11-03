@@ -29,14 +29,15 @@ type Kos = {
 }
 
 type DataDashboard = {
-    totalPenghuni: string
-    totalPenjaga: string
-    totalKamarKos: string
-    pendapatan: number // because it will use function to rupiah
+    totalPenghuni?: string
+    totalPenjaga?: string
+    totalKamarKos?: string
+    pendapatan?: number // because it will use function to rupiah
     // chartPiePenghuni?: Chart,
-    chartBarPendapatan: Chart,
+    chartBarPendapatan?: Chart,
     // chartLineTransaksi?: Chart,
-    listpenghuni: any[]
+    listpenghuni?: any[]
+    listkos?: any[]
 }
 
 type ModeCrud = 'add' | 'edit' | 'delete'
