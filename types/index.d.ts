@@ -4,7 +4,7 @@ type id_Owner = {
     }
 }
 type Chart = {
-    description?: string
+    // description?: string
     options: any
     series: any
 }
@@ -33,10 +33,10 @@ type DataDashboard = {
     totalPenjaga: string
     totalKamarKos: string
     pendapatan: number // because it will use function to rupiah
-    chartPiePenghuni?: Chart,
-    chartBarPendapatan?: Chart,
-    chartLineTransaksi?: Chart,
-    listpenghuni?: any[]
+    // chartPiePenghuni?: Chart,
+    chartBarPendapatan: Chart,
+    // chartLineTransaksi?: Chart,
+    listpenghuni: any[]
 }
 
 type ModeCrud = 'add' | 'edit' | 'delete'
