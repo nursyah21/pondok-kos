@@ -4,11 +4,8 @@
 
 - list semua yg perlu diperbaiki [x]
 - perbaiki seadanya [x]
-- ngefix bug kalo ada dan melengkapi semuanya []
+- ngefix bug kalo ada dan melengkapi semuanya [x]
 - test dan deploy []
-
-# fix bug
-- riwayat transaksi []
 
 ## use case sistem informasi pembayaran kos
 ![image](/public/use-case.drawio.png)

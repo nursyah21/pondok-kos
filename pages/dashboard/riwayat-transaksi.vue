@@ -356,54 +356,7 @@ const openPayment = async (e: any) => {
 
 }
 
-let columns = [{
-    key: 'num',
-    label: 'id',
-},
-{
-    key: 'tgl',
-    label: 'masuk'
-},
-{
-    key: 'duration',
-    label: 'keluar'
-},
-{
-    key: 'user_name',
-    label: 'penghuni'
-},
-{
-    key: 'name_kos',
-    label: 'kos',
-},
-{
-    key: 'name_kamar',
-    label: 'kamar',
-},
-{
-    key: 'admin',
-    label: 'admin'
-},
-{
-    key: 'price',
-    label: 'harga',
-},
-{
-    key: 'method_payment',
-    label: 'metode pembayaran',
-},
-{
-    key: 'link_payment',
-    label: 'link pembayaran',
-},
-{
-    key: 'paid_status',
-    label: 'status pembayaran',
-},
-{
-    key: 'action',
-    label: 'aksi',
-}]
+let columns:any[] = []
 
 const columns_penghuni = [{
     key: 'num',
@@ -413,10 +366,10 @@ const columns_penghuni = [{
     key: 'tgl',
     label: 'masuk'
 },
-{
-    key: 'duration',
-    label: 'keluar'
-},
+// {
+//     key: 'duration',
+//     label: 'durasi sewa'
+// },
 {
     key: 'name_kos',
     label: 'kos',
@@ -455,10 +408,10 @@ const columns_penjaga = [{
     key: 'tgl',
     label: 'masuk'
 },
-{
-    key: 'duration',
-    label: 'keluar'
-},
+// {
+//     key: 'duration',
+//     label: 'durasi sewa'
+// },
 {
     key: 'user_name',
     label: 'penghuni'
@@ -573,15 +526,16 @@ watch(status,(e, _) => {
     let { data, total } = raw.value
     totalPage.value = total
     // change color based on paid_value:
-    rows.value = data.map((e:any)=>{
-        return {...e, price: formatRupiahIntl(e.price),
-            tgl: moment(e.tgl).format('DD-MM-YYYY'),
-            paid_status: e.paid_status == 0 ? 'gagal' : 
-            e.paid_status == 1 ? 'menunggu'
-            : 'sukses', 
+    rows.value = data
+    // data.map((e:any)=>{
+    //     return {...e, price: formatRupiahIntl(e.price),
+    //         tgl: moment(e.tgl).format('DD-MM-YYYY'),
+    //         paid_status: e.paid_status == 0 ? 'gagal' : 
+    //         e.paid_status == 1 ? 'menunggu'
+    //         : 'sukses', 
             
-        }
-    })    
+    //     }
+    // })    
 }, {immediate: true})
 
 definePageMeta({
