@@ -4,7 +4,7 @@
 			<h1>Kos yang dijaga</h1>
 		</template>
 		<div class="flex gap-4  overflow-scroll">
-			<template v-for="i in dashboard.listkos">
+			<template v-for="i in dashboard.listKos">
 				<UCard class="flex-shrink-0 max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
 					<template #header>
 						<img :src="i.imgkos" alt="" />
@@ -77,7 +77,6 @@ const data = {
 }
 
 watch(props.dashboard, (e) => {
-	rows.value = e.listpenghuni
-	console.log(e.listpenghuni)
+	rows.value = e.listPenghuni	
 }, { immediate: true })
 </script>

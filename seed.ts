@@ -5,6 +5,8 @@ import { Users } from './server/utils/models/users'
 import { KamarKos } from './server/utils/models/kamar_kos'
 import { PenghuniKos } from './server/utils/models/penghuni_kos '
 import { PenjagaKos } from './server/utils/models/penjaga_kos '
+import { Booking } from './server/utils/models/booking'
+
 import dotenv from 'dotenv'
 dotenv.config({ path: '' })
 await mongoose.connect(process.env.MONGODB ?? '');
@@ -122,9 +124,9 @@ await PenghuniKos.insertMany(penghunikos).catch(e => {
 })
 
 const penjagakos: any[] = []
-const penjaga = await Users.findOne({name: 'penjaga1'}).select(['_id'])
+const penjaga = await Users.findOne({ name: 'penjaga1' }).select(['_id'])
 const tempkos = await PenghuniKos.findOne({}).populate(['id_kos'])
-if(penjaga && tempkos){
+if (penjaga && tempkos) {
     penjagakos.push({
         id_user: penjaga._id,
         id_kos: tempkos.id_kos._id
@@ -148,7 +150,17 @@ await PenjagaKos.insertMany(penjagakos).catch(e => {
     console.log(e.message)
 })
 
-// 
+await Booking.deleteMany({})
+await Booking.create({
+    order_id: "0000",
+    id_kamar_kos: tempkos?.id_kamar_kos,
+    id_user: tempkos?.id_user,
+    id_admin: penjaga?._id,
+    price: 100000,
+    method_payment: 'manual',
+    duration: 30,
+    paid_status: 2
+})
 
 await mongoose.disconnect()
-console.log('finish seeding users, kos, kamar_kos, penghuni, penjaga')
+console.log('finish seeding users, kos, kamar_kos, penghuni, penjaga, booking')

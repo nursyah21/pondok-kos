@@ -7,6 +7,9 @@
 - ngefix bug kalo ada dan melengkapi semuanya []
 - test dan deploy []
 
+# fix bug
+- riwayat transaksi []
+
 ## use case sistem informasi pembayaran kos
 ![image](/public/use-case.drawio.png)
 

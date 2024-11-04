@@ -68,8 +68,8 @@ const data = {
 }
 
 watch(props.dashboard, (e) => {
-	rows.value = e.listpenghuni
-	console.log(e.listpenghuni)
+	rows.value = e.listPenghuni
+	console.log(e.listPenghuni)
 }, { immediate: true })
 
 </script>

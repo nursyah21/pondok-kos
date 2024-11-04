@@ -36,8 +36,9 @@ type DataDashboard = {
     // chartPiePenghuni?: Chart,
     chartBarPendapatan?: Chart,
     // chartLineTransaksi?: Chart,
-    listpenghuni?: any[]
-    listkos?: any[]
+    listPenghuni?: any[]
+    listKos?: any[]
+    listTransaksi?: any[]
 }
 
 type ModeCrud = 'add' | 'edit' | 'delete'

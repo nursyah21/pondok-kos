@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
                         ]
                     }]
                 },
-                listpenghuni
+                listPenghuni: listpenghuni
             }
         }
         // penjaga
@@ -105,13 +105,43 @@ export default defineEventHandler(async (event) => {
 
 
             data = {
-                listkos: _listkos,
-                listpenghuni: _listpenghuni
+                listKos: _listkos,
+                listPenghuni: _listpenghuni
             }
         }
         // penghuni
         if (role == 0) {
+            const penghuni = await PenghuniKos.find({ id_user: { _id } }).populate(['id_user', 'id_kos', 'id_kamar_kos']).limit(10)
 
+            const listKos: any[] = []
+            const listTransaksi: any[] = []
+
+            penghuni.forEach((e: any) => {
+                listKos.push({
+                    kos: e.id_kos.name,
+                    address: e.id_kos.address,
+                    imgkos: e.id_kos.image
+                })
+            })
+
+            const booking = await Booking.find({ id_user: _id }).populate([
+                { path: 'id_kamar_kos', populate: ['id_kos'] }
+            ])
+            booking.forEach((e: any, idx) => {
+                listTransaksi.push({
+                    num: idx + 1,
+                    kos: e.id_kamar_kos.name,
+                    kamar: e.id_kamar_kos.id_kos.name,
+                    price: 'Rp' + formatRupiahIntl(e.price),
+                    tanggal_bayar: moment(e.updatetAt).format('DD-MM-YYYY')
+                })
+                console.log(e.id_kamar_kos.id_kos)
+            })
+
+            data = {
+                listKos,
+                listTransaksi
+            }
         }
 
 
