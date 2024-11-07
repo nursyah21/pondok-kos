@@ -316,8 +316,7 @@ watch(status, (e, _) => {
     // @ts-ignore
     const { data, total } = raw.value
     rows.value = data
-    totalPage.value = total
-    console.log("rows", rows.value)
+    totalPage.value = total    
 
     const kos = useRoute().query.kos
     if (!kos) return

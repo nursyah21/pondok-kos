@@ -275,7 +275,7 @@ const state = reactive({
 })
 
 
-const query = computed(() => ({ skip: skip.value, limit: pageCount }))
+const query = computed(() => ({ skip: skip.value, limit: pageCount.value }))
 const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
     query,
     method: 'get',
@@ -360,14 +360,14 @@ watch(status, (e, _) => {
     
     state.link = ''
     isOpen.value = true
-    const _kos = data.find((e: any) => e.id == kos)
-    state.image = _kos.image
-    state.name = _kos.name
-    state.location = _kos.location
-    state.description = _kos.description
-    state.price = _kos.price
-    state.id_kamar_kos = _kos.id
-    state.available = _kos.available
+    // const _kos = data.find((e: any) => e.id == kos)
+    // state.image = _kos.image
+    // state.name = _kos.name
+    // state.location = _kos.location
+    // state.description = _kos.description
+    // state.price = _kos.price
+    // state.id_kamar_kos = _kos.id
+    // state.available = _kos.available
     
 }, {immediate: true })
 
