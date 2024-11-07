@@ -10,7 +10,7 @@
 			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan ?? 0" />
 	</div>
 
-	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
+	<div class="flex flex-col xl:flex-row  gap-4 overflow-hidden">
 		<div class="flex-1">
 			<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
 				<template #header>
