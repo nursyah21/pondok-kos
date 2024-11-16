@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
               },
             },
             dataLabels: {
-              enabled: false
+              enabled: false,
             },
           },
           series: [
@@ -148,34 +148,57 @@ export default defineEventHandler(async (event) => {
     // penghuni
     if (role == 0) {
       const penghuni = await PenghuniKos.find({ id_user: { _id } })
-        .populate(["id_user", "id_kos", "id_kamar_kos"])
+        .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
         .limit(10);
 
       const listKos: any[] = [];
       const listTransaksi: any[] = [];
-
+      const idpenghunikamarkos:any[] = []
       penghuni.forEach((e: any) => {
-        console.log('=>',e.id_kos)
-        console.log('=>',e.id_kamar_kos)
-        listKos.push({
-          kos: e.id_kos.name,
-          kamar: e.id_kamar_kos.name,
-          address: e.id_kos.address,
-          imgkos: e.id_kos.image,
-        });
+        idpenghunikamarkos.push(e.id_kamar_kos._id.toString())
+
+        // listKos.push({
+        //   kos: e.id_kamar_kos.id_kos.name,
+        //   kamar: e.id_kamar_kos.name,
+        //   address: e.id_kamar_kos.id_kos.address,
+        //   imgkos: e.id_kamar_kos.image[0],
+        //   price: e.id_kamar_kos.price
+        // });
       });
 
-      const booking = await Booking.find({ id_user: _id, paid_status: 2 }).populate([
-        { path: "id_kamar_kos", populate: ["id_kos"] },
-      ]);
-      booking.forEach((e: any, idx) => {        
+      const booking = await Booking.find({
+        id_user: _id,
+        paid_status: 2,
+      }).populate([{ path: "id_kamar_kos", populate: ["id_kos"] }]);
+      booking.forEach((e: any, idx) => {
+        
+        const durationDays = new Date(e.createdAt).getTime()+(e.duration*24000*3600)
+        const tersisa = Math.ceil((durationDays - new Date().getTime()) / (24000*3600))
+
+        if(idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1){
+          listKos.push({
+            kos: e.id_kamar_kos.id_kos.name,
+            kamar: e.id_kamar_kos.name,
+            address: e.id_kamar_kos.id_kos.address,
+            imgkos: e.id_kamar_kos.image[0],
+            price: e.price,
+            tersisa
+          });
+          // console.log()
+        }
+        // if(tersisa>0){
+        //   listKos.push({
+
+        //   })
+        // }
+
         listTransaksi.push({
           num: idx + 1,
           kos: e.id_kamar_kos.name,
           kamar: e.id_kamar_kos.id_kos.name,
           price: "Rp" + formatRupiahIntl(e.price),
           tanggal_bayar: moment(e.updatetAt).format("DD-MM-YYYY"),
-        });        
+        });
       });
 
       data = {
