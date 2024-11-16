@@ -4,7 +4,7 @@ import moment from "moment";
 export default defineEventHandler(async (event) => {
   const authorizationHeader = event.node.req.headers.authorization;
   const token = authorizationHeader?.split(" ")[1];
-  try {    
+  try {
     checkBooking();
     const refreshTokens = await RefreshTokens.findOne({ token });
 
@@ -14,10 +14,10 @@ export default defineEventHandler(async (event) => {
     const user = await Users.findById(refreshTokens.id_user);
     if (!user) throw new Error("user not valid");
     const { role, _id } = user;
-    let data: DataDashboard = {};    
-    
+    let data: DataDashboard = {};
+
     // pemilik
-    if (role == 2) {            
+    if (role == 2) {
       const totalPenghuni = (
         await PenghuniKos.find({}).countDocuments()
       ).toString();
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
       });
       const listpenghuni: any[] = [];
       const _listpenghuni = await PenghuniKos.find({})
-        .populate(["id_kamar_kos", "id_user", "id_kos"])
+        .populate([{ path: "id_kamar_kos", populate: ["id_kos"] }, "id_user"])
         .limit(10);
 
       let num = 1;
@@ -46,8 +46,8 @@ export default defineEventHandler(async (event) => {
         listpenghuni.push({
           num,
           name: e.id_user.name,
-          kos: e.id_kos.name,
           kamar: e.id_kamar_kos.name,
+          kos: e.id_kamar_kos.id_kos.name,
           tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
         });
         num++;
@@ -123,7 +123,7 @@ export default defineEventHandler(async (event) => {
         });
       });
       const penghuni = await PenghuniKos.find({})
-        .populate(["id_user", "id_kos", "id_kamar_kos"])
+        .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
         .limit(10);
       let num = 1;
       penghuni.forEach((e: any) => {
@@ -133,8 +133,8 @@ export default defineEventHandler(async (event) => {
         _listpenghuni.push({
           num,
           name: e.id_user.name,
-          kos: e.id_kos.name,
           kamar: e.id_kamar_kos.name,
+          kos: e.id_kamar_kos.id_kos.name,
           tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
         });
         num++;
@@ -153,17 +153,9 @@ export default defineEventHandler(async (event) => {
 
       const listKos: any[] = [];
       const listTransaksi: any[] = [];
-      const idpenghunikamarkos:any[] = []
+      const idpenghunikamarkos: any[] = [];
       penghuni.forEach((e: any) => {
-        idpenghunikamarkos.push(e.id_kamar_kos._id.toString())
-
-        // listKos.push({
-        //   kos: e.id_kamar_kos.id_kos.name,
-        //   kamar: e.id_kamar_kos.name,
-        //   address: e.id_kamar_kos.id_kos.address,
-        //   imgkos: e.id_kamar_kos.image[0],
-        //   price: e.id_kamar_kos.price
-        // });
+        idpenghunikamarkos.push(e.id_kamar_kos._id.toString());
       });
 
       const booking = await Booking.find({
@@ -171,31 +163,27 @@ export default defineEventHandler(async (event) => {
         paid_status: 2,
       }).populate([{ path: "id_kamar_kos", populate: ["id_kos"] }]);
       booking.forEach((e: any, idx) => {
-        
-        const durationDays = new Date(e.createdAt).getTime()+(e.duration*24000*3600)
-        const tersisa = Math.ceil((durationDays - new Date().getTime()) / (24000*3600))
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
 
-        if(idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1){
+        if (idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1) {
           listKos.push({
             kos: e.id_kamar_kos.id_kos.name,
             kamar: e.id_kamar_kos.name,
             address: e.id_kamar_kos.id_kos.address,
             imgkos: e.id_kamar_kos.image[0],
             price: e.price,
-            tersisa
+            tersisa,
           });
-          // console.log()
         }
-        // if(tersisa>0){
-        //   listKos.push({
-
-        //   })
-        // }
 
         listTransaksi.push({
           num: idx + 1,
-          kos: e.id_kamar_kos.name,
-          kamar: e.id_kamar_kos.id_kos.name,
+          kamar: e.id_kamar_kos.name,
+          kos: e.id_kamar_kos.id_kos.name,
           price: "Rp" + formatRupiahIntl(e.price),
           tanggal_bayar: moment(e.updatetAt).format("DD-MM-YYYY"),
         });
