@@ -18,7 +18,7 @@
                 </UInput>
             </div>
             <div class="flex mt-2 sm:mt-0">
-                <UDropdown :items="[
+                <UDropdown class="hidden" :items="[
                     [{
                         label: 'filter status',
                         class: 'font-bold'

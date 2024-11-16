@@ -118,7 +118,7 @@ const pageCount = 10
 const skip = ref(0)
 const totalPage = ref(0)
 const query = computed(() => ({ skip: skip.value, limit: pageCount }))
-const { data:raw, status, refresh } = await useFetch('/api/penjaga/all-penjaga-kos', {
+const { data:raw, status, refresh } = await useFetch('/api/penjaga/all-penjaga', {
     headers:{
         Authorization: `Bearer ${token}`
     },

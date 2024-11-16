@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
         if (role == 0) throw new Error('user not authorization')
         const skip = getRequestURL(event).searchParams.get('skip')
         const limit = getRequestURL(event).searchParams.get('limit')
+        const sort = getRequestURL(event).searchParams.get('sort') ?? 'asc'
 
         // if onlyName == 1, return all user but only id and name, number_phone
         const onlyName = getRequestURL(event).searchParams.get('onlyName')
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event) => {
         let data;
 
         if(onlyName == '1'){
-            data = await Users.find({role: 0, verified: true}).select(['name', 'number_phone'])
+            data = await Users.find({role: 0, verified: true}).sort({createdAt: sort == 'asc' ? -1 : 1}).select(['name', 'number_phone'])
             return { status: 'success', data: data }
         }
         
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event) => {
 
         data = await Users.find({role: query})
             .select(['name', 'number_phone','avatar','id_card','address','verified','createdAt','birthdate', 'role'])
+            .sort({createdAt: sort == 'asc' ? -1 : 1})
             .skip(Number(skip))
             .limit(Number(limit));
 

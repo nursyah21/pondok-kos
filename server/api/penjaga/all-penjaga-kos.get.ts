@@ -39,10 +39,10 @@ export default defineEventHandler(async (event) => {
         data = data.map((e,idx)=>{
             const p = penjaga.find((f:any)=>f._id == e.id_user)
             const k = kos.find((f:any)=>f._id == e.id_kos)
-
+            
             if(p != undefined && k != undefined){
                 return {num:Number(skip)+idx+1, name: p.name, avatar:p.avatar, kos: k.name, 
-                    number_phone: p.number_phone, location: k.location, _id: e._id}
+                    number_phone: p.number_phone, location: k.address, _id: e._id}
                 }
         })
 
