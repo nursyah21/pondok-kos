@@ -155,25 +155,27 @@ export default defineEventHandler(async (event) => {
       const listTransaksi: any[] = [];
 
       penghuni.forEach((e: any) => {
+        console.log('=>',e.id_kos)
+        console.log('=>',e.id_kamar_kos)
         listKos.push({
           kos: e.id_kos.name,
+          kamar: e.id_kamar_kos.name,
           address: e.id_kos.address,
           imgkos: e.id_kos.image,
         });
       });
 
-      const booking = await Booking.find({ id_user: _id }).populate([
+      const booking = await Booking.find({ id_user: _id, paid_status: 2 }).populate([
         { path: "id_kamar_kos", populate: ["id_kos"] },
       ]);
-      booking.forEach((e: any, idx) => {
+      booking.forEach((e: any, idx) => {        
         listTransaksi.push({
           num: idx + 1,
           kos: e.id_kamar_kos.name,
           kamar: e.id_kamar_kos.id_kos.name,
           price: "Rp" + formatRupiahIntl(e.price),
           tanggal_bayar: moment(e.updatetAt).format("DD-MM-YYYY"),
-        });
-        console.log(e.id_kamar_kos.id_kos);
+        });        
       });
 
       data = {

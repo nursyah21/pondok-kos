@@ -60,7 +60,7 @@ const data = {
 			},
 			{
 				key: 'tanggal_bayar',
-				label: 'tanggal bayar',
+				label: 'tanggal masuk',
 			},
 
 		]
@@ -69,7 +69,6 @@ const data = {
 
 watch(props.dashboard, (e) => {
 	rows.value = e.listPenghuni
-	console.log(e.listPenghuni)
 }, { immediate: true })
 
 </script>

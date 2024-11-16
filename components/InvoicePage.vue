@@ -36,18 +36,18 @@
 				<tr class="text-slate-600 dark:text-slate-200">
 					<td>Tanggal Masuk</td>
 					<td class="px-2">:</td>
-					<td class="text-slate-800 font-bold">{{ moment(data.tgl).format('DD-MM-YYYY') }}</td>
+					<td class="text-slate-800 font-bold">{{data.tgl }}</td>
 				</tr>
-				<tr class="text-slate-600 dark:text-slate-200">
+				<!-- <tr class="text-slate-600 dark:text-slate-200">
 					<td>Tanggal Keluar</td>
 					<td class="px-2">:</td>
 					<td class="text-slate-800 font-bold">{{ moment(getNextDate(data.duration)).format('DD-MM-YYYY') }}</td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
 
 
-		<h1 class="font-bold">Diterbitkan oleh</h1>
+		<!-- <h1 class="font-bold">Diterbitkan oleh</h1>
 		<table class="text-sm mb-4">
 			<tbody>
 				<tr class="text-slate-600 dark:text-slate-200">
@@ -66,26 +66,26 @@
 					<td class="text-slate-800 font-bold">{{ data.method_payment }}</td>
 				</tr>
 			</tbody>
-		</table>
+		</table> -->
 
 		<hr class="h-2" />
 		<table class="w-full">
 			<tbody>
 				<tr class="font-bold">
 					<td>Deskripsi</td>
-					<td>Durasi (hari)</td>
+					<!-- <td>Durasi (hari)</td> -->
 					<td>Harga</td>
 				</tr>
 				<tr class="text-sm bg-slate-100">
-					<td>{{ data.name_kos }} - {{ data.name_kamar }}
-					</td>
-					<td>{{ data.duration }}</td>
-					<td>{{ formatRupiahIntl(data.price) }}</td>
+					<td>{{ data.name_kos }} - {{ data.name_kamar }}</td>
+					<!-- <td>{{ data.duration }}</td> -->
+					<!-- <td>{{ formatRupiahIntl(data.price) }}</td> -->
+					<td>{{ data.price }}</td>
 				</tr>
 			</tbody>
 		</table>
 
-		<h1 class="text-2xl font-bold text-blue-900 mt-2 text-end">{{ formatRupiahIntl(data.price) }}</h1>
+		<h1 class="text-2xl font-bold text-blue-900 mt-2 text-end">{{ data.price }}</h1>
 
 	</div>
 </template>

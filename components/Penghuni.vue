@@ -10,13 +10,10 @@
 						<img :src="i.imgkos" alt="" />
 					</template>
 					<div>
-						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
-							{{ i.kos }}
-						</h1>
+						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
+						<h1 class="text-sm text-slate-600 dark:text-slate-200">{{ i.kos }}</h1>
 						<UDivider />
-						<h1 class="text-xs text-slate-800">
-							{{ i.address }}
-						</h1>
+						<h1 class="text-xs text-slate-800 mt-2">{{ i.address }}</h1>
 						<h1 class="text-primary-600 font-bold pt-4 ">Rp{{ formatRupiahIntl("100000") }}</h1>
 						<!-- <UDivider class="my-2" />
 						<div class="flex gap-x-2 items-center">
@@ -81,7 +78,7 @@ const data = {
 			},
 			{
 				key: 'tanggal_bayar',
-				label: 'tanggal bayar',
+				label: 'tanggal masuk',
 			},
 
 		]

@@ -352,7 +352,6 @@ watch(status, (e, _) => {
     
     // @ts-ignore
     const { total, data } = raw.value
-    
     totalPage.value = total
 
     rows.value = data.map((items:any)=>({

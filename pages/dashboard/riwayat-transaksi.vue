@@ -128,6 +128,14 @@
         </div>
 
         <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
+            
+            <template #link_payment-data="i">
+                <a :href="i.row.link_payment" v-if="i.row.method_payment === 'midtrans'" class="hover:opacity-80">
+                    <UBadge color="blue">
+                        link
+                    </UBadge>
+                </a>                
+            </template>
             <template #action-data="i">
                 <UDropdown :items="[
                     [
@@ -146,7 +154,7 @@
                         {
                             label: 'Invoice',
                             icon: 'i-material-symbols-lab-profile',
-                            // disabled: i.row.paid_status == 1 ? false : true,
+                            disabled: i.row.paid_status == 'sukses' ? false : true,
                             click: () => (invoiceOpen = true, dataInvoice = i.row)
                         },
                     ]
@@ -229,7 +237,6 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment'
 const page = ref(1)
 const pageCount = ref(5)
 const skip = ref(0)
@@ -384,15 +391,15 @@ const columns_penghuni = [{
 },
 {
     key: 'method_payment',
-    label: 'metode pembayaran',
+    label: 'metode',
 },
-{
-    key: 'link_payment',
-    label: 'link pembayaran',
-},
+// {
+//     key: 'link_payment',
+//     label: 'link pembayaran',
+// },
 {
     key: 'paid_status',
-    label: 'status pembayaran',
+    label: 'status',
 },
 {
     key: 'action',
@@ -489,9 +496,9 @@ if (role == 0) {
 }
 
 const submitDeleteBooking = async (event: any) => {
-    loading.value = true
+    loading.value = true    
     const { _id } = event
-
+    
     try {
         const res = await $fetch('/api/booking/delete-booking', {
             headers: {
@@ -506,9 +513,9 @@ const submitDeleteBooking = async (event: any) => {
             useToast().add({ id: 'hapus booking', title: res.message })
             refresh()
         }
-    } catch (error: any) {
-        useToast().add({ id: 'settings', title: 'error', description: error.message, color: 'red' })
-        console.error('error: ' + error.message)
+    } catch (error: any) {        
+        console.log(error.data.message)
+        useToast().add({ id: 'settings', title: 'error', description: error.data.message, color: 'red' })
     }
 
     loading.value = false
@@ -526,16 +533,7 @@ watch(status,(e, _) => {
     let { data, total } = raw.value
     totalPage.value = total
     // change color based on paid_value:
-    rows.value = data
-    // data.map((e:any)=>{
-    //     return {...e, price: formatRupiahIntl(e.price),
-    //         tgl: moment(e.tgl).format('DD-MM-YYYY'),
-    //         paid_status: e.paid_status == 0 ? 'gagal' : 
-    //         e.paid_status == 1 ? 'menunggu'
-    //         : 'sukses', 
-            
-    //     }
-    // })    
+    rows.value = data 
 }, {immediate: true})
 
 definePageMeta({

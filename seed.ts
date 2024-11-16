@@ -240,6 +240,7 @@ if (kos && penghuni) {
     id_user: penghuni._id,
     tanggal_bayar: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14),
   });
+  await KamarKos.findByIdAndUpdate(kos._id, {available: 2})
 }
 
 await PenghuniKos.deleteMany({});
@@ -276,7 +277,7 @@ await PenjagaKos.insertMany(penjagakos).catch((e) => {
 
 await Booking.deleteMany({});
 await Booking.create({
-  order_id: "0000",
+  order_id: "order_id_" + Math.round((new Date()).getTime() / 1000),
   id_kamar_kos: tempkos?.id_kamar_kos,
   id_user: tempkos?.id_user,
   id_admin: penjaga?._id,
