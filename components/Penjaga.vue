@@ -7,7 +7,7 @@
 			<template v-for="i in dashboard.listKos">
 				<UCard class="flex-shrink-0 max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
 					<template #header>
-						<img :src="i.imgkos" alt="" />
+						<img :src="i.imgkos" alt="" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
 					</template>
 					<div>
 						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
@@ -69,7 +69,7 @@ const data = {
 			},
 			{
 				key: 'tanggal_bayar',
-				label: 'tanggal bayar',
+				label: 'tanggal masuk',
 			},
 
 		]

@@ -119,17 +119,20 @@
                             class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
                     </template>
                     <div>
+
                         <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ i.address }}</h1>
+                        <h1 class="text-sm text-slate-600 dark:text-slate-200">{{ i.kos }}</h1>
                         <UDivider />
+                        <h1 class="text-xs text-slate-800 mt-2">{{ i.location }}</h1>
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ i.description }}</h1>
                         <div v-if="i.description.length < 20" class="h-[6px]"></div>
                     </div>
 
                     <div class=" flex justify-between items-center ">
                         <h1 class="text-primary-600 font-bold">Rp{{ formatRupiahIntl(i.price) }}</h1>
-                        <!-- <UButton v-if="i.available == 0" @click="()=>{}" :to="'/dashboard/cari-kos?kos=' + i.id"> -->
+                        <!-- <UButton v-if="i.available == 0" @click="()=>{}" :to="'/dashboard/cari-kos?kos=' + i.id" /> -->
                         <!-- :to="'/login?kos='+i.id"  -->
+
                         <UButton v-if="i.available == 0" @click="addBoking(i)">
                             Pesan kamar</UButton>
                         <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
@@ -180,10 +183,10 @@
                     </div>
                 </template>
 
-                <UForm :state="state" @submit="() => { }">
+                <UForm :state="state" @submit="() => {
+                }">
                     <div v-if="state.image && state.image.length" class="mb-2 p-2">
-                        <UCarousel v-slot="{ item }" :items="state.image" 
-                         :ui="{
+                        <UCarousel v-slot="{ item }" :items="state.image" :ui="{
                             item: 'basis-full',
                             container: 'rounded-lg'
                         }" :prev-button="{
@@ -200,9 +203,10 @@
                     </div>
 
                     <div>
-                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.name }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ state.location }}</h1>
+                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.kamar }}</h1>
+                        <h1 class="text-sm text-slate-600 dark:text-slate-200">{{ state.kos }}</h1>
                         <UDivider />
+                        <h1 class="text-xs text-slate-800 mt-2">{{ state.location }}</h1>
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ state.description }}</h1>
                         <div v-if="state.description.length < 20" class="h-[6px]"></div>
 
@@ -220,17 +224,20 @@
 
                         <div v-if="state.available == 1"
                             class="text-center text-sm text-slate-600 dark:text-slate-200  p-2 rounded-md">
-                            masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat
+                            masuk ke <ULink to="/dashboard/riwayat-transaksi" class="text-blue-500 hover:underline">
+                                riwayat
                                 transaksi
                             </ULink> jika anda memesan kamar ini
                         </div>
 
                         <div class="mt-4 flex justify-between">
-                            <UButton v-if="state.link" color="blue" to="/dashboard/transaksi"
+                            <UButton v-if="state.link" color="blue" to="/dashboard/riwayat-transaksi"
                                 class="w-full text-center items-center justify-center">Buka Transaksi</UButton>
                             <template v-else>
+
                                 <UButton class="w-full text-center items-center justify-center" :loading="loading"
-                                    v-if="state.available == 0" type="submit">Lanjutkan</UButton>
+                                    v-if="state.available == 0" type="submit" :to="`/login?kos=${state.id_kamar_kos}`">
+                                    Lanjutkan</UButton>
                                 <UButton class="w-full text-center items-center justify-center"
                                     v-if="state.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
                                 <UButton class="w-full text-center items-center justify-center"
@@ -275,6 +282,8 @@ const state = reactive({
     name: '',
     description: '',
     location: '',
+    kos: '',
+    kamar: '',
     tgl_masuk: getDateNow(),
     tgl_keluar: getNextDate(30),
     available: 0,
@@ -297,6 +306,8 @@ const addBoking = (e: any) => {
     state.link = ''
     state.image = e.image
     state.name = e.kos
+    state.kos = e.kos
+    state.kamar = e.kamar
     state.location = e.address
     state.description = e.description
     state.price = e.price
@@ -317,7 +328,6 @@ watch(status, (e, _) => {
     const { data, total } = raw.value
     rows.value = data
     totalPage.value = total
-    console.log("rows", rows.value)
 
     const kos = useRoute().query.kos
     if (!kos) return

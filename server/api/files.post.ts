@@ -1,6 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {    
     const data = await readMultipartFormData(event)
     const accessKeyId = useRuntimeConfig().r2AccessKey
     const secretAccessKey = useRuntimeConfig().r2SecretKey
@@ -20,9 +20,10 @@ export default defineEventHandler(async (event) => {
         endpoint,
         forcePathStyle: true
     })
+    console.log({endpoint, publicPath,accessKeyId})
+    console.log(process.env)
 
     if (data?.length) {
-        
         const id = await $fetch('/api/auth/verify', {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -47,6 +48,7 @@ export default defineEventHandler(async (event) => {
         }
 
         try {
+            
             await s3.putObject({                
                 Bucket: bucketName,
                 Key: name, // Use the original file name
@@ -54,8 +56,7 @@ export default defineEventHandler(async (event) => {
                 ContentType: type
             })
             
-            const link = `${publicPath}/${name}`
-            console.log(link)
+            const link = `${publicPath}/${name}`            
 
             await Files.create({ name, type, link, id_owner, size })            
 

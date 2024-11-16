@@ -87,17 +87,19 @@
                         <USelect v-model="state.id_kamar_kos" :options="optionsKamarKos"  option-attribute="name" autocomplete="off" :disabled="mode == 'delete'" required/>
                     </UFormGroup>
 
-                    <UFormGroup label="Tanggal Bayar" name="birth_date" class="w-full">
+                    <UFormGroup label="Tanggal Masuk" name="birth_date" class="w-full">
                         <UInput v-model="state.tanggal_bayar" type="date" required :disabled="mode == 'delete'" />
                     </UFormGroup>
 
-                    <UFormGroup label="Tanggal Keluar" name="birth_date" class="w-full" v-if="mode == 'add'">
+                    <!-- <UFormGroup label="Tanggal Keluar" name="birth_date" class="w-full" v-if="mode == 'add'">
                         <UInput  type="date" :value="getNextDate(state.duration, state.tanggal_bayar)" disabled />
-                    </UFormGroup>
+                    </UFormGroup> -->
 
-                    <UFormGroup label="Durasi Sewa (Hari)" name="birth_date" class="w-full" v-if="mode == 'add'">
+                    <!-- <UFormGroup label="Durasi Sewa (Hari)" name="birth_date" class="w-full" v-if="mode == 'add'">
                         <UInput  type="number" v-model="state.duration" required :disabled="!state.price_harian"/>
-                    </UFormGroup>
+                    </UFormGroup> -->
+
+                    <!-- 1 bulan / 1 hari -->
 
                     <UFormGroup label="Harga" name="birth_date" class="w-full" v-if="mode == 'add'">
                         <div class="flex items-center gap-x-2 ">
@@ -158,7 +160,7 @@ const columns = [{
 },
 {
     key: 'tanggal_bayar',
-    label: 'tanggal bayar',
+    label: 'tanggal masuk',
 },
 {
     key: 'price',

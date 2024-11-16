@@ -7,17 +7,15 @@
 			<template v-for="i in dashboard.listKos">
 				<UCard class="flex-shrink-0 max-w-[300px] max-h-[480px] " :ui="{ header: { padding: '' }, footer: {} }">
 					<template #header>
-						<img :src="i.imgkos" alt="" />
+						<img :src="i.imgkos" alt="" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
 					</template>
 					<div>
-						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">
-							{{ i.kos }}
-						</h1>
+						<h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
+						<h1 class="text-sm text-slate-600 dark:text-slate-200">{{ i.kos }}</h1>
 						<UDivider />
-						<h1 class="text-xs text-slate-800">
-							{{ i.address }}
-						</h1>
-						<h1 class="text-primary-600 font-bold pt-4 ">Rp{{ formatRupiahIntl("100000") }}</h1>
+						<h1 class="text-xs text-slate-800 mt-2">{{ i.address }}</h1>
+						<h1 class="text-primary-600 font-bold pt-4 ">Rp{{ formatRupiahIntl(i.price) }}</h1>
+						<h1 class="text-slate-800">tersisa: <span class="text-blue-800 font-bold">{{ i.tersisa }} hari</span></h1>
 						<!-- <UDivider class="my-2" />
 						<div class="flex gap-x-2 items-center">
 							<UToggle v-model="bayarBulanan" />bulanan
@@ -81,7 +79,7 @@ const data = {
 			},
 			{
 				key: 'tanggal_bayar',
-				label: 'tanggal bayar',
+				label: 'tanggal masuk',
 			},
 
 		]

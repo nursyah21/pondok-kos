@@ -10,7 +10,7 @@
 			link="/dashboard/transaksi" color="bg-green-600" :total="dashboard.pendapatan ?? 0" />
 	</div>
 
-	<div class="flex flex-col md:flex-row  gap-4 overflow-hidden">
+	<div class="flex flex-col xl:flex-row  gap-4 overflow-hidden">
 		<div class="flex-1">
 			<UCard :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
 				<template #header>
@@ -24,7 +24,7 @@
 
 		<UCard class="flex-1" :ui="{ header: { padding: 'py-2' }, body: { padding: 'py-0' } }">
 			<template #header>
-				Chart Pendapatan 2024
+				Chart Transaksi 2024
 			</template>
 			<apexchart :options="dashboard.chartBarPendapatan?.options" :series="dashboard.chartBarPendapatan?.series">
 			</apexchart>
@@ -60,7 +60,7 @@ const data = {
 			},
 			{
 				key: 'tanggal_bayar',
-				label: 'tanggal bayar',
+				label: 'tanggal masuk',
 			},
 
 		]
@@ -69,7 +69,6 @@ const data = {
 
 watch(props.dashboard, (e) => {
 	rows.value = e.listPenghuni
-	console.log(e.listPenghuni)
 }, { immediate: true })
 
 </script>

@@ -8,8 +8,8 @@
 
         <!-- search -->
         <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
-            
-            <div class="flex items-center w-full">                
+
+            <div class="flex items-center w-full">
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
                     placeholder="Cari nama kos" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
@@ -27,22 +27,22 @@
                     }],
                     [{
                         label: 'semua',
-                        class: filter == 'all'  ? 'underline' : '',
-                        click: () => { filter = 'all'}
+                        class: filter == 'all' ? 'underline' : '',
+                        click: () => { filter = 'all' }
                     },
                     {
                         label: 'tersedia',
-                        class: filter == 'tersedia'  ? 'underline' : '',
-                        click: () => { filter = 'tersedia'}
+                        class: filter == 'tersedia' ? 'underline' : '',
+                        click: () => { filter = 'tersedia' }
                     },
                     {
                         label: 'dibooking',
-                        class: filter == 'dibooking'  ? 'underline' : '',
+                        class: filter == 'dibooking' ? 'underline' : '',
                         click: () => { filter = 'dibooking' }
-                    },                    
+                    },
                     {
                         label: 'ditempati',
-                        class: filter == 'ditempati'  ? 'underline' : '',
+                        class: filter == 'ditempati' ? 'underline' : '',
                         click: () => { filter = 'ditempati' }
                     },
                     ]
@@ -112,19 +112,23 @@
                 </UDropdown>
             </div>
         </div>
-        
-        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center" v-if="status == 'success' && totalPage">
+
+        <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center"
+            v-if="status == 'success' && totalPage">
             <template v-for="i in rows">
                 <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
                     <template #header>
-                        
-                        <img v-if="i.available == 0" :src="i.image[0] ?? '/images/noimage.png'" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
-                        <img v-else :src="i.image[0] ?? '/images/noimage.png'" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
+
+                        <img v-if="i.available == 0" :src="i.image[0] ?? '/images/noimage.png'"
+                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
+                        <img v-else :src="i.image[0] ?? '/images/noimage.png'"
+                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
                     </template>
                     <div>
                         <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ i.address }}</h1>
+                        <h1 class="text-sm text-slate-600 dark:text-slate-200">{{ i.kos }}</h1>
                         <UDivider />
+                        <h1 class="text-xs text-slate-800 mt-2">{{ i.address }}</h1>
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ i.description }}</h1>
                         <div v-if="i.description.length < 20" class="h-[6px]"></div>
                     </div>
@@ -146,20 +150,22 @@
 
         <!-- pagination -->
         <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh' color='gray'
+                :class="status == 'pending' && 'animate-pulse'">
                 <h1 v-if="pageCount == -1">
                     {{ page * pageCount + 2 }} - {{ totalPage }}
                 </h1>
                 <h1 v-else>
-                    {{skip >= 1? skip + page - 1 : skip+page}} - {{ page * pageCount }} of {{ totalPage }}
+                    {{ skip >= 1 ? skip + page - 1 : skip + page }} - {{ page * pageCount }} of {{ totalPage }}
                 </h1>
             </UButton>
-            <UButton v-else variant='ghost' @click='refresh'  color='gray' :class="status == 'pending' && 'animate-pulse'" >
+            <UButton v-else variant='ghost' @click='refresh' color='gray'
+                :class="status == 'pending' && 'animate-pulse'">
                 tidak tersedia
             </UButton>
-            
-            
-            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage"  :ui="{
+
+
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :ui="{
                 wrapper: 'flex items-center gap-2',
                 rounded: '!rounded-full min-w-[32px] justify-center',
                 default: {
@@ -169,35 +175,35 @@
                 }
             }" />
         </div>
-        
+
         <UModal v-model="isOpen">
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
                         <h1 class="font-bold text-slate-600 dark:text-slate-200">Pesan Kamar Kos</h1>
-                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                            @click="{                                
-                                isOpen = false;
-                                // @ts-ignore
-                                navigateTo('/dashboard/cari-kos')
-                            }" />
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="{
+                            isOpen = false;
+                            // @ts-ignore
+                            navigateTo('/dashboard/cari-kos')
+                        }" />
                     </div>
                 </template>
 
                 <UForm :state="state" @submit="submitMidtrans">
-                    <div v-if="state.image && state.image.length" class="mb-2 p-2" >
-                        <UCarousel  v-slot="{ item }" :items="state.image" class="mt-2"> 
+                    <div v-if="state.image && state.image.length" class="mb-2 p-2">
+                        <UCarousel v-slot="{ item }" :items="state.image" class="mt-2">
                             <img :src="item" class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] mr-2" />
                         </UCarousel>
                     </div>
-                    
-                    <div>
-                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.name }}</h1>
-                        <h1 class="text-xs text-slate-800">{{ state.location }}</h1>
+
+                    <div>                        
+                        <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.kamar }}</h1>
+                        <h1 class="text-sm text-slate-600 dark:text-slate-200">{{ state.kos }}</h1>
                         <UDivider />
+                        <h1 class="text-xs text-slate-800 mt-2">{{ state.location }}</h1>
                         <h1 class="my-4 text-sm text-slate-600 dark:text-slate-200">{{ state.description }}</h1>
                         <div v-if="state.description.length < 20" class="h-[6px]"></div>
-                        
+
                         <!-- <div class="my-2 border-t-2 pt-4">
                             <UFormGroup label="Tangal masuk">
                                 <UInput type="date" :value="state.tgl_masuk" disabled />
@@ -209,13 +215,16 @@
                         </div> -->
                         <h1 class="text-slate-600 dark:text-slate-200 font-bold  pt-2">Durasi sewa: 30 hari</h1>
                         <h1 class="text-primary-600 font-bold ">Rp{{ formatRupiahIntl(state.price) }}</h1>
-                        
-                        <div v-if="state.available == 1" class="text-center text-sm text-slate-600 dark:text-slate-200  p-2 rounded-md">
-                            masuk ke <ULink to="/dashboard/transaksi" class="text-blue-500 hover:underline">riwayat transaksi</ULink> jika anda memesan kamar ini
+
+                        <div v-if="state.available == 1"
+                            class="text-center text-sm text-slate-600 dark:text-slate-200  p-2 rounded-md">
+                            masuk ke <ULink to="/dashboard/riwayat-transaksi" class="text-blue-500 hover:underline">
+                                riwayat
+                                transaksi</ULink> jika anda memesan kamar ini
                         </div>
 
                         <div class="mt-4 flex justify-between">
-                            <UButton v-if="state.link" color="blue" to="/dashboard/transaksi"
+                            <UButton v-if="state.link" color="blue" to="/dashboard/riwayat-transaksi"
                                 class="w-full text-center items-center justify-center">Buka Transaksi</UButton>
                             <template v-else>
                                 <UButton class="w-full text-center items-center justify-center" :loading="loading"
@@ -263,6 +272,8 @@ const state = reactive({
     name: '',
     description: '',
     location: '',
+    kos:'',
+    kamar:'',
     tgl_masuk: getDateNow(),
     tgl_keluar: getNextDate(30),
     available: 0,
@@ -275,7 +286,7 @@ const state = reactive({
 })
 
 
-const query = computed(() => ({ skip: skip.value, limit: pageCount }))
+const query = computed(() => ({ skip: skip.value, limit: pageCount.value }))
 const { data: raw, status, refresh } = await useFetch('/api/kamar-kos/get', {
     query,
     method: 'get',
@@ -286,6 +297,8 @@ const addBoking = (e: any) => {
     state.link = ''
     state.image = e.image
     state.name = e.kos
+    state.kos = e.kos
+    state.kamar = e.kamar
     state.location = e.address
     state.description = e.description
     state.price = e.price
@@ -337,39 +350,39 @@ async function submitMidtrans(event: any) {
     })
 }
 
-watch(page, (e, _) => {        
+watch(page, (e, _) => {
     skip.value = (e - 1) * pageCount.value
-    refresh()        
+    refresh()
 })
 
-watch(isOpen, (e,_)=>{
+watch(isOpen, (e, _) => {
     // if(isOpen)  return
-    navigateTo('/dashboard/cari-kos') 
+    navigateTo('/dashboard/cari-kos')
 })
 
 watch(status, (e, _) => {
-    if(e != 'success') return
-    
+    if (e != 'success') return
+
     // @ts-ignore
     const { data, total } = raw.value
     rows.value = data
     totalPage.value = total
-
+    console.log(data)
     const kos = useRoute().query.kos
-    if(!kos) return
-    
+    if (!kos) return
+
     state.link = ''
     isOpen.value = true
-    const _kos = data.find((e: any) => e.id == kos)
-    state.image = _kos.image
-    state.name = _kos.name
-    state.location = _kos.location
-    state.description = _kos.description
-    state.price = _kos.price
-    state.id_kamar_kos = _kos.id
-    state.available = _kos.available
-    
-}, {immediate: true })
+    // const _kos = data.find((e: any) => e.id == kos)
+    // state.image = _kos.image
+    // state.name = _kos.name
+    // state.location = _kos.location
+    // state.description = _kos.description
+    // state.price = _kos.price
+    // state.id_kamar_kos = _kos.id
+    // state.available = _kos.available
+
+}, { immediate: true })
 
 definePageMeta({
     layout: 'dashboard'
