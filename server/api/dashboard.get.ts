@@ -4,8 +4,7 @@ import moment from "moment";
 export default defineEventHandler(async (event) => {
   const authorizationHeader = event.node.req.headers.authorization;
   const token = authorizationHeader?.split(" ")[1];
-
-  try {
+  try {    
     checkBooking();
     const refreshTokens = await RefreshTokens.findOne({ token });
 
@@ -15,9 +14,10 @@ export default defineEventHandler(async (event) => {
     const user = await Users.findById(refreshTokens.id_user);
     if (!user) throw new Error("user not valid");
     const { role, _id } = user;
-    let data: DataDashboard = {};
+    let data: DataDashboard = {};    
+    
     // pemilik
-    if (role == 2) {
+    if (role == 2) {            
       const totalPenghuni = (
         await PenghuniKos.find({}).countDocuments()
       ).toString();
