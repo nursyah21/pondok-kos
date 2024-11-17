@@ -118,11 +118,10 @@
             <template v-for="i in rows">
                 <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
                     <template #header>
-
-                        <img v-if="i.available == 0" :src="i.image[0] ?? '/images/noimage.png'"
-                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
-                        <img v-else :src="i.image[0] ?? '/images/noimage.png'"
+                        <img v-if="i.available != 0 || i.hidden" :src="i.image[0] ?? '/images/noimage.png'"
                             class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
+                        <img v-else :src="i.image[0] ?? '/images/noimage.png'"
+                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
                     </template>
                     <div>
                         <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ i.kamar }}</h1>
@@ -135,10 +134,14 @@
 
                     <div class=" flex justify-between items-center ">
                         <h1 class="text-primary-600 font-bold">Rp{{ formatRupiahIntl(i.price) }}</h1>
-                        <UButton v-if="i.available == 0" @click="addBoking(i)" :to="'/dashboard/cari-kos?kos=' + i.id">
-                            Pesan kamar</UButton>
-                        <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
-                        <UButton v-if="i.available == 2" color="red" disabled>Sudah ditempati</UButton>
+                        <UButton v-if="i.hidden" color="gray" disabled>Tidak tersedia</UButton>
+                        <template v-else>
+                            <UButton v-if="i.available == 0" @click="addBoking(i)"
+                                :to="'/dashboard/cari-kos?kos=' + i.id">
+                                Pesan kamar</UButton>
+                            <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
+                            <UButton v-if="i.available == 2" color="red" disabled>Sudah ditempati</UButton>
+                        </template>
                     </div>
                 </UCard>
             </template>
@@ -196,7 +199,7 @@
                         </UCarousel>
                     </div>
 
-                    <div>                        
+                    <div>
                         <h1 class="text-xl font-bold text-slate-600 dark:text-slate-200">{{ state.kamar }}</h1>
                         <h1 class="text-sm text-slate-600 dark:text-slate-200">{{ state.kos }}</h1>
                         <UDivider />
@@ -272,8 +275,8 @@ const state = reactive({
     name: '',
     description: '',
     location: '',
-    kos:'',
-    kamar:'',
+    kos: '',
+    kamar: '',
     tgl_masuk: getDateNow(),
     tgl_keluar: getNextDate(30),
     available: 0,

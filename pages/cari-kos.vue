@@ -110,13 +110,12 @@
 
         <div class="my-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 justify-items-center">
             <template v-for="i in rows" v-if="status == 'success'">
-                <UCard class="max-w-[300px] max-h-[480px]" :ui="{ header: { padding: '' }, footer: {} }">
+                <UCard :class="'max-w-[300px] max-h-[480px]'" :ui="{ header: { padding: '' }, footer: {} }">
                     <template #header>
-
-                        <img v-if="i.available == 0" :src="i.image[0] ?? '/images/noimage.png'"
-                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
-                        <img v-else :src="i.image[0] ?? '/images/noimage.png'"
+                        <img v-if="i.available != 0 || i.hidden" :src="i.image[0] ?? '/images/noimage.png'"
                             class="w-[300px] max-w-[300px] h-[260px] max-h-[260px] opacity-30" />
+                        <img v-else :src="i.image[0] ?? '/images/noimage.png'"
+                            class="w-[300px] max-w-[300px] h-[260px] max-h-[260px]" />
                     </template>
                     <div>
 
@@ -132,11 +131,17 @@
                         <h1 class="text-primary-600 font-bold">Rp{{ formatRupiahIntl(i.price) }}</h1>
                         <!-- <UButton v-if="i.available == 0" @click="()=>{}" :to="'/dashboard/cari-kos?kos=' + i.id" /> -->
                         <!-- :to="'/login?kos='+i.id"  -->
-
-                        <UButton v-if="i.available == 0" @click="addBoking(i)">
-                            Pesan kamar</UButton>
-                        <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
-                        <UButton v-if="i.available == 2" color="red" disabled>Sudah ditempati</UButton>
+                        <!-- <UButton v-if="i.hidden" disabled>
+                            tida</UButton> -->
+                        <!-- <template v-if="i.hidden">
+                        </template> -->
+                        <UButton v-if="i.hidden" color="gray" disabled>Tidak tersedia</UButton>                            
+                        <template v-else>
+                            <UButton v-if="i.available == 0" @click="addBoking(i)">
+                                Pesan kamar</UButton>
+                            <UButton v-if="i.available == 1" color="yellow" disabled>Sedang dipesan</UButton>
+                            <UButton v-if="i.available == 2" color="red" disabled>Sudah ditempati</UButton>
+                        </template>
                     </div>
                 </UCard>
             </template>

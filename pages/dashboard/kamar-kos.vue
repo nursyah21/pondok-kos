@@ -235,7 +235,7 @@
                         </UInput>
                     </UFormGroup>
 
-                    <UFormGroup :label="'Harga Harian'" name="harga" class="w-full">
+                    <!-- <UFormGroup :label="'Harga Harian'" name="harga" class="w-full">
                         <template #label>
                             <UCheckbox v-model="state.price_harian_on" name="notifications" label="Harga Harian Kamar Kos" />
                         </template>
@@ -245,7 +245,7 @@
                                 <span class="text-gray-500 dark:text-gray-400 text-xs">Rp</span>
                             </template>
                         </UInput>
-                    </UFormGroup>
+                    </UFormGroup> -->
 
                     <UFormGroup>
                         <template v-if="state.hidden && mode == 'delete'">
