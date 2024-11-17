@@ -15,9 +15,11 @@ export default defineEventHandler(async (event) => {
     if (role != 2) throw new Error("user not authorization, you must be admin");
     const skip = getRequestURL(event).searchParams.get("skip");
     const limit = getRequestURL(event).searchParams.get("limit");
+    const sort = getRequestURL(event).searchParams.get("sort") ?? "asc";
     const length = await PenjagaKos.find({}).countDocuments();
     const penjaga = await PenjagaKos.find({})
       .populate(["id_user", "id_kos"])
+      .sort({ createdAt: sort == "asc" ? -1 : 1 })
       .skip(Number(skip))
       .limit(Number(limit));
 
