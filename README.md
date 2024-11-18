@@ -2,6 +2,8 @@
 
 aduh konflik antar bookings dan penghuni. bagaimana kalo penghuni otomatis terisi jika ada transaksi.
 sepertinya lebih baik, sehingga tidak diperlukan db penghuni kos
+bagaimana caranya menghapus penghuni, jika data hanya menggunakan booking?
+durasinya tinggal dibikin minus.
 
 ## todo
 
