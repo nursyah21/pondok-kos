@@ -42,8 +42,9 @@ export default defineEventHandler(async (event) => {
         .limit(10);
 
       let num = 1;
-      _listpenghuni.forEach((e: any) => {
+      _listpenghuni.forEach((e: any) => {        
         listpenghuni.push({
+          ...e,
           num,
           name: e.id_user.name,
           kamar: e.id_kamar_kos.name,
@@ -171,21 +172,24 @@ export default defineEventHandler(async (event) => {
 
         if (idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1) {
           listKos.push({
+            id_kamar_kos: e.id_kamar_kos._id,
             kos: e.id_kamar_kos.id_kos.name,
             kamar: e.id_kamar_kos.name,
             address: e.id_kamar_kos.id_kos.address,
             imgkos: e.id_kamar_kos.image[0],
             price: e.price,
+            duration: e.duration,
+            pricekos: e.id_kamar_kos.price,
             tersisa,
           });
         }
-
+        
         listTransaksi.push({
           num: idx + 1,
           kamar: e.id_kamar_kos.name,
           kos: e.id_kamar_kos.id_kos.name,
           price: "Rp" + formatRupiahIntl(e.price),
-          tanggal_bayar: moment(e.updatetAt).format("DD-MM-YYYY"),
+          tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
         });
       });
 

@@ -178,14 +178,17 @@
 
                 <UForm :state="state" @submit="onSubmit" class="space-y-4">
                     <div class="flex justify-center">
-                        <img v-if="state.avatar" :src="state.avatar" alt="image kos"
+                        
+                        <img onerror="this.src='/images/noimage.jpeg'" v-if="state.avatar" :src="state.avatar" alt="image penghuni"
                             class="w-[200px] h-[200px] text-center">
+                        
                     </div>
                     <UFormGroup label="Penghuni" class="w-full">
                         <USelect v-model="state.id_user" :options="optionsPenghuni" option-attribute="name"
                             autocomplete="off" :disabled="mode == 'delete'" required />
                     </UFormGroup>
 
+                    <!-- {{state.id_kamar_kos}} - {{optionsKamarKos}} -->
                     <UFormGroup label="Kamar Kos" class="w-full">
                         <USelect v-model="state.id_kamar_kos" :options="optionsKamarKos" option-attribute="name"
                             autocomplete="off" :disabled="mode == 'delete'" required />

@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import argon2 from "argon2";
-import { Kos } from "./server/utils/models/kos";
-import { Users } from "./server/utils/models/users";
-import { KamarKos } from "./server/utils/models/kamar_kos";
-import { PenghuniKos } from "./server/utils/models/penghuni_kos ";
-import { PenjagaKos } from "./server/utils/models/penjaga_kos ";
-import { Booking } from "./server/utils/models/booking";
+import {
+  Kos,
+  KamarKos,
+  Users,
+  PenghuniKos,
+  PenjagaKos,
+  Booking,
+} from "./server/utils/models/index.schema";
 
 import dotenv from "dotenv";
 dotenv.config({ path: "" });
@@ -230,36 +232,51 @@ await KamarKos.insertMany(kamarKosData).catch((e) => {
   console.log(e.message);
 });
 
-const penghunikos = [];
-const kos = await KamarKos.findOne({ name: "kamar 1" });
-const penghuni = await Users.findOne({ name: "penghuni1" });
-if (kos && penghuni) {
-  penghunikos.push({
-    id_kos: kos.id_kos,
-    id_kamar_kos: kos._id,
-    id_user: penghuni._id,
-    tanggal_bayar: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14),
-  });
-  await KamarKos.findByIdAndUpdate(kos._id, {available: 2})
-}
+// const penghunikos = [];
+// const kos = await KamarKos.findOne({ name: "kamar 1" });
+// const penghuni = await Users.findOne({ name: "penghuni1" });
+// if (kos && penghuni) {
+//   penghunikos.push({
+//     id_kos: kos.id_kos,
+//     id_kamar_kos: kos._id,
+//     id_user: penghuni._id,
+//     tanggal_bayar: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14),
+//   });
+//   await KamarKos.findByIdAndUpdate(kos._id, { available: 2 });
+// }
 
-await PenghuniKos.deleteMany({});
-await PenghuniKos.insertMany(penghunikos).catch((e) => {
-  console.log(e.message);
-});
+// await PenghuniKos.deleteMany({});
+// await PenghuniKos.insertMany(penghunikos).catch((e) => {
+//   console.log(e.message);
+// });
 
-const penjagakos: any[] = [];
-const penjaga = await Users.findOne({ name: "penjaga1" }).select(["_id"]);
-const tempkos = await PenghuniKos.findOne({}).populate(["id_kos"]);
-if (penjaga && tempkos) {
-  penjagakos.push({
-    id_user: penjaga._id,
-    id_kos: tempkos.id_kos._id,
+const penghuni = await Users.findOne({ number_phone: "081234567894" });
+const pemilik = await Users.findOne({ number_phone: "081234567890" });
+const kamar = await KamarKos.findOne({ name: "kamar 1" }).populate(["id_kos"]);
+const kamar2 = await KamarKos.findOne({ name: "kamar 2" }).populate(["id_kos"]);
+
+await Booking.deleteMany({});
+const addbooking = async (kamar: any) =>
+  await Booking.create({
+    order_id: "order_id_" + Math.round(new Date().getTime() / 1000),
+    id_kamar_kos: kamar?._id,
+    id_user: penghuni?._id,
+    id_admin: pemilik?._id,
+    price: 100000,
+    method_payment: "manual",
+    duration: 30,
+    paid_status: 2,
   });
-}
-// penjaga random
-// const penjaga = await Users.find({ role: 1 }).select(['_id'])
-// const tempkos = await Kos.find({}).select(['_id'])
+await addbooking(kamar);
+await addbooking(kamar2);
+
+// const tempkos = await PenghuniKos.findOne({}).populate(["id_kos"]);
+// if (penjaga && tempkos) {
+//   penjagakos.push({
+//     id_user: penjaga._id,
+//     id_kos: tempkos.id_kos._id,
+//   });
+// }
 
 // penjaga.forEach(e => {
 //     if (!tempkos) return
@@ -269,23 +286,20 @@ if (penjaga && tempkos) {
 //         id_kos: tempkos[rand]._id
 //     })
 // })
+// const tempkos = await Kos.find({}).select(['_id'])
+// const penjaga = await Users.findOne({ number_phone: "081234567891" });
+// console.log(kamar);
+
+const penjaga = await Users.findOne({ number_phone: "081234567891" });
 
 await PenjagaKos.deleteMany({});
-await PenjagaKos.insertMany(penjagakos).catch((e) => {
-  console.log(e.message);
-});
-
-await Booking.deleteMany({});
-await Booking.create({
-  order_id: "order_id_" + Math.round((new Date()).getTime() / 1000),
-  id_kamar_kos: tempkos?.id_kamar_kos,
-  id_user: tempkos?.id_user,
-  id_admin: penjaga?._id,
-  price: 100000,
-  method_payment: "manual",
-  duration: 30,
-  paid_status: 2,
-});
+const addPenjagaKos = async (kos: any) =>
+  await PenjagaKos.create({
+    id_kos: kos?.id_kos?._id,
+    id_user: penjaga?._id,
+  });
+await addPenjagaKos(kamar);
+await addPenjagaKos(kamar2);
 
 await mongoose.disconnect();
 console.log("finish seeding users, kos, kamar_kos, penghuni, penjaga, booking");
