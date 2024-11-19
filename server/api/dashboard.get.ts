@@ -156,29 +156,22 @@ export default defineEventHandler(async (event) => {
     }
     // penghuni
     if (role == 0) {
-      const penghuni = await PenghuniKos.find({ id_user: { _id } })
-        .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
-        .limit(10);
 
       const listKos: any[] = [];
       const listTransaksi: any[] = [];
-      const idpenghunikamarkos: any[] = [];
-      penghuni.forEach((e: any) => {
-        idpenghunikamarkos.push(e.id_kamar_kos._id.toString());
-      });
 
       const booking = await Booking.find({
         id_user: _id,
         paid_status: 2,
       }).populate([{ path: "id_kamar_kos", populate: ["id_kos"] }]);
-      booking.forEach((e: any, idx) => {
+      booking.forEach((e: any, idx) => {        
         const durationDays =
           new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
         const tersisa = Math.ceil(
           (durationDays - new Date().getTime()) / (24000 * 3600)
         );
 
-        if (idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1) {
+        if (tersisa >= 0) {
           listKos.push({
             id_kamar_kos: e.id_kamar_kos._id,
             kos: e.id_kamar_kos.id_kos.name,

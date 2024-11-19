@@ -92,7 +92,7 @@
 							transaksi</ULink> jika anda memesan kamar ini
 					</div> -->
 
-					{{state}}
+					
 					<div class="mt-4 flex justify-between">
 						<UButton class="w-full text-center items-center justify-center" :loading="loading"
 							type="submit">Lanjutkan</UButton>

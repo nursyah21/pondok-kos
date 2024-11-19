@@ -9,7 +9,7 @@
             <div class="flex items-center w-full">
                 <!-- <UButton variant='link' color='gray' @click="add" icon="i-material-symbols-add-box" /> -->
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
-                    placeholder="Cari nama kos" class="w-full" v-model="q"
+                    placeholder="Cari nama user" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
                         <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
@@ -43,7 +43,7 @@
                     <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
                 </UDropdown> -->
 
-                <UDropdown :items="[
+                <UDropdown class="":items="[
                     [{
                         label: 'urutkan',
                         class: 'font-bold'

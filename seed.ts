@@ -4,7 +4,6 @@ import {
   Kos,
   KamarKos,
   Users,
-  PenghuniKos,
   PenjagaKos,
   Booking,
 } from "./server/utils/models/index.schema";
@@ -232,24 +231,6 @@ await KamarKos.insertMany(kamarKosData).catch((e) => {
   console.log(e.message);
 });
 
-// const penghunikos = [];
-// const kos = await KamarKos.findOne({ name: "kamar 1" });
-// const penghuni = await Users.findOne({ name: "penghuni1" });
-// if (kos && penghuni) {
-//   penghunikos.push({
-//     id_kos: kos.id_kos,
-//     id_kamar_kos: kos._id,
-//     id_user: penghuni._id,
-//     tanggal_bayar: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14),
-//   });
-//   await KamarKos.findByIdAndUpdate(kos._id, { available: 2 });
-// }
-
-// await PenghuniKos.deleteMany({});
-// await PenghuniKos.insertMany(penghunikos).catch((e) => {
-//   console.log(e.message);
-// });
-
 const penghuni = await Users.findOne({ number_phone: "081234567894" });
 const pemilik = await Users.findOne({ number_phone: "081234567890" });
 const kamar = await KamarKos.findOne({ name: "kamar 1" }).populate(["id_kos"]);
@@ -269,26 +250,6 @@ const addbooking = async (kamar: any) =>
   });
 await addbooking(kamar);
 await addbooking(kamar2);
-
-// const tempkos = await PenghuniKos.findOne({}).populate(["id_kos"]);
-// if (penjaga && tempkos) {
-//   penjagakos.push({
-//     id_user: penjaga._id,
-//     id_kos: tempkos.id_kos._id,
-//   });
-// }
-
-// penjaga.forEach(e => {
-//     if (!tempkos) return
-//     const rand = (Math.floor(Math.random() * tempkos.length))
-//     penjagakos.push({
-//         id_user: e._id,
-//         id_kos: tempkos[rand]._id
-//     })
-// })
-// const tempkos = await Kos.find({}).select(['_id'])
-// const penjaga = await Users.findOne({ number_phone: "081234567891" });
-// console.log(kamar);
 
 const penjaga = await Users.findOne({ number_phone: "081234567891" });
 

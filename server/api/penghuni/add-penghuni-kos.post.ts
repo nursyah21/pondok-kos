@@ -14,20 +14,18 @@ export default defineEventHandler(async (event) => {
         const { role } = user
         if (role == 0) throw new Error('user not authorization, you must be admin');
 
-
-
         // create new transaksi manual
         const order_id = "order_id_" + Math.round((new Date()).getTime() / 1000)
-
         const price_kos = await KamarKos.findById(id_kamar_kos)
+        
 
         await Booking.create({
             order_id, id_kamar_kos, price: price_kos?.price,
             id_user, id_admin: refreshTokens.id_user, method_payment: 'manual', paid_status: 2
         });
 
-        await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 });
-        await PenghuniKos.create({ id_user, id_kamar_kos, tanggal_bayar, id_kos })
+        // await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 });
+        // await PenghuniKos.create({ id_user, id_kamar_kos, tanggal_bayar, id_kos })
         // await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 })
         // await checkBooking()
         // await PenghuniKos.create({id_user, id_kamar_kos, id_kos, tanggal_bayar})
