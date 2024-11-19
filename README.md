@@ -4,6 +4,7 @@ aduh konflik antar bookings dan penghuni. bagaimana kalo penghuni otomatis teris
 sepertinya lebih baik, sehingga tidak diperlukan db penghuni kos
 bagaimana caranya menghapus penghuni, jika data hanya menggunakan booking?
 durasinya tinggal dibikin minus.
+mencari data penghuni dengan durasi min 0.
 
 ## todo
 
@@ -15,10 +16,9 @@ durasinya tinggal dibikin minus.
 # fitur
 - bug penjaga []
 - bug penghuni []
-- bug dashboard []
+- bug riwayat transaki (penjaga) []
 - notif verifikasi []
 - notif transaksi sukses manual / midtrans []
-- notif durasi selesai [x]
 - perpanjang sewa []
 (bisa memperpanjang selama 1hari masa sewa, jika sudah 1 hari lewat maka otomatis terhapus, penjaga atau pemilik bisa memperpanjang manual)
 

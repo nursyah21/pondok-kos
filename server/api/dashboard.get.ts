@@ -26,42 +26,35 @@ export default defineEventHandler(async (event) => {
       const totalKamarKos = (
         await KamarKos.find({}).countDocuments()
       ).toString();
+      const listpenghuni: any[] = [];
 
       const transaksi = await Booking.find({
         updatedAt: {
           $gte: new Date().getFullYear(),
         },
-      });
-
-      // const temp = await PenghuniKos.find({})
-      //   .populate(["id_kamar_kos"])
-      //   .select("id_kamar_kos")
-      //   .limit(10);
-      // let pendapatan = 0;
-      // temp.forEach((e: any) => {
-      //   pendapatan += e?.id_kamar_kos?.price ?? 0;
-      // });
-
-      // const listpenghuni: any[] = [];
-      // const _listpenghuni = await PenghuniKos.find({})
-      //   .populate([{ path: "id_kamar_kos", populate: ["id_kos"] }, "id_user"])
-      //   .limit(10);
-
-      // let num = 1;
-      // _listpenghuni.forEach((e: any) => {
-      //   listpenghuni.push({
-      //     ...e,
-      //     num,
-      //     name: e.id_user.name,
-      //     kamar: e.id_kamar_kos.name,
-      //     kos: e.id_kamar_kos.id_kos.name,
-      //     tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
-      //   });
-      //   num++;
-      // });
+      }).populate(["id_user", { path: "id_kamar_kos", populate: "id_kos" }]);
 
       const transaksiData = new Array(12).fill(0);
+      let num = 1;
       transaksi.forEach((e: any) => {
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
+        if (tersisa >= 0) {
+          console.log(tersisa, e);
+          totalPenghuni += 1;
+          listpenghuni.push({
+            num,
+            name: e.id_user.name,
+            kamar: e.id_kamar_kos.name,
+            kos: e.id_kamar_kos.id_kos.name,
+            tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
+          });
+          num++;
+        }
+
         const month = new Date(e.updatedAt).getMonth();
         transaksiData[month] += e.price;
         if (month === new Date().getMonth()) {
@@ -107,7 +100,7 @@ export default defineEventHandler(async (event) => {
             },
           ],
         },
-        // listPenghuni: listpenghuni,
+        listPenghuni: listpenghuni,
       };
     }
     // penjaga
@@ -126,22 +119,34 @@ export default defineEventHandler(async (event) => {
           imgkos: e.id_kos.image,
         });
       });
-      const penghuni = await PenghuniKos.find({})
-        .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
-        .limit(10);
+
+      const transaksi = await Booking.find({
+        updatedAt: {
+          $gte: new Date().getFullYear(),
+        },
+      }).populate(["id_user", { path: "id_kamar_kos", populate: "id_kos" }]);
+
       let num = 1;
-      penghuni.forEach((e: any) => {
-        if (idkos.indexOf(e.id_kos._id.toString()) === -1) {
-          return;
+      transaksi.forEach((e: any) => {
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
+
+        if (
+          tersisa >= 0 &&
+          idkos.indexOf(e.id_kamar_kos.id_kos._id.toString()) !== -1
+        ) {
+          _listpenghuni.push({
+            num,
+            name: e.id_user.name,
+            kamar: e.id_kamar_kos.name,
+            kos: e.id_kamar_kos.id_kos.name,
+            tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
+          });
+          num++;
         }
-        _listpenghuni.push({
-          num,
-          name: e.id_user.name,
-          kamar: e.id_kamar_kos.name,
-          kos: e.id_kamar_kos.id_kos.name,
-          tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
-        });
-        num++;
       });
 
       data = {
