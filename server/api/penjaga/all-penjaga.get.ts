@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
 
     const data = penjaga.map((e: any, idx) => {
       return {
+        _id: e._id,
         num: Number(skip) + idx + 1,
         name: e.id_user.name,
         number_phone: e.id_user.number_phone,
@@ -37,6 +38,9 @@ export default defineEventHandler(async (event) => {
     return { status: "success", total: length, data: data };
   } catch (error: any) {
     event.node.res.statusCode = 400;
+    if (error.data) {
+      error = error.data;
+    }
     return { status: "fail", message: error.message };
   }
 });

@@ -77,6 +77,7 @@ export default defineEventHandler(async (event) => {
         _id: e._id,
         num: idx + 1,
         user_name: e.id_user.name,
+        avatar: e.id_user.avatar,
         user_phone: e.id_user.number_phone,
         name_kos: e.id_kamar_kos.id_kos.name,
         name_kamar: e.id_kamar_kos.name,

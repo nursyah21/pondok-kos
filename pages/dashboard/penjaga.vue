@@ -241,7 +241,7 @@ const { data: raw, status, refresh } = await useFetch('/api/penjaga/all-penjaga'
 const { data: allKos } = await $fetch('/api/kos/get', {
     method: 'get'
 })
-console.log("=>", allKos)
+
 const optionsKos = allKos.map((e: any) => ({ value: e._id, name: `${e.name} - ${e.address}` }))
 
 // @ts-ignore
@@ -250,7 +250,20 @@ const { data: allPenjaga } = await $fetch('/api/penjaga/all-penjaga', {
         Authorization: `Bearer ${token}`
     }, method: 'get'
 })
-const optionsPenjaga = allPenjaga.map((e: any) => ({ value: e._id, name: `${e.name} - ${e.number_phone}` }))
+
+const optionsPenjaga: any[] = []
+const _idpenjaga: any[] = []
+allPenjaga.forEach((e: any) => {
+    // console.log(_idpenjaga, )
+    console.log(_idpenjaga.findIndex(f=>f===e._id))
+    // if (_idpenjaga.findIndex(f=>f===e._id) !== -1) {
+        optionsPenjaga.push(
+            { value: e._id, name: `${e.name} - ${e.number_phone}` }
+        )
+    // }
+    _idpenjaga.push(e._id)
+})
+
 
 const state = reactive({
     id_penjaga: optionsPenjaga[0].value,
@@ -282,6 +295,7 @@ const del = (e: any) => {
 }
 
 const onSubmit = (e: any) => {
+    return console.log('e=>', e.data)
     if (mode.value == 'add') {
         return submitAdd(e)
     }

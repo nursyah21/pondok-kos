@@ -128,7 +128,12 @@
         </div>
 
         <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
-            
+            <template #user_name-data="i">
+                <div class="items-center flex gap-x-3">
+                    <UAvatar :src="i.row.avatar" />
+                    {{ i.row.user_name }}
+                </div>
+            </template>
             <template #link_payment-data="i">
                 <a :href="i.row.link_payment" v-if="i.row.method_payment === 'midtrans'" class="hover:opacity-80">
                     <UBadge color="blue">
@@ -373,10 +378,6 @@ const columns_penghuni = [{
     key: 'tgl',
     label: 'masuk'
 },
-// {
-//     key: 'duration',
-//     label: 'durasi sewa'
-// },
 {
     key: 'name_kos',
     label: 'kos',
@@ -393,10 +394,6 @@ const columns_penghuni = [{
     key: 'method_payment',
     label: 'metode',
 },
-// {
-//     key: 'link_payment',
-//     label: 'link pembayaran',
-// },
 {
     key: 'paid_status',
     label: 'status',
@@ -415,13 +412,9 @@ const columns_penjaga = [{
     key: 'tgl',
     label: 'masuk'
 },
-// {
-//     key: 'duration',
-//     label: 'durasi sewa'
-// },
 {
     key: 'user_name',
-    label: 'penghuni'
+    label: 'nama'
 },
 {
     key: 'name_kos',
@@ -459,7 +452,7 @@ const columns_pemilik = [{
 },
 {
     key: 'user_name',
-    label: 'penghuni'
+    label: 'nama'
 },
 {
     key: 'name_kos',

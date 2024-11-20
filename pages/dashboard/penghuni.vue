@@ -298,11 +298,6 @@ const resetState = () => {
     if (optionsKamarKos[0]) {
         state.id_kamar_kos = optionsKamarKos[0].value
     }
-    console.group("asd")
-    console.log(state)
-    console.log(optionsKamarKos)
-    console.log(optionsPenghuni)
-    console.groupEnd()
     state.price = optionsKamarKos[0].price
     state.price_harian = optionsKamarKos[0].price_harian
     if (!state.price_harian) {

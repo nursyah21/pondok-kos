@@ -20,12 +20,12 @@ durasinya tinggal dibikin minus.
 
 # fitur
 - bug penjaga []
-- bug penghuni []
 - bug riwayat transaki (penjaga) []
 - notif verifikasi []
 - notif transaksi sukses manual / midtrans []
 - perpanjang sewa []
 (bisa memperpanjang selama 1hari masa sewa, jika sudah 1 hari lewat maka otomatis terhapus, penjaga atau pemilik bisa memperpanjang manual)
+- bug search, filter,sort, size []
 
 
 # prosedur

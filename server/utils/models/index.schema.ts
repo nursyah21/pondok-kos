@@ -218,7 +218,7 @@ export const Users = mongoose.model(
       },
       avatar: {
         type: String,
-        maxLength: 255,
+        // maxLength: 512, // so people can include base64 image
       },
       id_card: {
         type: String,

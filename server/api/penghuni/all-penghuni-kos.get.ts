@@ -26,13 +26,12 @@ export default defineEventHandler(async (event) => {
     }).populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }]);
 
     booking.forEach((e: any, idx) => {
-      
       const durationDays =
         new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
       const tersisa = Math.ceil(
         (durationDays - new Date().getTime()) / (24000 * 3600)
       );
-      
+
       if (tersisa >= 0) {
         length++;
         listpenghuni.push({
@@ -57,6 +56,9 @@ export default defineEventHandler(async (event) => {
     return { status: "success", total: length, data: listpenghuni };
   } catch (error: any) {
     event.node.res.statusCode = 400;
+    if (error.data) {
+      error = error.data;
+    }
     return { status: "fail", message: error.message };
   }
 });
