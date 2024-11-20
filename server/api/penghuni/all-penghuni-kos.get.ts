@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
       const tersisa = Math.ceil(
         (durationDays - new Date().getTime()) / (24000 * 3600)
       );
-      console.log(tersisa, e.duration)
+      
       if (tersisa >= 0) {
         length++;
         listpenghuni.push({

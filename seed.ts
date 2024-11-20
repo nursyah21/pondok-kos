@@ -6,6 +6,7 @@ import {
   Users,
   PenjagaKos,
   Booking,
+  RefreshTokens,
 } from "./server/utils/models/index.schema";
 
 import dotenv from "dotenv";
@@ -167,6 +168,7 @@ const userData = [
   },
 ].map((items) => ({ ...items, avatar: random(linkImageProfile) }));
 
+await RefreshTokens.deleteMany({});
 await Users.deleteMany({});
 await Users.insertMany(userData).catch((e) => {
   console.log(e.message);

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     console.log(e);
     // whats wrong with id kamar kos
     await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 0 });
-    await Booking.findOneAndUpdate({ id_user }, { duration: -1 });
+    await Booking.findOneAndUpdate({ id_user, id_kamar_kos }, { duration: -1 });
 
     return { status: "success", message: "sukses menghapus penghuni" };
   } catch (error: any) {

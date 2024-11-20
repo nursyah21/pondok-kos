@@ -158,14 +158,6 @@
                         <UInput v-model="state.tanggal_bayar" type="date" required :disabled="mode == 'delete'" />
                     </UFormGroup>
 
-                    <!-- <UFormGroup label="Tanggal Keluar" name="birth_date" class="w-full" v-if="mode == 'add'">
-                        <UInput  type="date" :value="getNextDate(state.duration, state.tanggal_bayar)" disabled />
-                    </UFormGroup> -->
-
-                    <!-- <UFormGroup label="Durasi Sewa (Hari)" name="birth_date" class="w-full" v-if="mode == 'add'">
-                        <UInput  type="number" v-model="state.duration" required :disabled="!state.price_harian"/>
-                    </UFormGroup> -->
-
                     <UFormGroup label="Durasi" name="duration" class="w-full" v-if="mode == 'add'">
                         <div class="flex items-center gap-x-2 ">
                             <UInput class="flex-1" type="number" max="10000000" min="1" v-model="state.duration"
@@ -257,7 +249,7 @@ const { data: allPenghuni } = await $fetch('/api/penghuni/all-penghuni-kos', {
     query: { 'onlyName': 1 },
     method: 'get'
 })
-const optionsPenghuni = allPenghuni.map((e: any) => ({ value: e.id_user, name: `${e.name} - ${e.number_phone}`}))
+const optionsPenghuni = allPenghuni.map((e: any) => ({ value: e.id_user, name: `${e.name} - ${e.number_phone}` }))
 
 // @ts-ignore
 const { data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos } = await useFetch('/api/kamar-kos/get', {
@@ -311,7 +303,6 @@ const resetState = () => {
     console.log(optionsKamarKos)
     console.log(optionsPenghuni)
     console.groupEnd()
-    // console.log('a=>', state, optionsKamarKos, optionsPenghuni)
     state.price = optionsKamarKos[0].price
     state.price_harian = optionsKamarKos[0].price_harian
     if (!state.price_harian) {
@@ -324,11 +315,12 @@ const resetState = () => {
 
 const helperState = (e: any) => {
     const { id_kamar_kos, id, id_user, id_kos, tanggal_bayar, avatar } = e
-    console.log("=>", e)
     if (tanggal_bayar) {
         state.tanggal_bayar = tanggal_bayar.split('-').reverse().join('-')
     }
-    const _kamarkos = optionsKamarKos.find((e: any) => e.value == `${id_kos}_${id_kamar_kos}`)
+
+    
+    const _kamarkos = optionsKamarKos.find((e: any) => e.value == id_kamar_kos)    
     const _id_user = optionsPenghuni.find((e: any) => e.value == id_user)
     if (avatar) {
         state.avatar = avatar
@@ -354,8 +346,8 @@ const del = (e: any) => {
     mode.value = 'delete'
 }
 
-const onSubmit = (e: any) => {    
-    const {id_user, id_kamar_kos} = e.data    
+const onSubmit = (e: any) => {
+    const { id_user, id_kamar_kos } = e.data
     if (mode.value == 'add') {
         return submitAdd({ ...e.data, id_user, id_kamar_kos })
     }
