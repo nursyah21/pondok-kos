@@ -24,12 +24,6 @@ export default defineEventHandler(async (event) => {
             id_user, id_admin: refreshTokens.id_user, method_payment: 'manual', paid_status: 2
         });
 
-        // await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 });
-        // await PenghuniKos.create({ id_user, id_kamar_kos, tanggal_bayar, id_kos })
-        // await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 })
-        // await checkBooking()
-        // await PenghuniKos.create({id_user, id_kamar_kos, id_kos, tanggal_bayar})
-
         return { status: 'success', message: 'sukses menambahkan penghuni' }
 
 

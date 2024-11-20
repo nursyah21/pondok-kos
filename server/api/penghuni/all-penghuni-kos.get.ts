@@ -23,24 +23,29 @@ export default defineEventHandler(async (event) => {
 
     const booking = await Booking.find({
       paid_status: 2,
-    }).populate([{ path: "id_kamar_kos", populate: ["id_kos"] }]);
+    }).populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }]);
 
     booking.forEach((e: any, idx) => {
+      
       const durationDays =
         new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
       const tersisa = Math.ceil(
         (durationDays - new Date().getTime()) / (24000 * 3600)
       );
-
+      console.log(tersisa, e.duration)
       if (tersisa >= 0) {
         length++;
         listpenghuni.push({
           num: length,
           name: e.id_user.name,
+          number_phone: e.id_user.number_phone,
+          avatar: e.id_user.avatar,
           kamar: e.id_kamar_kos.name,
+          id_kamar_kos: e.id_kamar_kos._id,
+          id_user: e.id_user._id,
           kos: e.id_kamar_kos.id_kos.name,
-          tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
-          price: e.price
+          tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
+          price: e.price,
         });
       }
     });

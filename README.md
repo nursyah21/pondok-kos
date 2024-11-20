@@ -1,10 +1,15 @@
 # pondok kos nursyah
 
-aduh konflik antar bookings dan penghuni. bagaimana kalo penghuni otomatis terisi jika ada transaksi.
+1. aduh konflik antar bookings dan penghuni. bagaimana kalo penghuni otomatis terisi jika ada transaksi.
 sepertinya lebih baik, sehingga tidak diperlukan db penghuni kos
-bagaimana caranya menghapus penghuni, jika data hanya menggunakan booking?
+2. bagaimana caranya menghapus penghuni, jika data hanya menggunakan booking?
 durasinya tinggal dibikin minus.
-mencari data penghuni dengan durasi min 0.
+3. mencari data penghuni dengan durasi min 0.
+4. ketika menambahkan penghuni ubah belum terverifikasi menjad terverifikasi
+
+
+
+
 
 ## todo
 

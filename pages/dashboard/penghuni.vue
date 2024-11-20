@@ -6,8 +6,8 @@
         <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
 
             <div class="flex items-center w-full">
-                <UButton :class="optionsKamarKos.length ? '' : 'hidden'" variant='link' color='gray'
-                    @click="add" icon="i-material-symbols-add-box" />
+                <UButton :class="optionsKamarKos.length ? '' : 'hidden'" variant='link' color='gray' @click="add"
+                    icon="i-material-symbols-add-box" />
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
                     placeholder="Cari nama penghuni" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
@@ -18,30 +18,6 @@
                 </UInput>
             </div>
             <div class="flex mt-2 sm:mt-0">
-                <!-- <UDropdown :items="[
-        [{
-            label: 'filter status',
-            class: 'font-bold'
-        }],
-        [{
-            label: 'semua',
-            class: filter == 'all' ? 'underline' : '',
-            click: () => { filter = 'all' }
-        },
-        {
-            label: 'non aktif',
-            class: filter == 'non aktif' ? 'underline' : '',
-            click: () => { filter = 'non aktif' }
-        },
-        {
-            label: 'aktif',
-            class: filter == 'aktif' ? 'underline' : '',
-            click: () => { filter = 'aktif' }
-        },
-        ]
-    ]" :popper="{ placement: 'bottom-start' }">
-        <UButton variant="link" icon="i-material-symbols-filter-alt" color="gray" />
-    </UDropdown> -->
 
                 <UDropdown :items="[
                     [{
@@ -115,20 +91,6 @@
                 </div>
             </template>
 
-            <template #kamar-data="i">
-                <!-- this data will long so -->
-                <!-- {{ getKamarKos(i.row.id_kos, i.row.id_kamar_kos)}} -->
-            </template>
-
-            <template #tanggal_bayar-data="i">
-                <div v-if="i.row.tanggal_bayar">
-                    {{ moment(i.row.tgl).format('DD-MM-YYYY') }}
-                </div>
-                <UBadge color="yellow" v-else>
-                    kosong
-                </UBadge>
-            </template>
-
             <template #price-data="i">
                 {{ formatRupiahIntl(i.row.price) }}
             </template>
@@ -178,17 +140,15 @@
 
                 <UForm :state="state" @submit="onSubmit" class="space-y-4">
                     <div class="flex justify-center">
-                        
-                        <img onerror="this.src='/images/noimage.jpeg'" v-if="state.avatar" :src="state.avatar" alt="image penghuni"
-                            class="w-[200px] h-[200px] text-center">
-                        
+                        <img onerror="this.src='/images/noimage.jpeg'" v-if="state.avatar" :src="state.avatar"
+                            alt="image penghuni" class="w-[200px] h-[200px] text-center">
                     </div>
+
                     <UFormGroup label="Penghuni" class="w-full">
                         <USelect v-model="state.id_user" :options="optionsPenghuni" option-attribute="name"
                             autocomplete="off" :disabled="mode == 'delete'" required />
                     </UFormGroup>
 
-                    <!-- {{state.id_kamar_kos}} - {{optionsKamarKos}} -->
                     <UFormGroup label="Kamar Kos" class="w-full">
                         <USelect v-model="state.id_kamar_kos" :options="optionsKamarKos" option-attribute="name"
                             autocomplete="off" :disabled="mode == 'delete'" required />
@@ -206,7 +166,6 @@
                         <UInput  type="number" v-model="state.duration" required :disabled="!state.price_harian"/>
                     </UFormGroup> -->
 
-                    <!-- 1 bulan / 1 hari -->
                     <UFormGroup label="Durasi" name="duration" class="w-full" v-if="mode == 'add'">
                         <div class="flex items-center gap-x-2 ">
                             <UInput class="flex-1" type="number" max="10000000" min="1" v-model="state.duration"
@@ -247,7 +206,6 @@
 definePageMeta({
     layout: 'dashboard'
 })
-import moment from 'moment'
 const router = useRoute()
 const page = ref(1)
 const pageCount = ref(5)
@@ -263,6 +221,10 @@ const columns = [{
 {
     key: 'name',
     label: 'nama',
+},
+{
+    key: 'number_phone',
+    label: 'nomor whatsapp',
 },
 {
     key: 'kos',
@@ -288,14 +250,14 @@ const columns = [{
 ]
 
 // @ts-ignore
-const { data: allPenghuni } = await $fetch('/api/all-user', {
+const { data: allPenghuni } = await $fetch('/api/penghuni/all-penghuni-kos', {
     headers: {
         Authorization: `Bearer ${token}`,
     },
     query: { 'onlyName': 1 },
     method: 'get'
 })
-const optionsPenghuni = allPenghuni.map((e: any) => ({ value: e._id, name: `${e.name} - ${e.number_phone}` }))
+const optionsPenghuni = allPenghuni.map((e: any) => ({ value: e.id_user, name: `${e.name} - ${e.number_phone}`}))
 
 // @ts-ignore
 const { data: allKamarKos, status: statusKamarKos, refresh: refreshKamarKos } = await useFetch('/api/kamar-kos/get', {
@@ -321,8 +283,8 @@ const { data: raw, status, refresh } = await useFetch('/api/penghuni/all-penghun
 const image = ref('')
 
 const state = reactive({
-    id_user: optionsPenghuni[0]?.value,
-    id_kamar_kos: optionsKamarKos[0]?.value,
+    id_user: '',
+    id_kamar_kos: '',
     id_kos: '',
     tanggal_bayar: '',
     id: '',
@@ -344,6 +306,12 @@ const resetState = () => {
     if (optionsKamarKos[0]) {
         state.id_kamar_kos = optionsKamarKos[0].value
     }
+    console.group("asd")
+    console.log(state)
+    console.log(optionsKamarKos)
+    console.log(optionsPenghuni)
+    console.groupEnd()
+    // console.log('a=>', state, optionsKamarKos, optionsPenghuni)
     state.price = optionsKamarKos[0].price
     state.price_harian = optionsKamarKos[0].price_harian
     if (!state.price_harian) {
@@ -353,18 +321,12 @@ const resetState = () => {
     image.value = ''
 }
 
-// fungsi khusus untuk mendapatkan data kamar kos
-const getKamarKos = (id_kos: string, id_kamar_kos: string) => {
-    const exist = optionsKamarKos.find((e: any) => e.value == `${id_kos}_${id_kamar_kos}`)
-    if (!exist) return '';    
-    return exist.value
-}
-
 
 const helperState = (e: any) => {
     const { id_kamar_kos, id, id_user, id_kos, tanggal_bayar, avatar } = e
+    console.log("=>", e)
     if (tanggal_bayar) {
-        state.tanggal_bayar = tanggal_bayar.split('T')[0]
+        state.tanggal_bayar = tanggal_bayar.split('-').reverse().join('-')
     }
     const _kamarkos = optionsKamarKos.find((e: any) => e.value == `${id_kos}_${id_kamar_kos}`)
     const _id_user = optionsPenghuni.find((e: any) => e.value == id_user)
@@ -372,10 +334,10 @@ const helperState = (e: any) => {
         state.avatar = avatar
     }
     if (_id_user) {
-        state.id_user = _id_user.value
+        state.id_user = id_user
     }
     if (_kamarkos) {
-        state.id_kamar_kos = _kamarkos.value
+        state.id_kamar_kos = e.id_kamar_kos
     }
     state.id = id
 }
@@ -392,16 +354,13 @@ const del = (e: any) => {
     mode.value = 'delete'
 }
 
-const onSubmit = (e: any) => {
-    const data = e.data.id_kamar_kos.split('_')
-    const id_kos = data[0]
-    const id_kamar_kos = data[1]
-
+const onSubmit = (e: any) => {    
+    const {id_user, id_kamar_kos} = e.data    
     if (mode.value == 'add') {
-        return submitAdd({ ...e.data, id_kamar_kos, id_kos })
+        return submitAdd({ ...e.data, id_user, id_kamar_kos })
     }
     if (mode.value == 'delete') {
-        return submitDelete({ ...e.data, id_kamar_kos, id_kos })
+        return submitDelete({ ...e.data, id_user, id_kamar_kos })
     }
 }
 
@@ -443,8 +402,9 @@ watch(() => statusKamarKos, (e) => {
     if (e.value == 'success') {
         // @ts-ignore
         const { data } = allKamarKos.value
+        console.log(e)
         optionsKamarKos = data.map((e: any) => ({
-            value: e.id_kos_id_kamar_kos, name: `${e.kamar} - ${e.kos}`,
+            value: e.id, name: `${e.kamar} - ${e.kos}`,
             ...e
         }))
 

@@ -43,7 +43,6 @@ export default defineEventHandler(async (event) => {
           (durationDays - new Date().getTime()) / (24000 * 3600)
         );
         if (tersisa >= 0) {
-          console.log(tersisa, e);
           totalPenghuni += 1;
           listpenghuni.push({
             num,
