@@ -251,17 +251,11 @@ const { data: allPenjaga } = await $fetch('/api/penjaga/all-penjaga', {
     }, method: 'get'
 })
 
-const optionsPenjaga: any[] = []
-const _idpenjaga: any[] = []
-allPenjaga.forEach((e: any) => {
-    // console.log(_idpenjaga, )
-    console.log(_idpenjaga.findIndex(f=>f===e._id))
-    // if (_idpenjaga.findIndex(f=>f===e._id) !== -1) {
-        optionsPenjaga.push(
-            { value: e._id, name: `${e.name} - ${e.number_phone}` }
-        )
-    // }
-    _idpenjaga.push(e._id)
+// @ts-ignore
+const { optionsPenjaga } = await $fetch('/api/penjaga/options-penjaga', {
+    headers: {
+        Authorization: `Bearer ${token}`
+    }, method: 'get'
 })
 
 
@@ -295,7 +289,6 @@ const del = (e: any) => {
 }
 
 const onSubmit = (e: any) => {
-    return console.log('e=>', e.data)
     if (mode.value == 'add') {
         return submitAdd(e)
     }
