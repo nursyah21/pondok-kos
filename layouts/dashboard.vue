@@ -129,11 +129,11 @@ const penjaga = [{
     icon: 'i-material-symbols-dashboard',
     link: '/dashboard'
 },
-{
-    label: 'Riwayat Transaksi',
-    icon: 'i-material-symbols-lab-profile',
-    link: '/dashboard/riwayat-transaksi'
-},
+// {
+//     label: 'Riwayat Transaksi',
+//     icon: 'i-material-symbols-lab-profile',
+//     link: '/dashboard/riwayat-transaksi'
+// },
 {
     label: 'Penghuni',
     icon: 'i-material-symbols-supervisor-account-rounded',

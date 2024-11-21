@@ -24,6 +24,11 @@ export default defineEventHandler(async (event) => {
     let sort = getRequestURL(event).searchParams.get("sort");
     let size = getRequestURL(event).searchParams.get("sort");
 
+    // cari berdasarkan penjaga
+    if (role == 1) {
+      return { status: "success", total: 0, data:[] };
+    }
+
     // cari berdasarkan role
     let query =
       role == 0
@@ -50,12 +55,6 @@ export default defineEventHandler(async (event) => {
         name: e.name,
         number_phone: e.number_phone,
       };
-    });
-    const userName = await Users.find({
-      name: {
-        $regex: /peng/,
-        $options: "i",
-      },
     });
 
     query = q
