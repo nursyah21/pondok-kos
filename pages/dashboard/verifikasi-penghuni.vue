@@ -154,7 +154,16 @@
 
 
         <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :ui="{
+                wrapper: 'flex items-center gap-2',
+                rounded: '!rounded-full min-w-[32px] justify-center',
+                default: {
+                    activeButton: {
+                        variant: 'outline'
+                    }
+                }
+            }" />
+            <!-- <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :to="(page) => ({
                 query: { page }
             })" :ui="{
                 wrapper: 'flex items-center gap-2',
@@ -164,7 +173,7 @@
                         variant: 'outline'
                     }
                 }
-            }" />
+            }" /> -->
         </div>
 
         <UModal v-model="isOpen">
@@ -290,12 +299,17 @@ const { data: raw, status, refresh } = await useFetch('/api/penghuni/all-penghun
     query, method: 'get'
 })
 
-watch(() => router.query,
-    (e) => {
-        // @ts-ignore
-        skip.value = (e['page'] - 1) * pageCount
-        refresh()
-    }, { deep: true })
+// watch(() => router.query,
+//     (e) => {
+//         // @ts-ignore
+//         skip.value = (e['page'] - 1) * pageCount
+//         refresh()
+//     }, { deep: true })
+
+watch(page, (e,_)=>{
+    skip.value = (e - 1) * pageCount.value    
+    refresh()
+})
 
 
 watch(() => status, (e) => {

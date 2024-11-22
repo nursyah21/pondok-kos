@@ -261,7 +261,7 @@ const addPenjagaKos = async (kos: any) =>
     id_user: penjaga?._id,
   });
 await addPenjagaKos(kamar);
-await addPenjagaKos(kamar2);
+// await addPenjagaKos(kamar2);
 
 await mongoose.disconnect();
 console.log("finish seeding users, kos, kamar_kos, penghuni, penjaga, booking");

@@ -7,7 +7,7 @@
     <main v-if="verified" class="my-4">
 
         <!-- search -->
-        <div class="flex sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
+        <div class="hidden sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
 
             <div class="flex items-center w-full">
                 <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"

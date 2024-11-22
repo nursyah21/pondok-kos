@@ -1,16 +1,5 @@
 # pondok kos nursyah
 
-1. aduh konflik antar bookings dan penghuni. bagaimana kalo penghuni otomatis terisi jika ada transaksi.
-sepertinya lebih baik, sehingga tidak diperlukan db penghuni kos
-2. bagaimana caranya menghapus penghuni, jika data hanya menggunakan booking?
-durasinya tinggal dibikin minus.
-3. mencari data penghuni dengan durasi min 0.
-4. ketika menambahkan penghuni ubah belum terverifikasi menjad terverifikasi
-
-
-
-
-
 ## todo
 
 - list semua yg perlu diperbaiki [x]
@@ -18,15 +7,9 @@ durasinya tinggal dibikin minus.
 - ngefix bug kalo ada dan melengkapi semuanya [x]
 - test dan deploy [x]
 
-# fitur
+# fitur tambahan ntar aja
 - notif verifikasi []
 - notif transaksi sukses manual / midtrans []
-(bisa memperpanjang selama 1hari masa sewa, jika sudah 1 hari lewat maka otomatis terhapus, penjaga atau pemilik bisa memperpanjang manual)
-- bug search, filter,sort, size []
-- bug dashboard []
-
-# prosedur
-- ubah semua datanya menggunakan data booking
 
 
 [link docs](https://docs.google.com/document/d/1Yp7zNghWauwjlCDM7tx0bJm8d4GfbyrLj-6ED3UIbL8/edit?usp=sharing)

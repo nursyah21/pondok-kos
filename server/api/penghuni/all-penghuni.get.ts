@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
     if (role == 0) throw new Error("user not authorization, you must be admin");
     const skip = getRequestURL(event).searchParams.get("skip");
     const limit = getRequestURL(event).searchParams.get("limit");
+    const q = getRequestURL(event).searchParams.get("q");
     const sort = getRequestURL(event).searchParams.get("sort") ?? "asc";
     const length = await Users.find({ role: 0 }).countDocuments();
     let data = await Users.find({ role: 0 })
@@ -29,22 +30,28 @@ export default defineEventHandler(async (event) => {
       ])
       .sort({ createdAt: sort == "asc" ? -1 : 1 })
       .skip(Number(skip))
-      .limit(Number(limit));
+      .limit(Number(limit));    
 
     // @ts-ignore
-    data = data.map((e, idx) => {
-      return {
-        num: Number(skip) + idx + 1,
-        id: e._id,
-        name: e.name,
-        number_phone: e.number_phone,
-        avatar: e.avatar,
-        id_card: e.id_card,
-        address: e.address,
-        birthdate: e.birthdate,
-        verified: e.verified,
-      };
-    });
+    data = data
+      .filter((e) => {
+        const regex = new RegExp("^.*" + q + ".*$", "i");
+        const isMatch = regex.test(e.name);
+        return q ? isMatch : true;
+      })
+      .map((e, idx) => {
+        return {
+          num: Number(skip) + idx + 1,
+          id: e._id,
+          name: e.name,
+          number_phone: e.number_phone,
+          avatar: e.avatar,
+          id_card: e.id_card,
+          address: e.address,
+          birthdate: e.birthdate,
+          verified: e.verified,
+        };
+      });
 
     return { status: "success", total: length, data: data };
   } catch (error: any) {

@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
     if (role != 2) throw new Error("user not authorization, you must be admin");
     const skip = getRequestURL(event).searchParams.get("skip");
     const limit = getRequestURL(event).searchParams.get("limit");
+    const q = getRequestURL(event).searchParams.get("q");
     const sort = getRequestURL(event).searchParams.get("sort") ?? "asc";
     const length = await PenjagaKos.find({}).countDocuments();
     const penjaga = await PenjagaKos.find({})
@@ -23,17 +24,23 @@ export default defineEventHandler(async (event) => {
       .skip(Number(skip))
       .limit(Number(limit));
 
-    const data = penjaga.map((e: any, idx) => {
-      return {
-        _id: e._id,
-        num: Number(skip) + idx + 1,
-        name: e.id_user.name,
-        number_phone: e.id_user.number_phone,
-        avatar: e.id_user.avatar,
-        kos: e.id_kos.name,
-        location: e.id_kos.address,
-      };
-    });
+    const data = penjaga
+      .filter((e: any) => {
+        const regex = new RegExp("^.*" + q + ".*$", "i");
+        const isMatch = regex.test(e.id_user.name);
+        return q ? isMatch : true;
+      })
+      .map((e: any, idx) => {
+        return {
+          _id: e._id,
+          num: Number(skip) + idx + 1,
+          name: e.id_user.name,
+          number_phone: e.id_user.number_phone,
+          avatar: e.id_user.avatar,
+          kos: e.id_kos.name,
+          location: e.id_kos.address,
+        };
+      });
 
     return { status: "success", total: length, data: data };
   } catch (error: any) {
