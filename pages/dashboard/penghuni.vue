@@ -389,7 +389,6 @@ watch(() => statusKamarKos, (e) => {
     if (e.value == 'success') {
         // @ts-ignore
         const { data } = allKamarKos.value
-        console.log(e)
         optionsKamarKos = data.map((e: any) => ({
             value: e.id, name: `${e.kamar} - ${e.kos}`,
             ...e

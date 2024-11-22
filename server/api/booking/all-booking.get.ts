@@ -1,3 +1,4 @@
+import { AnyArn } from "aws-sdk/clients/groundstation";
 import moment from "moment";
 import { formatRupiahIntl } from "~/utils/formatRupiah";
 
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
     // cari berdasarkan penjaga
     if (role == 1) {
-      return { status: "success", total: 0, data:[] };
+      return { status: "success", total: 0, data: [] };
     }
 
     // cari berdasarkan role
@@ -57,42 +58,43 @@ export default defineEventHandler(async (event) => {
       };
     });
 
-    query = q
-      ? {
-          ...query,
-          // @ts-ignore
-          "id_user.name": { $regex: new RegExp(q, "i") },
-        }
-      : { ...query };
-
-    const _data = await Booking.find(query)
-      .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
+    const _data = await Booking.find({})
+      .populate([
+        { path: "id_user" },
+        { path: "id_kamar_kos", populate: ["id_kos"] },
+      ])
       .sort()
       .skip(Number(skip))
       .limit(Number(limit));
 
-    const data = _data.map((e: any, idx) => {
-      return {
-        _id: e._id,
-        num: idx + 1,
-        user_name: e.id_user.name,
-        avatar: e.id_user.avatar,
-        user_phone: e.id_user.number_phone,
-        name_kos: e.id_kamar_kos.id_kos.name,
-        name_kamar: e.id_kamar_kos.name,
-        price: "Rp" + formatRupiahIntl(e.price),
-        link_payment: e.link_payment ?? "-",
-        method_payment: e.method_payment,
-        paid_status:
-          e.paid_status == 0
-            ? "gagal"
-            : e.paid_status == 1
-            ? "menunggu"
-            : "sukses",
-        order_id: e.order_id,
-        tgl: moment(e.updatedAt).format("DD-MM-YYYY"),
-      };
-    });
+    const data = _data
+      .filter((e: any) => {
+        const regex = new RegExp("^.*" + q + ".*$", 'i');
+        const isMatch = regex.test(role == 0 ? e.id_kamar_kos.id_kos.name : e.id_user.name);
+        return q ? isMatch : true;
+      })
+      .map((e: any, idx) => {
+        return {
+          _id: e._id,
+          num: idx + 1 + Number(skip),
+          user_name: e.id_user.name,
+          avatar: e.id_user.avatar,
+          user_phone: e.id_user.number_phone,
+          name_kos: e.id_kamar_kos.id_kos.name,
+          name_kamar: e.id_kamar_kos.name,
+          price: "Rp" + formatRupiahIntl(e.price),
+          link_payment: e.link_payment ?? "-",
+          method_payment: e.method_payment,
+          paid_status:
+            e.paid_status == 0
+              ? "gagal"
+              : e.paid_status == 1
+              ? "menunggu"
+              : "sukses",
+          order_id: e.order_id,
+          tgl: moment(e.updatedAt).format("DD-MM-YYYY"),
+        };
+      });
 
     return { status: "success", total: length, data };
   } catch (error: any) {

@@ -338,16 +338,7 @@ watch(status, (e, _) => {
     if (!kos) return
 
     state.link = ''
-    isOpen.value = true
-    // const _kos = data.find((e: any) => e.id == kos)
-    // console.log("kos=>",_kos)
-    // state.image = _kos.image
-    // state.name = _kos.name
-    // state.location = _kos.location
-    // state.description = _kos.description
-    // state.price = _kos.price
-    // state.id_kamar_kos = _kos.id
-    // state.available = _kos.available
+    isOpen.value = true    
 }, { immediate: true })
 
 useHead({

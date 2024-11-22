@@ -35,7 +35,10 @@ export default defineEventHandler(async (event) => {
       paid_status: 2,
     });
 
-    await KamarKos.findByIdAndUpdate(id_kamar_kos, { available: 2 });
+    await KamarKos.findByIdAndUpdate(id_kamar_kos, {
+      available: 2,
+      id_user: refreshTokens.id_user,
+    });
 
     return { status: "success", message: "sukses menambahkan penghuni" };
   } catch (error: any) {

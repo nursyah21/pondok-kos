@@ -19,12 +19,11 @@ durasinya tinggal dibikin minus.
 - test dan deploy [x]
 
 # fitur
-- bug riwayat transaki (penjaga) []
 - notif verifikasi []
 - notif transaksi sukses manual / midtrans []
-- perpanjang sewa []
 (bisa memperpanjang selama 1hari masa sewa, jika sudah 1 hari lewat maka otomatis terhapus, penjaga atau pemilik bisa memperpanjang manual)
 - bug search, filter,sort, size []
+- bug dashboard []
 
 # prosedur
 - ubah semua datanya menggunakan data booking

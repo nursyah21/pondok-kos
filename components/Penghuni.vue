@@ -220,6 +220,7 @@ async function submitMidtrans(event: any) {
 			if (res.status == 'success') {
 				// refresh()
 				state.link = e
+				navigateTo("/dashboard/riwayat-transaksi")
 			}
 		} catch (error: any) {
 			useToast().add({ id: 'fail', title: error.data.status, description: error.data.message, color: 'red' })

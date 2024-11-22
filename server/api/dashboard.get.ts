@@ -42,7 +42,8 @@ export default defineEventHandler(async (event) => {
         const tersisa = Math.ceil(
           (durationDays - new Date().getTime()) / (24000 * 3600)
         );
-        if (tersisa >= 0) {
+        console.log(e.duration)
+        if (tersisa >= 0 && e.paid_status == 2) {
           totalPenghuni += 1;
           listpenghuni.push({
             num,

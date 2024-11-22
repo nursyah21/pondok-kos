@@ -22,6 +22,11 @@ export const KamarKos = mongoose.model(
         type: Number,
         default: 0, // 0 tersedia, 1 sedang dipesan, 2 ditempati
       },
+      id_user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "user",
+        // required: true,
+      },
       price: {
         type: Number,
         required: true,

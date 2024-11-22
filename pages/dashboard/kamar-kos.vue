@@ -376,7 +376,7 @@ const resetState = () => {
 
 const helperState = (e: any) => {
     const { kamar,name, description, available, price, image: _image, id, id_kos, hidden, price_harian, price_harian_on } = e
-    console.log(e)
+    
     state.name = kamar
     state.description = description
     state.available = available == 2 ? optionsAvailable[1] : optionsAvailable[1]
@@ -393,13 +393,11 @@ const helperState = (e: any) => {
     }
     state.hidden = hidden
 
-    if (_image) {
-        console.log(_image)
+    if (_image) {        
         image.value = _image
         imageKos.value = _image
     }
     state._id = id
-    console.log(state)
 }
 
 
