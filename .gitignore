@@ -13,6 +13,7 @@ node_modules
 logs
 *.log
 log.txt
+*.lock.yaml
 
 # ipynb
 *.ipynb

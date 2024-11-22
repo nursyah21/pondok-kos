@@ -9,26 +9,19 @@
     </div>
     <main class="my-4" v-else>
 
-        <div :state="search" class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2" >            
-                <!-- pencarian berdasarkan nama penghuni -->
-                <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
-                    placeholder="Cari nama penghuni" class="w-full" v-model="search.q" 
-                    @keyup.enter="searchSubmit({q:search.q})"
+        <div  class="flex sm:flex-row flex-col sm:mr-2 border-b-2 py-2" >            
+                
+            <UInput icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
+                    :placeholder="role === 0 ? 'Cari nama kos' : 'Cari nama penghuni'" class="w-full" v-model="q"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
-                    <UButton
-                        v-show="search.q !== ''"
-                        color="gray"
-                        variant="link"
-                        icon="i-heroicons-x-mark-20-solid"
-                        :padded="false"
-                        @click="search.q = ''"
-                    />
+                        <UButton v-show="q !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                            :padded="false" @click="q = ''" />
                     </template>
                 </UInput>
                 <div class="flex mt-2 sm:mt-0">
                     <!-- Filter status, sukses, menunggu, gagal -->
-                    <UDropdown :items="[
+                    <UDropdown class="hidden" :items="[
                         [{
                             label: 'filter status',
                             class: 'font-bold'
@@ -54,7 +47,7 @@
                     </UDropdown>
 
                     <!-- Urutkan penghuni, kos, kamar, harga, tanggal -->
-                    <UDropdown :items="[
+                    <UDropdown class="hidden" :items="[
                         [{
                             label: 'urutkan',
                             class: 'font-bold'
@@ -92,27 +85,27 @@
                         }],
                         [{
                             label: '5',
-                            class: false ? '' : 'underline',
+                            class: pageCount == 5 ? 'underline' : '',
                             click: () => { pageCount = 5 }
                         },
                         {
                             label: '15',
-                            // class: false ? 'bg-yellow-500 text-white opacity-95 border border-yellow-500 my-2' : 'border border-yellow-500 my-2',
+                            class: pageCount == 15 ? 'underline' : '',
                             click: () => { pageCount = 15 }
                         },
                         {
                             label: '25',
-                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            class: pageCount == 25 ? 'underline' : '',
                             click: () => { pageCount = 25 }
                         },
                         {
                             label: '50',
-                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            class: pageCount == 50 ? 'underline' : '',
                             click: () => { pageCount = 50 }
                         },
                         {
                             label: '100',
-                            // class: false ? 'bg-red-500 text-white opacity-95 border border-red-600 my-2' : 'border border-red-600 my-2',
+                            class: pageCount == 100 ? 'underline' : '',
                             click: () => { pageCount = 100 }
                         },
                         {
@@ -128,7 +121,12 @@
         </div>
 
         <UTable :loading="status != 'success' || loading" :rows="rows" :columns="columns" >
-            
+            <template #user_name-data="i">
+                <div class="items-center flex gap-x-3">
+                    <UAvatar :src="i.row.avatar" />
+                    {{ i.row.user_name }}
+                </div>
+            </template>
             <template #link_payment-data="i">
                 <a :href="i.row.link_payment" v-if="i.row.method_payment === 'midtrans'" class="hover:opacity-80">
                     <UBadge color="blue">
@@ -164,7 +162,33 @@
             </template>
         </UTable>
         
-        <Pagination :refresh="refresh" :total-page="totalPage" :page-count="pageCount" :page="page" :skip="skip" :status="status" :rows="rows"/>
+        
+        <div class="flex justify-between  items-center px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+            <UButton v-if="rows && rows.length" variant='ghost' @click='refresh' color='gray'
+                :class="status == 'pending' && 'animate-pulse'">
+                <h1 v-if="pageCount == -1">
+                    {{ page * pageCount + 2 }} - {{ totalPage }}
+                </h1>
+                <h1 v-else>
+                    {{ skip >= 1 ? skip + page - 1 : skip + page }} - {{ page * pageCount }} of {{ totalPage }}
+                </h1>
+            </UButton>
+            <UButton v-else variant='ghost' @click='refresh' color='gray'
+                :class="status == 'pending' && 'animate-pulse'">
+                tidak tersedia
+            </UButton>
+
+
+            <UPagination :disabled="status != 'success'" v-model="page" :page-count="pageCount" :total="totalPage" :ui="{
+                wrapper: 'flex items-center gap-2',
+                rounded: '!rounded-full min-w-[32px] justify-center',
+                default: {
+                    activeButton: {
+                        variant: 'outline'
+                    }
+                }
+            }" />
+        </div>
         
 
         <!-- modal bukti pembayaran -->
@@ -241,6 +265,7 @@ const page = ref(1)
 const pageCount = ref(5)
 const skip = ref(0)
 const rows = ref([])
+const q = ref('')
 const totalPage = ref(0)
 
 const isOpen = ref(false)
@@ -285,6 +310,7 @@ const _uploadFile = (e: any) => uploadFile(e, loading, attachment)
 
 const query = computed(() => ({ 
     skip: skip.value, 
+    q: q.value,
     limit: pageCount.value == -1 ? pageCount.value * totalPage.value : pageCount.value 
 }))
 
@@ -373,10 +399,6 @@ const columns_penghuni = [{
     key: 'tgl',
     label: 'masuk'
 },
-// {
-//     key: 'duration',
-//     label: 'durasi sewa'
-// },
 {
     key: 'name_kos',
     label: 'kos',
@@ -393,10 +415,6 @@ const columns_penghuni = [{
     key: 'method_payment',
     label: 'metode',
 },
-// {
-//     key: 'link_payment',
-//     label: 'link pembayaran',
-// },
 {
     key: 'paid_status',
     label: 'status',
@@ -415,13 +433,13 @@ const columns_penjaga = [{
     key: 'tgl',
     label: 'masuk'
 },
-// {
-//     key: 'duration',
-//     label: 'durasi sewa'
-// },
 {
     key: 'user_name',
-    label: 'penghuni'
+    label: 'nama'
+},
+{
+    key: 'user_phone',
+    label: 'nomor whatsapp'
 },
 {
     key: 'name_kos',
@@ -459,7 +477,11 @@ const columns_pemilik = [{
 },
 {
     key: 'user_name',
-    label: 'penghuni'
+    label: 'nama'
+}
+,{
+    key: 'user_phone',
+    label: 'nomor whatsapp'
 },
 {
     key: 'name_kos',
@@ -514,7 +536,6 @@ const submitDeleteBooking = async (event: any) => {
             refresh()
         }
     } catch (error: any) {        
-        console.log(error.data.message)
         useToast().add({ id: 'settings', title: 'error', description: error.data.message, color: 'red' })
     }
 

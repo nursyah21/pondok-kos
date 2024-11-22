@@ -13,9 +13,9 @@ const penghuni = [
 const penjaga = [
     '/logout',
     '/dashboard',
-    '/dashboard/laporan',
-    '/dashboard/messages',
-    '/dashboard/riwayat-transaksi',
+    // '/dashboard/laporan',
+    // '/dashboard/messages',
+    // '/dashboard/riwayat-transaksi',
     '/dashboard/edit-profile',
     '/dashboard/penghuni',
     '/dashboard/verifikasi-penghuni'

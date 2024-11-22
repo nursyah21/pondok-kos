@@ -4,7 +4,7 @@ import moment from "moment";
 export default defineEventHandler(async (event) => {
   const authorizationHeader = event.node.req.headers.authorization;
   const token = authorizationHeader?.split(" ")[1];
-  try {    
+  try {
     checkBooking();
     const refreshTokens = await RefreshTokens.findOne({ token });
 
@@ -14,59 +14,56 @@ export default defineEventHandler(async (event) => {
     const user = await Users.findById(refreshTokens.id_user);
     if (!user) throw new Error("user not valid");
     const { role, _id } = user;
-    let data: DataDashboard = {};    
-    
+    let data: DataDashboard = {};
+
     // pemilik
-    if (role == 2) {            
-      const totalPenghuni = (
-        await PenghuniKos.find({}).countDocuments()
-      ).toString();
+    if (role == 2) {
+      let totalPenghuni = 0;
+      let pendapatan = 0;
       const totalPenjaga = (
         await PenjagaKos.find({}).countDocuments()
       ).toString();
       const totalKamarKos = (
         await KamarKos.find({}).countDocuments()
       ).toString();
-
-      const temp = await PenghuniKos.find({})
-        .populate(["id_kamar_kos"])
-        .select("id_kamar_kos")
-        .limit(10);
-      let pendapatan = 0;
-      temp.forEach((e: any) => {
-        pendapatan += e?.id_kamar_kos?.price ?? 0;
-      });
       const listpenghuni: any[] = [];
-      const _listpenghuni = await PenghuniKos.find({})
-        .populate(["id_kamar_kos", "id_user", "id_kos"])
-        .limit(10);
-
-      let num = 1;
-      _listpenghuni.forEach((e: any) => {
-        listpenghuni.push({
-          num,
-          name: e.id_user.name,
-          kos: e.id_kos.name,
-          kamar: e.id_kamar_kos.name,
-          tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
-        });
-        num++;
-      });
 
       const transaksi = await Booking.find({
         updatedAt: {
           $gte: new Date().getFullYear(),
         },
-      });
+      }).populate(["id_user", { path: "id_kamar_kos", populate: "id_kos" }]);
 
       const transaksiData = new Array(12).fill(0);
+      let num = 1;
       transaksi.forEach((e: any) => {
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
+        console.log(e.duration)
+        if (tersisa >= 0 && e.paid_status == 2) {
+          totalPenghuni += 1;
+          listpenghuni.push({
+            num,
+            name: e.id_user.name,
+            kamar: e.id_kamar_kos.name,
+            kos: e.id_kamar_kos.id_kos.name,
+            tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
+          });
+          num++;
+        }
+
         const month = new Date(e.updatedAt).getMonth();
         transaksiData[month] += e.price;
+        if (month === new Date().getMonth()) {
+          pendapatan += e.price;
+        }
       });
 
       data = {
-        totalPenghuni,
+        totalPenghuni: totalPenghuni.toString(),
         totalPenjaga,
         totalKamarKos,
         pendapatan,
@@ -122,22 +119,34 @@ export default defineEventHandler(async (event) => {
           imgkos: e.id_kos.image,
         });
       });
-      const penghuni = await PenghuniKos.find({})
-        .populate(["id_user", "id_kos", "id_kamar_kos"])
-        .limit(10);
+
+      const transaksi = await Booking.find({
+        updatedAt: {
+          $gte: new Date().getFullYear(),
+        },
+      }).populate(["id_user", { path: "id_kamar_kos", populate: "id_kos" }]);
+
       let num = 1;
-      penghuni.forEach((e: any) => {
-        if (idkos.indexOf(e.id_kos._id.toString()) === -1) {
-          return;
+      transaksi.forEach((e: any) => {
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
+
+        if (
+          tersisa >= 0 &&
+          idkos.indexOf(e.id_kamar_kos.id_kos._id.toString()) !== -1
+        ) {
+          _listpenghuni.push({
+            num,
+            name: e.id_user.name,
+            kamar: e.id_kamar_kos.name,
+            kos: e.id_kamar_kos.id_kos.name,
+            tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
+          });
+          num++;
         }
-        _listpenghuni.push({
-          num,
-          name: e.id_user.name,
-          kos: e.id_kos.name,
-          kamar: e.id_kamar_kos.name,
-          tanggal_bayar: moment(e.tanggal_bayar).format("DD-MM-YYYY"),
-        });
-        num++;
       });
 
       data = {
@@ -147,57 +156,41 @@ export default defineEventHandler(async (event) => {
     }
     // penghuni
     if (role == 0) {
-      const penghuni = await PenghuniKos.find({ id_user: { _id } })
-        .populate(["id_user", { path: "id_kamar_kos", populate: ["id_kos"] }])
-        .limit(10);
 
       const listKos: any[] = [];
       const listTransaksi: any[] = [];
-      const idpenghunikamarkos:any[] = []
-      penghuni.forEach((e: any) => {
-        idpenghunikamarkos.push(e.id_kamar_kos._id.toString())
-
-        // listKos.push({
-        //   kos: e.id_kamar_kos.id_kos.name,
-        //   kamar: e.id_kamar_kos.name,
-        //   address: e.id_kamar_kos.id_kos.address,
-        //   imgkos: e.id_kamar_kos.image[0],
-        //   price: e.id_kamar_kos.price
-        // });
-      });
 
       const booking = await Booking.find({
         id_user: _id,
         paid_status: 2,
       }).populate([{ path: "id_kamar_kos", populate: ["id_kos"] }]);
-      booking.forEach((e: any, idx) => {
-        
-        const durationDays = new Date(e.createdAt).getTime()+(e.duration*24000*3600)
-        const tersisa = Math.ceil((durationDays - new Date().getTime()) / (24000*3600))
+      booking.forEach((e: any, idx) => {        
+        const durationDays =
+          new Date(e.createdAt).getTime() + e.duration * 24000 * 3600;
+        const tersisa = Math.ceil(
+          (durationDays - new Date().getTime()) / (24000 * 3600)
+        );
 
-        if(idpenghunikamarkos.indexOf(e.id_kamar_kos._id.toString()) != -1){
+        if (tersisa >= 0) {
           listKos.push({
+            id_kamar_kos: e.id_kamar_kos._id,
             kos: e.id_kamar_kos.id_kos.name,
             kamar: e.id_kamar_kos.name,
             address: e.id_kamar_kos.id_kos.address,
             imgkos: e.id_kamar_kos.image[0],
             price: e.price,
-            tersisa
+            duration: e.duration,
+            pricekos: e.id_kamar_kos.price,
+            tersisa,
           });
-          // console.log()
         }
-        // if(tersisa>0){
-        //   listKos.push({
-
-        //   })
-        // }
 
         listTransaksi.push({
           num: idx + 1,
-          kos: e.id_kamar_kos.name,
-          kamar: e.id_kamar_kos.id_kos.name,
+          kamar: e.id_kamar_kos.name,
+          kos: e.id_kamar_kos.id_kos.name,
           price: "Rp" + formatRupiahIntl(e.price),
-          tanggal_bayar: moment(e.updatetAt).format("DD-MM-YYYY"),
+          tanggal_bayar: moment(e.updatedAt).format("DD-MM-YYYY"),
         });
       });
 

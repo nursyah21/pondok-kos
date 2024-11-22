@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import argon2 from "argon2";
-import { Kos } from "./server/utils/models/kos";
-import { Users } from "./server/utils/models/users";
-import { KamarKos } from "./server/utils/models/kamar_kos";
-import { PenghuniKos } from "./server/utils/models/penghuni_kos ";
-import { PenjagaKos } from "./server/utils/models/penjaga_kos ";
-import { Booking } from "./server/utils/models/booking";
+import {
+  Kos,
+  KamarKos,
+  Users,
+  PenjagaKos,
+  Booking,
+  RefreshTokens,
+} from "./server/utils/models/index.schema";
 
 import dotenv from "dotenv";
 dotenv.config({ path: "" });
@@ -24,9 +26,8 @@ const linkImageKamar = [
 
 const linkImageProfile = [
   "https://pics.craiyon.com/2023-10-25/b65f72d6d11a48c1bc560059cc36e31f.webp",
-  "https://priv.au/image_proxy?url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcRUGMk0nDUqb0t8E9aRW8Fwfw9vroYJFCZXOSXLAAUTbl2USsuI%26s&h=870becf5693660ca9bc54a771268f4dd21ed2617c6ac99a29eae5ba8a3bcf960",
-  "https://priv.au/image_proxy?url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcSzl5R-9727qrUHMP4IPcXHqcj7pStolo4Yxnk1ELruTq9BBLlx%26s&h=91b839201b42c2ea59cc7f2163da4df30ddf46c31725a9c1c9cd0eb8c313e627",
-  "https://priv.au/image_proxy?url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcTz6YdwSwjyjtrW4Ntyg2pc0SA-zDhy9V8beK6CLkb2-qYELrdR%26s&h=fad4e62177084cb86813da24b53f14e6e032b9a9778347846979ac951716733d",
+  "https://scontent.fsub6-4.fna.fbcdn.net/v/t39.30808-6/429548530_122115054008210694_2521757544094032769_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=zZGB0QiKMpwQ7kNvgGUtsCu&_nc_zt=23&_nc_ht=scontent.fsub6-4.fna&_nc_gid=AQct93oPuPSwtfcX2UYfLqf&oh=00_AYAIy5Mo3FBhI-BgukFlnygRD7Sq2ST21BCvWpl6F5DfCQ&oe=674435AE",
+  "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/4fe33b1d-a9d0-4fdb-8d15-0cb7787218aa/dgtudkw-d99f50c3-3a64-4b19-adfd-c7e34fb9a32c.png/v1/fill/w_512,h_512,q_80,strp/cute_anime_girl_smiling_at_viewer___profile_pic_by_louidev_dgtudkw-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvNGZlMzNiMWQtYTlkMC00ZmRiLThkMTUtMGNiNzc4NzIxOGFhXC9kZ3R1ZGt3LWQ5OWY1MGMzLTNhNjQtNGIxOS1hZGZkLWM3ZTM0ZmI5YTMyYy5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.jhAE6ZPO76_OIiNkTTL1AS2xSZLKTMmdwoVvqjB3Cl0",  
   "https://pics.craiyon.com/2023-10-19/ebd05cc8b06f4c439bccef6994f74fc1.webp",
 ];
 
@@ -166,6 +167,7 @@ const userData = [
   },
 ].map((items) => ({ ...items, avatar: random(linkImageProfile) }));
 
+await RefreshTokens.deleteMany({});
 await Users.deleteMany({});
 await Users.insertMany(userData).catch((e) => {
   console.log(e.message);
@@ -230,62 +232,36 @@ await KamarKos.insertMany(kamarKosData).catch((e) => {
   console.log(e.message);
 });
 
-const penghunikos = [];
-const kos = await KamarKos.findOne({ name: "kamar 1" });
-const penghuni = await Users.findOne({ name: "penghuni1" });
-if (kos && penghuni) {
-  penghunikos.push({
-    id_kos: kos.id_kos,
-    id_kamar_kos: kos._id,
-    id_user: penghuni._id,
-    tanggal_bayar: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14),
-  });
-  await KamarKos.findByIdAndUpdate(kos._id, {available: 2})
-}
-
-await PenghuniKos.deleteMany({});
-await PenghuniKos.insertMany(penghunikos).catch((e) => {
-  console.log(e.message);
-});
-
-const penjagakos: any[] = [];
-const penjaga = await Users.findOne({ name: "penjaga1" }).select(["_id"]);
-const tempkos = await PenghuniKos.findOne({}).populate(["id_kos"]);
-if (penjaga && tempkos) {
-  penjagakos.push({
-    id_user: penjaga._id,
-    id_kos: tempkos.id_kos._id,
-  });
-}
-// penjaga random
-// const penjaga = await Users.find({ role: 1 }).select(['_id'])
-// const tempkos = await Kos.find({}).select(['_id'])
-
-// penjaga.forEach(e => {
-//     if (!tempkos) return
-//     const rand = (Math.floor(Math.random() * tempkos.length))
-//     penjagakos.push({
-//         id_user: e._id,
-//         id_kos: tempkos[rand]._id
-//     })
-// })
-
-await PenjagaKos.deleteMany({});
-await PenjagaKos.insertMany(penjagakos).catch((e) => {
-  console.log(e.message);
-});
+const penghuni = await Users.findOne({ number_phone: "081234567894" });
+const pemilik = await Users.findOne({ number_phone: "081234567890" });
+const kamar = await KamarKos.findOne({ name: "kamar 1" }).populate(["id_kos"]);
+const kamar2 = await KamarKos.findOne({ name: "kamar 2" }).populate(["id_kos"]);
 
 await Booking.deleteMany({});
-await Booking.create({
-  order_id: "order_id_" + Math.round((new Date()).getTime() / 1000),
-  id_kamar_kos: tempkos?.id_kamar_kos,
-  id_user: tempkos?.id_user,
-  id_admin: penjaga?._id,
-  price: 100000,
-  method_payment: "manual",
-  duration: 30,
-  paid_status: 2,
-});
+const addbooking = async (kamar: any) =>
+  await Booking.create({
+    order_id: "order_id_" + Math.round(new Date().getTime() / 1000),
+    id_kamar_kos: kamar?._id,
+    id_user: penghuni?._id,
+    id_admin: pemilik?._id,
+    price: 100000,
+    method_payment: "manual",
+    duration: 30,
+    paid_status: 2,
+  });
+await addbooking(kamar);
+await addbooking(kamar2);
+
+const penjaga = await Users.findOne({ number_phone: "081234567891" });
+
+await PenjagaKos.deleteMany({});
+const addPenjagaKos = async (kos: any) =>
+  await PenjagaKos.create({
+    id_kos: kos?.id_kos?._id,
+    id_user: penjaga?._id,
+  });
+await addPenjagaKos(kamar);
+// await addPenjagaKos(kamar2);
 
 await mongoose.disconnect();
 console.log("finish seeding users, kos, kamar_kos, penghuni, penjaga, booking");

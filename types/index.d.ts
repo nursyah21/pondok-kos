@@ -25,6 +25,7 @@ type Kos = {
     image: string
     available: number
     id: string
+    hidden: boolean
     price: number
 }
 
