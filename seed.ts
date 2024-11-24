@@ -12,6 +12,7 @@ import {
 import dotenv from "dotenv";
 dotenv.config({ path: "" });
 
+console.log('connect to', process.env.MONGODB)
 await mongoose.connect(process.env.MONGODB ?? "").catch((e) => {
   console.log(e);
 });

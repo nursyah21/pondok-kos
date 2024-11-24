@@ -7,6 +7,11 @@
 - ngefix bug kalo ada dan melengkapi semuanya [x]
 - test dan deploy [x]
 
+# docs
+- test / pengujian []
+- evaluasi []
+- keimpulan & saran []
+
 # fitur tambahan ntar aja
 - notif verifikasi []
 - notif transaksi sukses manual / midtrans []
