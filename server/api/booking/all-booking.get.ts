@@ -58,7 +58,9 @@ export default defineEventHandler(async (event) => {
       };
     });
 
-    const _data = await Booking.find({})
+    const _data = await Booking.find(
+      role == 0 ? { id_user: refreshTokens.id_user } : {}
+    )
       .populate([
         { path: "id_user" },
         { path: "id_kamar_kos", populate: ["id_kos"] },
@@ -69,8 +71,10 @@ export default defineEventHandler(async (event) => {
 
     const data = _data
       .filter((e: any) => {
-        const regex = new RegExp("^.*" + q + ".*$", 'i');
-        const isMatch = regex.test(role == 0 ? e.id_kamar_kos.id_kos.name : e.id_user.name);
+        const regex = new RegExp("^.*" + q + ".*$", "i");
+        const isMatch = regex.test(
+          role == 0 ? e.id_kamar_kos.id_kos.name : e.id_user.name
+        );
         return q ? isMatch : true;
       })
       .map((e: any, idx) => {
