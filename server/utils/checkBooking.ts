@@ -34,6 +34,7 @@ const midtransCheckStatus = async (notificationJson: any, id_booking: any, id_ka
 
 export const checkBooking = async () => {
     try {
+        console.log('test')
         let allmidtrans = await Booking.find({ paid_status: 1 })
 
         allmidtrans.forEach((e) => {

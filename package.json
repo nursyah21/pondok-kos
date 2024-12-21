@@ -3,18 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build && xcopy .output udh-dibuild /S /E",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "pnpm nuxt prepare",
     "test": "vitest --run",
-    "seed": "tsx seed.ts"
+    "seed": "tsx seed.ts",
+    "local": "node udh-dibuild/server/index.mjs",
+    "update": "git add . && git commit -m update && git push"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.620.0",
     "@faker-js/faker": "^8.4.1",
-    "@nuxt/ui": "^2.18.2",
+    "@nuxt/ui": "^2.20.0",
     "apexcharts": "^3.51.0",
     "argon2": "^0.40.3",
     "aws-sdk": "^2.1664.0",
@@ -46,5 +48,6 @@
     "tsx": "^4.17.0",
     "vitest": "^2.0.5",
     "vitest-environment-nuxt": "^1.0.1"
-  }
+  },
+  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"
 }
