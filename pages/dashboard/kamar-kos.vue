@@ -451,6 +451,12 @@ watch([q, sort, filter], (e, _) => {
     refresh()
 }, { deep: true })
 
+watch(page, (e, _) => {    
+    // @ts-ignore
+    skip.value = (e - 1) * pageCount.value
+    refresh()
+})
+
 watch(status, (e, _) => {
     if (e != 'success') return
     // @ts-ignore

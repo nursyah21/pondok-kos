@@ -150,6 +150,15 @@
                             click: () => openPayment(i.row)
                         },
                         {
+                            label: 'Verifikasi pembayaran',
+                            icon: 'i-material-symbols-edit',
+                            disabled: i.row.paid_status == 'menunggu' ? false : true,
+                            click: () => {
+                                state = i.row
+                                isOpen = true;
+                            }
+                        },
+                        {
                             label: 'Invoice',
                             icon: 'i-material-symbols-lab-profile',
                             disabled: i.row.paid_status == 'sukses' ? false : true,
@@ -216,25 +225,25 @@
                     </div>
                 </template>
                 <UForm :state="state" class="space-y-4" @submit="onUpdateTransaksi">
-                    <img v-show="attachment" :src="attachment" alt="image attachment" class="w-[200px] h-[200px] ">
+                    <!-- <img v-show="state.avatar" :src="state.avatar" alt="image attachment" class="w-[200px] h-[200px] "> -->
                     <UFormGroup label="Nama" class="w-full">
-                        <UInput v-model="state.name" placeholder="nama" autocomplete="off" disabled />
+                        <UInput v-model="state.user_name" placeholder="nama" autocomplete="off" disabled />
                     </UFormGroup>
                     <UFormGroup label="Kamar Kos" class="w-full">
-                        <UInput v-model="state.kamarKos" placeholder="nama" autocomplete="off" disabled />
+                        <UInput v-model="state.name_kamar" placeholder="nama" autocomplete="off" disabled />
                     </UFormGroup>
-                    <UFormGroup label="admin" class="w-full">
+                    <!-- <UFormGroup label="admin" class="w-full">
                         <UInput v-model="state.admin" placeholder="admin" autocomplete="off" disabled />
-                    </UFormGroup>
+                    </UFormGroup> -->
                     <!-- <UFormGroup :label="'Harga Kamar Kos: ' + formatRupiahIntl(state.price)" class="w-full"> -->
                     <UFormGroup label="Harga Kamar Kos" class="w-full">
-                        <UInput type="number" v-model="state.price" placeholder="harga kamar kos" required
-                            autocomplete="off" :disabled="state.paid_status == 2" />
-                    </UFormGroup>
-                    <UFormGroup label="metode pembayaran" class="w-full">
-                        <UInput v-model="state.metodePembayaran" placeholder="harga kamar kos" required
+                        <UInput  v-model="state.price" placeholder="harga kamar kos" required
                             autocomplete="off" disabled />
                     </UFormGroup>
+                    <!-- <UFormGroup label="metode pembayaran" class="w-full">
+                        <UInput v-model="state.metodePembayaran" placeholder="harga kamar kos" required
+                            autocomplete="off" disabled />
+                    </UFormGroup> -->
 
 
 
@@ -326,7 +335,9 @@ const { data: raw, status, refresh } = await useFetch('/api/booking/all-booking'
 const onUpdateTransaksi = async (event: any) => {
     loading.value = true
     const { _id, attachment, verified, price } = event.data
-    const link = verified ? '/api/booking/verify-booking' : '/api/booking/fail-booking'
+    // const link = verified ? '/api/booking/verify-booking' : '/api/booking/fail-booking'
+    const link = '/api/booking/verify-booking'
+    
 
     try {
         const res = await $fetch(link, {
@@ -334,7 +345,7 @@ const onUpdateTransaksi = async (event: any) => {
                 Authorization: `Bearer ${token}`
             },
             method: 'POST',
-            body: { _id, attachment, price }
+            body: event.data
         })
 
         if (res.status == 'success') {

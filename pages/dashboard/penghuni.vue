@@ -2,7 +2,9 @@
 
     <Breadcrumb />
     <main class="my-4">
+    <!--
         <UButton :class="optionsKamarKos.length ? '' : 'hidden'" @click="add">Tambahkan Penghuni </UButton> 
+        -->
         <!-- search -->
         <div class="hidden sm:flex-row flex-col sm:mr-2 border-b-2 dark:border-gray-800 py-2">
 

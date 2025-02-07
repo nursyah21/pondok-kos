@@ -239,7 +239,7 @@ const kamar = await KamarKos.findOne({ name: "kamar 1" }).populate(["id_kos"]);
 const kamar2 = await KamarKos.findOne({ name: "kamar 2" }).populate(["id_kos"]);
 
 await Booking.deleteMany({});
-const addbooking = async (kamar: any) =>
+const addbooking = async (kamar: any) =>{
   await Booking.create({
     order_id: "order_id_" + Math.round(new Date().getTime() / 1000),
     id_kamar_kos: kamar?._id,
@@ -250,6 +250,10 @@ const addbooking = async (kamar: any) =>
     duration: 30,
     paid_status: 2,
   });
+
+  await KamarKos.findOneAndUpdate({  id_kamar_kos: kamar?._id}, {available: 0})
+}
+
 await addbooking(kamar);
 await addbooking(kamar2);
 

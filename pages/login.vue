@@ -22,11 +22,11 @@
                                 :padded="false" @click="hide_pass = !hide_pass" />
                         </template>
                     </UInput>
-                    <div class="mt-2 text-left">
+                    <!-- <div class="mt-2 text-left">
                         <ULink to="/reset-password" class=" text-primary text-sm hover:underline">
                             lupa password?
                         </ULink>
-                    </div>
+                    </div> -->
                 </UFormGroup>
 
                 <UFormGroup>

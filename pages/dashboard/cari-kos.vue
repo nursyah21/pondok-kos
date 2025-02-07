@@ -183,7 +183,7 @@
             <UCard>
                 <template #header>
                     <div class="items-center justify-between flex">
-                        <h1 class="font-bold text-slate-600 dark:text-slate-200">Pesan Kamar Kos</h1>
+                        <h1 class="font-bold text-slate-600 dark:text-slate-200">Pesan Kamar</h1>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="{
                             isOpen = false;
                             // @ts-ignore
